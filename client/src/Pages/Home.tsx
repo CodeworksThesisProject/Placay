@@ -6,9 +6,7 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Navbar>
-
-      </Navbar> 
+      <Navbar/> 
       <div className="map-container">
           map should be shown here
       </div>
