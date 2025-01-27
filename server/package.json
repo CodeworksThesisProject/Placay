@@ -1,9 +1,12 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "placay_server",
+  "version": "0.0.1",
+  "main": "server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "develop": "NODE_ENV=develop ts-node server.ts",
+    "nodemon": "NODE_ENV=develop nodemon server.ts"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +24,7 @@
     "@types/jsonwebtoken": "^9.0.8",
     "@types/mongoose": "^5.11.96",
     "@types/node": "^22.10.10",
+    "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }
