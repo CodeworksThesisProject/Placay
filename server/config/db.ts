@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 process.env.NODE_ENV == 'develop'
-  ? require('dotenv').config({ path: '.env.development' })
-  : require('dotenv').config({ path: '.env.production' })
+  ? require('dotenv').config({ path: '.env.development.local' })
+  : require('dotenv').config({ path: '.env.production.local' })
 
 export const connectDB = async () => {
   try {
