@@ -1,0 +1,17 @@
+import Navbar from "../Components/Navbar";
+
+
+
+const Home: React.FC = () => {
+
+  return (
+    <>
+      <Navbar/> 
+      <div className="map-container">
+          map should be shown here
+      </div>
+    </>
+  );
+};
+
+export default Home;
