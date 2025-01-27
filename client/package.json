@@ -1,11 +1,13 @@
 {
-  "name": "Placay Client",
+  "name": "placay_client",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc -b && vite build",
+    "start": "vite",
+    "develop": "NODE_ENV=develop vite",
+    "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview"
   },
