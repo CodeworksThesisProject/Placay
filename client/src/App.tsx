@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Components/Login/Login';
 import Register from './Components/Login/Resgister';
 import MapView from './Components/Map/MapView';
+import Footer from './Components/footer';
 
 const App: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Login />} />
       </Routes>
       <MapView></MapView>
+      <Footer />
     </Router>
   );
 };
