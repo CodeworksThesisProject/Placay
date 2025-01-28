@@ -13,7 +13,7 @@ const App: React.FC = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} />
       </Routes>
-      <MapView></MapView>
+      <MapView />
       <Footer />
     </Router>
   );
