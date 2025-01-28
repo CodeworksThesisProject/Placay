@@ -1,52 +1,70 @@
-import React, { useEffect } from 'react';
+'use strict'
+import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { getPointsOfInterest } from '../../getplacesService';
 
-const MapComponent: React.FC = () => {
-    useEffect(() => {
-        // Initialize the map
-        const map = L.map('map').setView([41.39165, 2.164772], 14);
+interface MapComponentProps {
+  coordinates: [number, number];
+  searchedCity: string;
+}
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
+const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }): JSX.Element | null => {
+  const [locations, setLocations] = useState<any[]>([]);
+  const mapRef = useRef<L.Map | null>(null);
 
-        // Data
-        const locations = [
-            {
-                name: 'Casa Batlló',
-                latitude: 41.39165,
-                longitude: 2.164772,
-            },
-            {
-                name: 'La Pepita',
-                latitude: 41.397987,
-                longitude: 2.161159,
-            },
-            {
-                name: 'Brunch & Cake',
-                latitude: 41.38827,
-                longitude: 2.161604,
-            },
-            // Add more locations here
-        ];
+  const fetchLocations = async () => {
+      try {
+          const data = await getPointsOfInterest(searchedCity, coordinates[0], coordinates[1]);
+          const formattedLocations = data.map((item: any) => ({
+              name: item.name,
+              latitude: item.geoCode.latitude,
+              longitude: item.geoCode.longitude,
+              description: item.description,
+              picture: item.pictures[0] || '',
+          }));
+          setLocations(formattedLocations);
+      } catch (error) {
+          console.error('Error fetching points of interest:', error);
+      }
+  };
 
-        // Add markers for each location
-        locations.forEach((location) => {
-            L.marker([location.latitude, location.longitude])
-                .addTo(map)
-                .bindPopup(`<b>${location.name}</b>`)
-                .openPopup();
-        });
+  useEffect(() => {
+      if (!mapRef.current) {
+          mapRef.current = L.map('map').setView(coordinates, 14);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          }).addTo(mapRef.current);
+      }
+      return () => {
+          if (mapRef.current) {
+              mapRef.current.remove();
+              mapRef.current = null;
+          }
+      };
+  }, [coordinates]);
 
-        // Cleanup map on component unmount
-        return () => {
-            map.remove();
-        };
-    }, []);
+  useEffect(() => {
+      fetchLocations();
+  }, [coordinates, searchedCity]);
 
-    return <div id="map" style={{ height: '500px', width: '100%' }}></div>;
+  useEffect(() => {
+      if (locations.length > 0 && mapRef.current) {
+          locations.forEach((location) => {
+              if (mapRef.current) {
+                  L.marker([location.latitude, location.longitude])
+                      .addTo(mapRef.current)
+                      .bindPopup(`<b>${location.name}</b><br>${location.description}`)
+                      .openPopup();
+              }
+          });
+      }
+  }, [locations]);
+
+    return <div id="map" style={{
+        height: '100%',
+        width: '100%',
+    }}></div>;
 };
 
 export default MapComponent;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -22,6 +22,7 @@ const Register: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name, email, password }),
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -32,10 +33,9 @@ const Register: React.FC = () => {
 
       const data = await response.json();
       setSuccess(true);
-      localStorage.setItem('token', data.token);
 
       setTimeout(() => {
-        navigate('/login');
+        navigate('/');
       }, 2000);
     } catch (err) {
       console.error('Registration error:', err);

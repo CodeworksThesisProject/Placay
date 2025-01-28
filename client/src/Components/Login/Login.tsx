@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
@@ -16,6 +16,7 @@ const Login: React.FC = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -25,9 +26,6 @@ const Login: React.FC = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('role', data.user.role);
-
       navigate('/');
     } catch (err) {
       console.error('Login error:', err);
@@ -67,11 +65,6 @@ const Login: React.FC = () => {
               placeholder="Enter your password"
               className="bg-gray-500 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full"
             />
-          </div>
-          <div>
-            <a className="text-sm text-[#0366fc]" href="#">
-              Forgot your password?
-            </a>
           </div>
           <button
             type="submit"
