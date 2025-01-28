@@ -46,7 +46,10 @@ const MapComponent: React.FC = () => {
         };
     }, []);
 
-    return <div id="map" style={{ height: '500px', width: '100%' }}></div>;
+    return <div id="map" style={{
+        height: '100%',
+        width: '100%',
+    }}></div>;
 };
 
 export default MapComponent;

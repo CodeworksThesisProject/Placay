@@ -16,7 +16,7 @@ const App: React.FC = () => {
         <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
         <Route path="/" element={<Home />} />
       </Routes>
-      
+
       <Footer />
     </Router>
   );
