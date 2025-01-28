@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-process.env.NODE_ENV == 'develop'
-  ? require('dotenv').config({ path: '.env.development.local' })
-  : require('dotenv').config({ path: '.env.production.local' })
-
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
 
