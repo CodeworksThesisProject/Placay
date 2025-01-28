@@ -1,16 +1,11 @@
-import Navbar from "../Components/Navbar";
-
-
+import MapView from '../Components/Map/MapView';
 
 const Home: React.FC = () => {
 
   return (
-    <>
-      <Navbar/> 
       <div className="map-container">
-          map should be shown here
+        <MapView />
       </div>
-    </>
   );
 };
 

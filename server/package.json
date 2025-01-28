@@ -6,12 +6,15 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "develop": "NODE_ENV=develop ts-node server.ts",
-    "nodemon": "NODE_ENV=develop nodemon server.ts"
+    "nodemon": "NODE_ENV=develop nodemon server.ts",
+    "seed": "NODE_ENV=develop npx ts-node seed/createAdmin.ts"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
     "amadeus": "^11.0.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
