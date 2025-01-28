@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="bg-white border-b border-gray-200 shadow-sm flex flex-row items-center ">
-      <img src="../../public/asserts/images/placay-logo.png" alt="placay logo" className="w-15 mx-3 "/>
+      <img src="/asserts/images/favicon.png" alt="placay logo" className="w-15 mx-3 "/>
 
       <div className="border-r border-l border-gray-300 px-2 h-15 flex items-center whitespace-nowrap text-black">{formatDate(currentDate)} </div>
 
