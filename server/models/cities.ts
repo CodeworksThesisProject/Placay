@@ -1,19 +1,10 @@
 import mongoose from 'mongoose';
 
-const pointOfInterestSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  id: { type: String, required: true },
-  categoyy: { type: String, required: true },
-  latitude: { type: Number, required: true },
-  longitude: { type: Number, required: true },
-});
-
-
 const citySchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  cityName: { type: String, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
-  pointsOfInterest: [pointOfInterestSchema],
+  pointsOfInterest: { type: mongoose.Schema.Types.Mixed },
 });
 
 

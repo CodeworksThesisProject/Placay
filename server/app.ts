@@ -2,9 +2,10 @@ import bodyParser from "body-parser";
 import express, { Application } from "express";
 import authRoute from "./routes/authRoute";
 import cityRouter from "./routes/cityRoute";
+import cors from 'cors';
 
 const app: Application = express();
-
+app.use(cors());
 app.use(express.json());
 
 // Routes
