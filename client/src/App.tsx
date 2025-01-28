@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Components/Login/Login';
 import Register from './Components/Login/Resgister';
 import Home from './Pages/Home';
-import MapView from './Components/Map/MapView';
+
 import Footer from './Components/footer';
 import Admin from './Admin/Admin';
 import AdminRoute from './Admin/AdminMiddleware';
@@ -16,7 +16,7 @@ const App: React.FC = () => {
         <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
         <Route path="/" element={<Home />} />
       </Routes>
-      <MapView />
+      
       <Footer />
     </Router>
   );
