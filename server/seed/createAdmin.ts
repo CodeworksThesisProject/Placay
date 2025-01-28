@@ -2,6 +2,10 @@ import { User } from "../models/userModel";
 import bcrypt from "bcryptjs";
 import { connectDB } from "../config/db";
 
+process.env.NODE_ENV == 'develop'
+  ? require('dotenv').config({ path: '.env.development.local' })
+  : require('dotenv').config({ path: '.env.production.local' });
+
 const createAdminUser = async () => {
   try {
     await connectDB();

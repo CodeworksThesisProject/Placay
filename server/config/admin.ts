@@ -4,7 +4,7 @@ process.env.NODE_ENV == 'develop'
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const SECRET_KEY = process.env.SECRET_KEY || 'default';
+const SECRET_KEY = process.env.JWT_SECRET || 'default';
 
 const adminMiddleware = async (req, res, next) => {
   // next(); // and comment rest to skip isAdmin check

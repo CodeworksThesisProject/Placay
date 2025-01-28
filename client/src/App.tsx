@@ -4,6 +4,8 @@ import Register from './Components/Login/Resgister';
 import Home from './Pages/Home';
 import MapView from './Components/Map/MapView';
 import Footer from './Components/footer';
+import Admin from './Admin/Admin';
+import AdminRoute from './Admin/AdminMiddleware';
 
 const App: React.FC = () => {
   return (
@@ -11,6 +13,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
         <Route path="/" element={<Home />} />
       </Routes>
       <MapView />
