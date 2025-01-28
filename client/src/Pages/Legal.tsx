@@ -1,9 +1,5 @@
-import Navbar from "../Components/Navbar";
-
 const Legal: React.FC = () => {
   return (
-    <>
-      <Navbar />
       <div className="mx-auto p-6 max-w-6xl">
         <h1 className="text-3xl font-bold text-gray-800 mb-4">Legal Information</h1>
         <p className="text-gray-600 mb-4">
@@ -21,7 +17,6 @@ const Legal: React.FC = () => {
           responsibly.
         </p>
       </div>
-    </>
   );
 };
 

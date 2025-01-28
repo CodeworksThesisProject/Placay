@@ -1,9 +1,6 @@
-import Navbar from "../Components/Navbar";
 
 const About: React.FC = () => {
   return (
-    <>
-      <Navbar />
       <div className="flex flex-col md:flex-row items-center justify-between mx-auto p-6 max-w-6xl">
         {/* Left: Image */}
         <div className="flex-shrink-0 mb-6 md:mb-0">
@@ -26,7 +23,6 @@ const About: React.FC = () => {
           </p>
         </div>
       </div>
-    </>
   );
 };
 

@@ -5,12 +5,15 @@ import Home from './Pages/Home';
 import Legal from './Pages/Legal';
 import About from './Pages/About';
 import Footer from './Components/footer';
+import Navbar from "./Components/Navbar";
 import Admin from './Admin/Admin';
 import AdminRoute from './Admin/AdminMiddleware';
 
 const App: React.FC = () => {
   return (
     <Router>
+      <Navbar />
+      
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
