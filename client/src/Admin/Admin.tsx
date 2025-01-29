@@ -1,48 +1,88 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+}
 
 const AdminPage = () => {
-  // State for storing user data
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [editUserId, setEditUserId] = useState(null);
+  const [editableUser, setEditableUser] = useState<User | null>(null);
+  const [newUser, setNewUser] = useState<{ name: string; email: string; role: string; password: string }>({ name: '', email: '', role: 'user', password: '' });
 
   // Fetch users from the backend
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('/admin/users', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-
-        if (response.status === 403 || response.status === 401) {
-          alert('Access denied. You are not authorized to view this page.');
-          navigate('/');
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch users');
-        }
-
-        const data = await response.json();
-        setUsers(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
-  }, [navigate]);
+  }, []);
 
-  // Handlers for edit and delete actions
-  const handleEdit = (id) => {
-    alert(`Edit user with ID: ${id}`);
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/admin/user', {
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch users. Maybe not allowed?');
+      }
+
+      const data = await response.json();
+      setUsers(data);
+    } catch (err: unknown) {
+      console.error('Fetch error:', err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const refreshUsers = async () => {
+    try {
+      const response = await fetch('/admin/user', {
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to refresh users');
+      }
+
+      const data = await response.json();
+      setUsers(data);
+    } catch (err) {
+      alert('Error refreshing users: ' + err.message);
+    }
+  };
+
+  const handleEdit = (user) => {
+    setEditUserId(user._id);
+    setEditableUser({ ...user });
+  };
+
+  const handleSave = async (id) => {
+    try {
+      const response = await fetch(`/admin/user/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(editableUser),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update user');
+      }
+
+      await refreshUsers();
+      setEditUserId(null);
+      setEditableUser(null);
+    } catch (err) {
+      alert('Error updating user: ' + err.message);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -63,6 +103,32 @@ const AdminPage = () => {
       } catch (err) {
         alert('Error deleting user: ' + err.message);
       }
+    }
+  };
+
+  const handleAddUser = async () => {
+    try {
+      if (!newUser.name || !newUser.email || !newUser.password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+      const response = await fetch('/admin/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(newUser),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add user');
+      }
+
+      await refreshUsers();
+      setNewUser({ name: '', email: '', role: 'user', password: '' });
+    } catch (err) {
+      alert('Error adding user: ' + err.message);
     }
   };
 
