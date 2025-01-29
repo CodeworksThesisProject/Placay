@@ -2,7 +2,6 @@ import bodyParser from "body-parser";
 import express, { Application } from "express";
 import authRoute from "./routes/authRoute";
 import adminRoutes from "./routes/adminRoute";
-import profileRoutes from "./routes/profileRoute";
 import cityRouter from "./routes/cityRoute";
 import cors from 'cors';
 
@@ -26,7 +25,6 @@ app.use(express.json());
 // Routes
 app.use("/api", authRoute);
 app.use("/admin", adminRoutes);
-app.use("/city", cityRouter); //Just 1 route, we need the cityRoute File?
-app.use("/profile", profileRoutes);
+app.use("/city", cityRouter);
 
 export default app;

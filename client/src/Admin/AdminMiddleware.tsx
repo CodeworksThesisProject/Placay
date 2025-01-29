@@ -6,9 +6,9 @@ const AdminRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   const isAdmin = localStorage.getItem('role') === 'admin';
 
-  // if (!token || !isAdmin) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (!token || !isAdmin) {
+    return <Navigate to="/login" replace />;
+  }
 
   return children;
 };

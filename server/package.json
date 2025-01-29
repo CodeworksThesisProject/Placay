@@ -6,7 +6,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "develop": "NODE_ENV=develop ts-node server.ts",
-    "nodemon": "NODE_ENV=develop nodemon ./server.ts",
+    "nodemon": "NODE_ENV=develop nodemon server.ts",
     "seed": "NODE_ENV=develop npx ts-node seed/createAdmin.ts"
   },
   "author": "",
