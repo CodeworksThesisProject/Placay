@@ -24,7 +24,10 @@ const Navbar: React.FC = () => {
       <div className="flex flex-row gap-3 justify-start w-full">
         <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/map')}>Map</a>
         <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/tours')}>Tours</a>
-        <a href="/login" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/login')}>Login</a>
+        {/* if user is login then show username btn which redirect to profile page */}
+        <a href="/profile" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/profile')}>profile</a>
+        {/* else  show login btn */}
+        {/* <a href="/login" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/login')}>Login</a> */}
       </div>
 
     </div>

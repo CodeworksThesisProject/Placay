@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+:root{
+  --background-grey:#f5f6f7;
+  --orange: #c93102;
+  --router:#f56e20;
+}
+
 body,
 html {
   margin: 0;
