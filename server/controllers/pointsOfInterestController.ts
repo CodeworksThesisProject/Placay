@@ -106,7 +106,7 @@ async function saveCityData(cityName: string, latitude: number, longitude: numbe
   }
 }
 
-async function saveDetailsData(point_id: string, name: string, description: string, phone:number, images: string[]): Promise<void> {
+async function saveDetailsData(point_id: string, name: string, description: string, phone:string, images: string[]): Promise<void> {
   try {
     const newDetails = new Details({ point_id, name, description, phone, images });
     await newDetails.save();
