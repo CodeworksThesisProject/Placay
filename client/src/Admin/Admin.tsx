@@ -1,36 +1,43 @@
 import React, { useState, useEffect } from 'react';
 
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
 const AdminPage = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editUserId, setEditUserId] = useState(null);
-  const [editableUser, setEditableUser] = useState(null);
-  const [newUser, setNewUser] = useState({ name: '', email: '', role: 'user', password: '' });
+  const [editableUser, setEditableUser] = useState<User | null>(null);
+  const [newUser, setNewUser] = useState<{ name: string; email: string; role: string; password: string }>({ name: '', email: '', role: 'user', password: '' });
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('/admin/user', {
-          credentials: 'include',
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch users. Maybe not allowed?');
-        }
-
-        const data = await response.json();
-        setUsers(data);
-      } catch (err) {
-        console.error('Fetch error:', err.message);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/admin/user', {
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch users. Maybe not allowed?');
+      }
+
+      const data = await response.json();
+      setUsers(data);
+    } catch (err: unknown) {
+      console.error('Fetch error:', err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const refreshUsers = async () => {
     try {
@@ -98,6 +105,10 @@ const AdminPage = () => {
 
   const handleAddUser = async () => {
     try {
+      if (!newUser.name || !newUser.email || !newUser.password) {
+        alert("Please fill in all fields.");
+        return;
+      }
       const response = await fetch('/admin/user', {
         method: 'POST',
         headers: {
