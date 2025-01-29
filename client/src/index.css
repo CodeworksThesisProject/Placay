@@ -19,3 +19,14 @@ html {
   flex-direction: column;
   position: relative;
 }
+.pac-target-input {
+  background-color: white;
+  padding: 10px 15px;
+  border: 1px solid #d7d7d7
+}
+.autocomplete-container {
+  position: absolute;
+  top: 10px;
+  left: 55px;
+  z-index: 9999;
+}
