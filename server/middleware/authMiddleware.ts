@@ -6,6 +6,7 @@ const token = req.cookies.token;
 
   if (!token) {
     res.status(401).json({ error: "No token, authorization denied" });
+    console.log("este 2")
     return;
   }
 
@@ -15,6 +16,7 @@ const token = req.cookies.token;
     next();
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });
+    console.log("este 1")
     return;
   }
 };

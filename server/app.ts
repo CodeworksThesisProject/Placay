@@ -4,6 +4,7 @@ import authRoute from "./routes/authRoute";
 import adminRoutes from "./routes/adminRoute";
 import cityRouter from "./routes/cityRoute";
 import cors from 'cors';
+import cookieParser from "cookie-parser";
 
 // Load enviroment variables
 process.env.NODE_ENV == 'develop'
@@ -11,6 +12,10 @@ process.env.NODE_ENV == 'develop'
   : require('dotenv').config({ path: '.env.production.local' });
 
 const app: Application = express();
+
+
+// To get info from cookies
+app.use(cookieParser());
 
 app.use(cors({
   origin: "http://localhost:5173",
