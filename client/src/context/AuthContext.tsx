@@ -50,9 +50,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       const data = await response.json();
-      console.log("esto 4", data)
+      console.log("esto 4", data.user)
+
       setIsAuthenticated(true);
-      setToken(data);
+      setToken(data.user);
     } catch (error) {
       console.error('Error checking authentication:', error);
       setIsAuthenticated(false);

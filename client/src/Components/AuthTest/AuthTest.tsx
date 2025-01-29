@@ -6,7 +6,7 @@ const AuthTest: React.FC = () => {
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []);
 
   if (!isAuthenticated) {
     return <div>You are not authenticated</div>;
