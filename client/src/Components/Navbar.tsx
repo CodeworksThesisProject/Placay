@@ -25,7 +25,7 @@ const ProfileDropdown: React.FC<{ isDropdownOpen: boolean; closeDropdown: () => 
       <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center" onClick={() => { navigate('/mylocations'); closeDropdown(); }}>
         My Locations
       </button>
-      <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center" onClick={() => { handleLogout(); closeDropdown(); }}>
+      <button className="block px-4 py-2 text-[#38436C] hover:bg-red-100 w-full text-center" onClick={() => { handleLogout(); closeDropdown(); }}>
         Logout
       </button>
     </div>
@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className={`w-4/12 hidden md:flex justify-center gap-3 ${isMenuOpen ? 'hidden' : ''}`}>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/map')}>Map</button>
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/')}>Map</button>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
       </div>
 
