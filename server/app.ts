@@ -3,6 +3,7 @@ import express, { Application } from "express";
 import authRoute from "./routes/authRoute";
 import adminRoutes from "./routes/adminRoute";
 import cityRouter from "./routes/cityRoute";
+import profileRoutes from "./routes/profileRoute";
 import cors from 'cors';
 
 // Load enviroment variables
@@ -26,5 +27,6 @@ app.use(express.json());
 app.use("/api", authRoute);
 app.use("/admin", adminRoutes);
 app.use("/city", cityRouter);
+app.use("/profile", profileRoutes);
 
 export default app;
