@@ -9,4 +9,4 @@ const tourSchema = new mongoose.Schema({
 });
 
 
-export const Tour = mongoose.model('City', tourSchema);
+export const Tour = mongoose.model('Tour', tourSchema);
