@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import fileUpload, { UploadedFile } from "express-fileupload";
+import fs from "fs";
+import path from "path";
 import { User, IFavorite } from "../models/userModel";
 
 export const getProfile = async (req: Request, res: Response) => {
@@ -117,5 +120,44 @@ export const deleteFavorite = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error." });
+  }
+};
+
+export const uploadProfileImage = async (req: Request, res: Response) => {
+  try {
+    const user = req.body;
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    if (!req.files || !req.files.image) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const imageFile = req.files.image as UploadedFile;
+    const uploadDir = path.join(__dirname, "../../uploads");
+
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const fileName = `${Date.now()}_${imageFile.name}`;
+    const filePath = path.join(uploadDir, fileName);
+
+    imageFile.mv(filePath, async (err: any) => {
+      if (err) {
+        console.error("File upload error:", err);
+        return res.status(500).json({ message: "File upload failed" });
+      }
+
+      user.profileImage = `/uploads/${fileName}`;
+      await user.save();
+
+      res.status(200).json({ message: "Profile image updated", profileImage: user.profileImage });
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error. So sorry" });
   }
 };
