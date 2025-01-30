@@ -1,15 +1,15 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-interface AuthToken {
+interface User {
   id: string;
+  name: string;
+  email: string;
   role: string;
-  exp: number;
-  iat: number;
 }
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  token: AuthToken | null;
+  user: User | null;
   checkAuth: () => void;
 }
 
@@ -29,7 +29,7 @@ export const useAuth = (): AuthContextType => {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [token, setToken] = useState<AuthToken | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -44,25 +44,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (!response.ok) {
         setIsAuthenticated(false);
-        setToken(null);   
-        console.log("este 3");
+        setUser(null);
         return;
       }
 
       const data = await response.json();
-      console.log("esto 4", data.user)
-
       setIsAuthenticated(true);
-      setToken(data.user);
+      setUser(data.user);
     } catch (error) {
       console.error('Error checking authentication:', error);
       setIsAuthenticated(false);
-      setToken(null);
+      setUser(null);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, checkAuth }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );

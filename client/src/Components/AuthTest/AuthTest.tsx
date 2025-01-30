@@ -1,12 +1,7 @@
-import React, { useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
-const AuthTest: React.FC = () => {
-  const { isAuthenticated, token, checkAuth } = useAuth();
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
+const UserProfile: React.FC = () => {
+  const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
     return <div>You are not authenticated</div>;
@@ -14,9 +9,12 @@ const AuthTest: React.FC = () => {
 
   return (
     <div>
-      <h2>Welcome, your role is: {token?.role}</h2>
+      <h1>User Profile</h1>
+      <p>Name: {user?.name}</p>
+      <p>Email: {user?.email}</p>
+      <p>Role: {user?.role}</p>
     </div>
   );
 };
 
-export default AuthTest;
+export default UserProfile;
