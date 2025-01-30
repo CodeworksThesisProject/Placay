@@ -1,4 +1,4 @@
-
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Components/Login/Login';
 import Register from './Components/Login/Register';
@@ -15,11 +15,13 @@ import AuthTest from './Components/AuthTest/AuthTest';
 import './App.css';
 
 const App: React.FC = () => {
+  const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
+  const [searchedCity, setSearchedCity] = useState<string>("");
 
   return (
     <AuthProvider>
       <Router>
-        <Navbar />
+        <Navbar setCoordinates={setCoordinates} setSearchedCity={setSearchedCity}/>
 
         <Routes>
           <Route path="/login" element={<Login />} />

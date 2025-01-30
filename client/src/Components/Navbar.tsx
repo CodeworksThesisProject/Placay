@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import LocateMe from "./LocateMe";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  setCoordinates: (coords: [number, number]) => void;
+  setSearchedCity: (cityName: string) => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ setCoordinates, setSearchedCity }) => {
   const { isAuthenticated, user, setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -55,6 +61,7 @@ const Navbar: React.FC = () => {
         <div className="text-[#38436C]">{formatDate(new Date())}</div>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/map')}>Map</button>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
+        <LocateMe setCoordinates={setCoordinates} setSearchedCity={setSearchedCity} />
         {isAuthenticated && user?.role === 'admin' ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
         ) : ("")}
