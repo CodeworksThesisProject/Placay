@@ -86,16 +86,16 @@ const Navbar: React.FC = () => {
             <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={toggleDropdown}>{user ? `${user.name} ` : ""}Profile</button>
             {isDropdownOpen && (
               <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-50">
-                <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center" onClick={() => { navigate('/profile'); closeDropdown(); }}>
+                <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { navigate('/profile'); closeDropdown(); }}>
                   View Profile
                 </button>
-                <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center" onClick={() => { navigate('/mytours'); closeDropdown(); }}>
+                <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { navigate('/mytours'); closeDropdown(); }}>
                   My Tours
                 </button>
-                <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center" onClick={() => { navigate('/mylocations'); closeDropdown(); }}>
+                <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { navigate('/mylocations'); closeDropdown(); }}>
                   My Locations
                 </button>
-                <button className="block px-4 py-2 text-[#38436C] hover:bg-red-100 w-full text-center" onClick={() => { handleLogout(); closeDropdown(); }}>
+                <button className="block px-4 py-2 text-[#38436C] hover:bg-red-100 w-full text-center cursor-pointer" onClick={() => { handleLogout(); closeDropdown(); }}>
                   Logout
                 </button>
               </div>
