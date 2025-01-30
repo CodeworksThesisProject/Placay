@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
 
+:root{
+  --background-grey:#f5f6f7;
+  --orange: #c93102;
+  --router:#f56e20;
+}
+
 body,
 html {
   margin: 0;
@@ -19,4 +25,15 @@ html {
   display: flex;
   flex-direction: column;
   position: relative;
+}
+.pac-target-input {
+  background-color: white;
+  padding: 10px 15px;
+  border: 1px solid #d7d7d7
+}
+.autocomplete-container {
+  position: absolute;
+  top: 10px;
+  left: 55px;
+  z-index: 9999;
 }
