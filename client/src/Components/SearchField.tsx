@@ -29,9 +29,11 @@ const SearchField = ({
 
 
   return (
-    <APIProvider apiKey={API_KEY} solutionChannel="GMP_devsite_samples_v3_rgmautocomplete">
-      <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
-    </APIProvider>
+    <div className="flex justify-center mt-[65px] w-full">
+      <APIProvider apiKey={API_KEY} solutionChannel="GMP_devsite_samples_v3_rgmautocomplete">
+        <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
+      </APIProvider>
+    </div>
   );
 };
 
@@ -63,10 +65,11 @@ const PlaceAutocomplete = ({ onPlaceSelect }: PlaceAutocompleteProps) => {
   }, [onPlaceSelect, placeAutocomplete]);
 
   return (
-    <div className="autocomplete-container">
+    <div className="relative z-10 w-full max-w-md mx-auto p-2">
       <input
         ref={inputRef}
         placeholder="Search a city"
+        className="w-full px-4 py-2 border border-[#38436C] rounded-lg shadow-md"
       />
     </div>
   );
