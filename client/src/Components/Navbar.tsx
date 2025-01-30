@@ -78,64 +78,16 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200 shadow-sm flex items-center p-3 justify-between">
-      <div className="flex items-center gap-3 px-3">
-        <img
-          src="/asserts/images/placay-just-logo.png"
-          alt="Placay Logo"
-          className="w-12 cursor-pointer"
-          onClick={() => navigate('/')}
-        />
-        <div className="text-[#38436C]">{formatDate(new Date())}</div>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/')}>Map</button>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
-        {isAuthenticated && user?.role === 'admin' ? (
-          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        ) : ("")}
-        <div className="flex gap-2 items-center">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="border px-2 py-1 rounded"
-          />
-          <span>-</span>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="border px-2 py-1 rounded"
-          />
-          <button
-            onClick={handleSaveTimePeriod}
-            className="bg-[#38436C] text-white px-3 py-1 rounded hover:bg-opacity-90 cursor-pointer"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-
-      <div className="md:hidden">
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          ☰
-        </button>
-      </div>
-
-      <div className={`absolute top-14 left-0 w-full bg-white shadow-md p-3 flex flex-col md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/map')}>Map</button>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        {isAuthenticated && user?.role === 'admin' ? (
-          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        ) : ("")}
-        {isAuthenticated ? (
-          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={handleLogout}>Logout</button>
-        ) : (
-          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/login')}>Login</button>
-        )}
-      </div>
-
-      <div className="relative hidden md:flex items-center">
+    <div className="bg-white border-b border-gray-200 shadow-sm flex flex-row items-center ">
+      <img src="/asserts/images/placay-just-logo.png" alt="Placay Logo" className="w-15 mx-3 cursor-pointer" onClick={() => navigate('/')} />
+      <div className="border-r border-l border-gray-300 px-2 h-15 flex items-center whitespace-nowrap text-[#38436C]">{new Date().toLocaleDateString()}</div>
+      <div className="flex flex-row gap-3 justify-start w-full">
+        <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/')}>Map</a>
+        <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/tours')}>Tours</a>
+        {/* if user is login then show username btn which redirect to profile page */}
+        <a href="/profile" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/profile')}>profile</a>
+        {/* else  show login btn */}
+        {/* <a href="/login" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/login')}>Login</a> */}
         {isAuthenticated ? (
           <div className="relative">
             <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={toggleDropdown}>{user ? `${user.name} ` : ""}Profile</button>

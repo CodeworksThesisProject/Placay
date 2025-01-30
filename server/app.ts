@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import authRoute from "./routes/authRoute";
 import adminRoutes from "./routes/adminRoute";
 import cityRouter from "./routes/cityRoute";
+import tourRouter from "./routes/toursRoute";
 import profileRoutes from "./routes/profileRoute";
 
 // Load enviroment variables
@@ -36,6 +37,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api", authRoute);
 app.use("/admin", adminRoutes);
 app.use("/city", cityRouter);
-app.use("/user", profileRoutes);
+app.use("/profile", profileRoutes);
+app.use("/tour", tourRouter);
 
 export default app;
