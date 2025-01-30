@@ -12,7 +12,7 @@ export const getPointsOfInterest = async (req: Request, res: Response): Promise<
       res.json(savedCity.pointsOfInterest);
       return;
     }
-    const pointsOfInterest = await getPoints(latitude, longitude, radius);
+    const pointsOfInterest = await fetchPoints(latitude, longitude, radius);
     if (pointsOfInterest) {
       await saveCityData(cityName, latitude, longitude, pointsOfInterest);
       res.json(pointsOfInterest);
@@ -50,7 +50,7 @@ export const getDetails = async (req: Request, res: Response): Promise<void> => 
 
 
 /* TODO change the key to an .env file */const API_KEY = "AIzaSyB57oCWBiCU7ET0vWR_dGrO5tIcy9ed71E";
-async function getPoints(latitude: number = 51.5072178, longitude: number = -0.1275862, radius: number = 50000): Promise<any> {
+async function fetchPoints(latitude: number = 51.5072178, longitude: number = -0.1275862, radius: number): Promise<any> {
   let pointsOfInterest = [];
   try {
     const types = ['tourist_attraction', 'museum', 'park', 'historic_site', 'art_gallery', 'amusement_park'];
