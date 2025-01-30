@@ -32,6 +32,6 @@ app.use(express.json());
 app.use("/api", authRoute);
 app.use("/admin", adminRoutes);
 app.use("/city", cityRouter);
-app.use("/profile", profileRoutes);
+app.use("/user", profileRoutes);
 
 export default app;

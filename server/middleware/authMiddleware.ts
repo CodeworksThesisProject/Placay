@@ -3,10 +3,6 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/userModel";
 
-process.env.NODE_ENV == 'development'
-  ? require('dotenv').config({ path: '.env.development.local' })
-  : require('dotenv').config({ path: '.env.production.local' })
-
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const token = req.cookies.token;
 
