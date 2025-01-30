@@ -6,6 +6,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  role: string;
   generateAuthToken(): string;
 }
 
@@ -14,6 +15,7 @@ const userSchema: Schema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: { type: String, enum: ["user", "admin"], default: "user" }
   },
   { timestamps: true }
 );
@@ -30,8 +32,8 @@ userSchema.pre<IUser>("save", async function (next) {
 userSchema.methods.generateAuthToken = function (): string {
   const user = this as IUser;
   
-  const jsonWebTokenKey = process.env.JWT || "your_jwt_secret"
-  const token = jwt.sign({ _id: user._id }, jsonWebTokenKey, {
+  const jsonWebTokenKey = process.env.JWT_SECRET || "your_jwt_secret";
+  const token = jwt.sign({ id: this._id, role: this.role }, jsonWebTokenKey, {
     expiresIn: "1h",
   });
   return token;
