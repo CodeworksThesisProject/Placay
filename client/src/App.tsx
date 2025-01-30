@@ -12,6 +12,7 @@ import AdminRoute from './Admin/AdminMiddleware';
 import { AuthProvider } from './context/AuthContext';
 import Profile from './Pages/UserProfile';
 import AuthTest from './Components/AuthTest/AuthTest';
+import './App.css';
 
 const App: React.FC = () => {
 

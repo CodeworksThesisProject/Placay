@@ -7,6 +7,17 @@
   --router:#f56e20;
 }
 
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
 body,
 html {
   margin: 0;
@@ -25,6 +36,7 @@ html {
   display: flex;
   flex-direction: column;
   position: relative;
+  z-index: 1;
 }
 .pac-target-input {
   background-color: white;
