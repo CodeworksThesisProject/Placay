@@ -11,6 +11,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   checkAuth: () => void;
+  setIsAuthenticated: (auth: boolean) => void;
 }
 
 interface AuthProviderProps {
@@ -59,8 +60,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, checkAuth }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, checkAuth, setIsAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
