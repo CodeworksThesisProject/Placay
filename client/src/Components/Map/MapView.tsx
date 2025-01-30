@@ -21,7 +21,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
 
     const fetchLocations = async () => {
         try {
-            const data = await getPointsOfInterest(searchedCity, coordinates[0], coordinates[1]);
+            const data = await getPointsOfInterest(searchedCity, ...coordinates);
             const formattedLocations = data.map((item: any) => ({
                 name: item.name,
                 id: item.id,
@@ -43,8 +43,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             }).addTo(mapRef.current);
         }
-
-
         return () => {
             if (mapRef.current) {
                 mapRef.current.remove();
@@ -55,7 +53,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
 
     useEffect(() => {
         fetchLocations();
-    }, [coordinates, searchedCity]);
+    }, [coordinates]);
 
     useEffect(() => {
         if (locations.length > 0 && mapRef.current) {
