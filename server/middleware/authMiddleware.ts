@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-const jsonWebTokenKey = process.env.JWT_SECRET || "your_jwt_secret";
+process.env.NODE_ENV == 'develop'
+  ? require('dotenv').config({ path: '.env.development.local' })
+  : require('dotenv').config({ path: '.env.production.local' })
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const token = req.cookies.token;

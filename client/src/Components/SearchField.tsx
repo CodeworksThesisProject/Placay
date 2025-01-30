@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 //npm install "@vis.gl/react-google-maps"
 //npm i -D @types/google.maps
 //Code source: https://developers.google.com/maps/documentation/javascript/examples/rgm-autocomplete
 //https://developers.google.com/maps/documentation/javascript/get-api-key?hl=es-419
 
-const API_KEY = "AIzaSyB57oCWBiCU7ET0vWR_dGrO5tIcy9ed71E";
+/* TODO change the key to an .env file */const API_KEY = "AIzaSyB57oCWBiCU7ET0vWR_dGrO5tIcy9ed71E";
 
 const SearchField = ({
   setCoordinates,
@@ -22,16 +22,16 @@ const SearchField = ({
       const lat = selectedPlace.geometry.location.lat();
       const lng = selectedPlace.geometry.location.lng();
       setCoordinates([lat, lng]);
-      setSearchedCity(selectedPlace.name||"");
-      console.log("El selected place es: ",selectedPlace.name)
+      setSearchedCity(selectedPlace.name || "");
+      console.log("El selected place es: ", selectedPlace.name)
     }
   }, [selectedPlace, setCoordinates, setSearchedCity]);
 
 
   return (
-      <APIProvider apiKey={API_KEY} solutionChannel="GMP_devsite_samples_v3_rgmautocomplete">
-        <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
-      </APIProvider>
+    <APIProvider apiKey={API_KEY} solutionChannel="GMP_devsite_samples_v3_rgmautocomplete">
+      <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
+    </APIProvider>
   );
 };
 

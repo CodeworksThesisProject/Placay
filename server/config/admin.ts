@@ -1,3 +1,7 @@
+process.env.NODE_ENV == 'develop'
+  ? require('dotenv').config({ path: '.env.development.local' })
+  : require('dotenv').config({ path: '.env.production.local' })
+
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const SECRET_KEY = process.env.JWT_SECRET || 'default';

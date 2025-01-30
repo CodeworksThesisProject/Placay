@@ -30,6 +30,6 @@ app.use(express.json());
 // Routes
 app.use("/api", authRoute);
 app.use("/admin", adminRoutes);
-app.use("/", cityRouter); //Just 1 route, we need the cityRoute File?
+app.use("/city", cityRouter);
 
 export default app;
