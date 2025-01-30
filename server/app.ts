@@ -3,6 +3,7 @@ import express, { Application } from "express";
 import authRoute from "./routes/authRoute";
 import adminRoutes from "./routes/adminRoute";
 import cityRouter from "./routes/cityRoute";
+import tourRouter from "./routes/toursRoute";
 import profileRoutes from "./routes/profileRoute";
 import cors from 'cors';
 import cookieParser from "cookie-parser";
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use("/api", authRoute);
 app.use("/admin", adminRoutes);
 app.use("/city", cityRouter);
-app.use("/user", profileRoutes);
+app.use("/profile", profileRoutes);
+app.use("/tour", tourRouter);
 
 export default app;
