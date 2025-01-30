@@ -133,7 +133,7 @@ const AdminPage = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch('/profile', {
+      const response = await fetch('/user', {
         method: 'GET',
         credentials: 'include',
       });

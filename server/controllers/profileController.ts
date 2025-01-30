@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { User } from "../models/userModel";
+import mongoose from "mongoose";
+import { User, IFavorite } from "../models/userModel";
 
 export const getProfile = async (req: Request, res: Response) => {
   try {
@@ -13,6 +14,76 @@ export const getProfile = async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+export const addFavorite = async (req: Request, res: Response) => {
+  try {
+    const { latitude, longitude, label } = req.body;
+    const user = req.body;
+
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    if (typeof latitude !== "number" || typeof longitude !== "number") {
+      return res.status(400).json({ error: "Invalid location data" });
+    }
+
+    const newFavorite = {
+      _id: new mongoose.Types.ObjectId(),
+      latitude,
+      longitude,
+      label,
+    };
+
+    user.favorites.push(newFavorite);
+    await user.save();
+
+    res.status(201).json({ message: "Favorite added successfully", favorites: user.favorites });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+export const getFavorites = async (req: Request, res: Response) => {
+  try {
+    const user = req.body;
+
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    res.status(200).json({ favorites: user.favorites });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+export const deleteFavorite = async (req: Request, res: Response) => {
+  try {
+    const user = req.body;
+    const favoriteId = req.params.id;
+
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const favoriteIndex = user.favorites.findIndex((fav: IFavorite) => fav._id.toString() === favoriteId);
+
+    if (favoriteIndex === -1) {
+      return res.status(404).json({ error: "Favorite not found" });
+    }
+
+    user.favorites.splice(favoriteIndex, 1);
+    await user.save();
+
+    res.status(200).json({ message: "Favorite removed successfully", favorites: user.favorites });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error." });

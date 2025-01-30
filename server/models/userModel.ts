@@ -7,7 +7,15 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: string;
+  favorites: IFavorite[];
   generateAuthToken(): string;
+}
+
+export interface IFavorite {
+  _id: mongoose.Types.ObjectId;
+  latitude: number;
+  longitude: number;
+  label?: string;
 }
 
 const userSchema: Schema = new Schema(
@@ -15,7 +23,15 @@ const userSchema: Schema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ["user", "admin"], default: "user" }
+    role: { type: String, enum: ["user", "admin"], default: "user" },
+    favorites: [
+      {
+        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+        latitude: { type: Number, required: true },
+        longitude: { type: Number, required: true },
+        label: { type: String },
+      },
+    ],
   },
   { timestamps: true }
 );
