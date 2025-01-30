@@ -7,6 +7,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: string;
+  profileImage?: string;
   favorites: IFavorite[];
   generateAuthToken(): string;
 }
@@ -24,6 +25,7 @@ const userSchema: Schema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
+    profileImage: { type: String, default: "" },
     favorites: [
       {
         _id: { type: mongoose.Schema.Types.ObjectId, auto: true },

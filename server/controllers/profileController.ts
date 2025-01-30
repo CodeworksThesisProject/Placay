@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 import { User, IFavorite } from "../models/userModel";
 
 export const getProfile = async (req: Request, res: Response) => {
@@ -13,7 +14,36 @@ export const getProfile = async (req: Request, res: Response) => {
     res.status(200).json({
       name: user.name,
       email: user.email,
+      profileImage: user.profileImage || "",
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const { name, email, password } = req.body;
+    const user = req.body;
+
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+
+    if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters long" });
+      }
+      user.password = await bcrypt.hash(password, 10);
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: "Profile updated successfully", user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error." });
