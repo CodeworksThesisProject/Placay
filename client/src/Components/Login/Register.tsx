@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext'
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -9,6 +10,13 @@ const Register: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated, checkAuth } = useAuth();
+
+  useEffect(() => {
+      if (isAuthenticated) {
+        navigate('/');
+      }
+    }, [isAuthenticated, navigate]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
