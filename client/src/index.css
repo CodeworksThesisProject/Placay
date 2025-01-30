@@ -1,5 +1,9 @@
 @import "tailwindcss";
-
+@layer components {
+  .bg-black {
+    background-color: #000000bf !important;
+  }
+}
 
 :root{
   --background-grey:#f5f6f7;
@@ -48,4 +52,10 @@ html {
   top: 10px;
   left: 55px;
   z-index: 9999;
+}
+
+
+div:has(.custom-modal-backdrop) {
+  background-color: rgba(0, 0, 0, 0.254);
+  backdrop-filter: blur(4px);
 }
