@@ -39,12 +39,11 @@ useEffect(() => {
         return;
       }
 
-      const data = await response.json();
       setIsAuthenticated(true);
       navigate('/');
     } catch (err) {
       console.error('Registration error:', err);
-      setError(`Error: ${err.message || err}`);
+      setError(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   };
 

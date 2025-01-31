@@ -50,7 +50,7 @@ userSchema.pre<IUser>("save", async function (next) {
 userSchema.methods.generateAuthToken = function (): string {
   const user = this as IUser;
 
-  const jsonWebTokenKey = process.env.JWT_SECRET || "your_jwt_secret";
+  const jsonWebTokenKey = process.env.JWT_SECRET || "token";
   const token = jwt.sign({ id: this._id, }, jsonWebTokenKey, {
     expiresIn: "1h",
   });
