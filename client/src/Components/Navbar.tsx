@@ -7,8 +7,6 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
 
   const closeDropdown = () => setIsDropdownOpen(false);
   const toggleDropdown = () => setIsDropdownOpen(prev => !prev);
@@ -37,57 +35,52 @@ const Navbar: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchTimePeriod();
-    }
     const handleResize = () => {
       if (window.innerWidth >= 768) setIsMenuOpen(false);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, [isAuthenticated]);
-
-  const fetchTimePeriod = async () => {
-    try {
-      const response = await fetch('/user/timeperiod', { credentials: 'include' });
-      if (response.ok) {
-        const data = await response.json();
-        setStartDate(data.startDate || '');
-        setEndDate(data.endDate || '');
-      }
-    } catch (error) {
-      console.error('Error fetching time period:', error);
-    }
-  };
-
-  const handleSaveTimePeriod = async () => {
-    try {
-      const response = await fetch('/user/timeperiod', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ startDate, endDate })
-      });
-      if (!response.ok) {
-        console.error('Failed to save time period');
-      }
-    } catch (error) {
-      console.error('Error saving time period:', error);
-    }
-  };
+  }, []);
 
   return (
-    <div className="bg-white border-b border-gray-200 shadow-sm flex flex-row items-center ">
-      <img src="/asserts/images/placay-just-logo.png" alt="Placay Logo" className="w-15 mx-3 cursor-pointer" onClick={() => navigate('/')} />
-      <div className="border-r border-l border-gray-300 px-2 h-15 flex items-center whitespace-nowrap text-[#38436C]">{new Date().toLocaleDateString()}</div>
-      <div className="flex flex-row gap-3 justify-start items-center w-full">
-        <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/')}>Map</a>
-        <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/tours')}>Tours</a>
-        {/* if user is login then show username btn which redirect to profile page */}
-        <a href="/profile" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/profile')}>profile</a>
-        {/* else  show login btn */}
-        {/* <a href="/login" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/login')}>Login</a> */}
+    <div className="bg-white border-b border-gray-200 shadow-sm flex items-center p-3 justify-between">
+      <div className="flex items-center gap-3 px-3">
+        <img
+          src="/asserts/images/placay-just-logo.png"
+          alt="Placay Logo"
+          className="w-12 cursor-pointer"
+          onClick={() => navigate('/')}
+        />
+        <div className="text-[#38436C]">{formatDate(new Date())}</div>
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/')}>Map</button>
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
+        {isAuthenticated && user?.role === 'admin' ? (
+          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
+        ) : ("")}
+    </div>
+
+      <div className="md:hidden">
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          ☰
+        </button>
+      </div>
+
+      <div className={`absolute top-14 left-0 w-full bg-white shadow-md p-3 flex flex-col md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/map')}>Map</button>
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
+        {isAuthenticated && user?.role === 'admin' ? (
+          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
+        ) : ("")}
+        {isAuthenticated ? (
+          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={handleLogout}>Logout</button>
+        ) : (
+          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/login')}>Login</button>
+        )}
+      </div>
+
+      <div className="relative hidden md:flex items-center">
         {isAuthenticated ? (
           <div className="relative">
             <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={toggleDropdown}>{user ? `${user.name} ` : ""}Profile</button>
