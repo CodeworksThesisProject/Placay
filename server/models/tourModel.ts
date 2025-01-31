@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const tourSchema = new mongoose.Schema({
+  user_id: { type: String, required: true },
   title: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },

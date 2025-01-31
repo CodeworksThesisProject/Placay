@@ -46,13 +46,13 @@ export const deleteTours = async (req: Request, res: Response): Promise<void> =>
   try {
     const { tour_id } = req.params;
 
-    const updatedTour = await Tour.findByIdAndDelete(tour_id);
-    if (updatedTour) {
-      res.json(updatedTour);
+    const deletedTour = await Tour.findByIdAndDelete(tour_id);
+    if (deletedTour) {
+      res.json(deletedTour);
       return;
     }
   } catch (error: any) {
-    console.error('Error fetching points of interest:', error);
+    console.error('Error deleting the tour:', error);
     res.status(500).json({ error: error.message });
   }
 }
