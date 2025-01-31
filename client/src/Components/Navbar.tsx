@@ -7,6 +7,8 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const closeDropdown = () => setIsDropdownOpen(false);
   const toggleDropdown = () => setIsDropdownOpen(prev => !prev);
@@ -35,13 +37,45 @@ const Navbar: React.FC = () => {
   };
 
   useEffect(() => {
+    if (isAuthenticated) {
+      fetchTimePeriod();
+    }
     const handleResize = () => {
       if (window.innerWidth >= 768) setIsMenuOpen(false);
     };
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isAuthenticated]);
+
+  const fetchTimePeriod = async () => {
+    try {
+      const response = await fetch('/user/timeperiod', { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        setStartDate(data.startDate || '');
+        setEndDate(data.endDate || '');
+      }
+    } catch (error) {
+      console.error('Error fetching time period:', error);
+    }
+  };
+
+  const handleSaveTimePeriod = async () => {
+    try {
+      const response = await fetch('/user/timeperiod', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ startDate, endDate })
+      });
+      if (!response.ok) {
+        console.error('Failed to save time period');
+      }
+    } catch (error) {
+      console.error('Error saving time period:', error);
+    }
+  };
 
   return (
     <div className="bg-white border-b border-gray-200 shadow-sm flex items-center p-3 justify-between">
@@ -58,6 +92,27 @@ const Navbar: React.FC = () => {
         {isAuthenticated && user?.role === 'admin' ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
         ) : ("")}
+        <div className="flex gap-2 items-center">
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border px-2 py-1 rounded"
+          />
+          <span>-</span>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border px-2 py-1 rounded"
+          />
+          <button
+            onClick={handleSaveTimePeriod}
+            className="bg-[#38436C] text-white px-3 py-1 rounded hover:bg-opacity-90 cursor-pointer"
+          >
+            Save
+          </button>
+        </div>
       </div>
 
       <div className="md:hidden">
