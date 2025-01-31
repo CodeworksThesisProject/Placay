@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <div className="navbar bg-white border-b border-gray-200 shadow-sm flex items-center p-3 justify-between">
+    <div className="bg-white border-b border-gray-200 shadow-sm flex items-center p-3 justify-between">
       <div className="flex items-center gap-3 px-3">
         <img
           src="/asserts/images/placay-just-logo.png"
@@ -53,7 +53,7 @@ const Navbar: React.FC = () => {
           onClick={() => navigate('/')}
         />
         <div className="text-[#38436C]">{formatDate(new Date())}</div>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/map')}>Map</button>
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/')}>Map</button>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
         {isAuthenticated && user?.role === 'admin' ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>

@@ -1,7 +1,7 @@
 const TourDetail: React.FC = () => {
 
   return (
-      <div className="flex flex-col gap-3 w-sm bg-white p-3 rounded-xs shadow-sm mt-2" >
+      <div className="flex flex-col gap-3 w-sm bg-white p-3 rounded-xs shadow-sm" >
             
             <div className="header flex flex-row justify-between text-gray-800 mx-5">
               <div className="flex flex-row gap-2 text-sm items-center">
@@ -19,14 +19,14 @@ const TourDetail: React.FC = () => {
 
             <div className="map">
 
-              <img src="../../../public/asserts/images/tours/map.png" className="px-5" alt="map" />
+              <img src="../../../asserts/images/tours/map.png" className="px-5" alt="map" />
               {/* TODO mapview with router should be shown here */}
             </div>
 
             <div className="tour-locations grid grid-cols-2 gap-4">
               <div className="px-4 flex flex-row gap-3">
                 <img 
-                  src="../../../public/asserts/images/tours/tv-tower.png" 
+                  src="../../../asserts/images/tours/tv-tower.png" 
                   className="w-8 h-8 object-cover rounded-full shadow-sm" 
                   alt="picture of location"  
                 />
@@ -38,7 +38,7 @@ const TourDetail: React.FC = () => {
 
               <div className="px-4 flex flex-row gap-3">
                 <img 
-                  src="../../../public/asserts/images/tours/brandenburg.png" 
+                  src="../../../asserts/images/tours/brandenburg.png" 
                   className="w-8 h-8 object-cover rounded-full shadow-sm" 
                   alt="picture of location"  
                 />
@@ -50,7 +50,7 @@ const TourDetail: React.FC = () => {
 
               <div className="px-4 flex flex-row gap-3">
                 <img 
-                  src="../../../public/asserts/images/tours/catedral.png" 
+                  src="../../../asserts/images/tours/catedral.png" 
                   className="w-8 h-8 object-cover rounded-full shadow-sm" 
                   alt="picture of location"  
                 />
@@ -62,7 +62,7 @@ const TourDetail: React.FC = () => {
 
               <div className="px-4 flex flex-row gap-3">
                 <img 
-                  src="../../../public/asserts/images/tours/zoo.png" 
+                  src="../../../asserts/images/tours/zoo.png" 
                   className="w-8 h-8 object-cover rounded-full shadow-sm" 
                   alt="picture of location"  
                 />
@@ -74,7 +74,7 @@ const TourDetail: React.FC = () => {
 
               <div className="px-4 flex flex-row gap-3">
                 <img 
-                  src="../../../public/asserts/images/tours/east-side-gallery.png" 
+                  src="../../../asserts/images/tours/east-side-gallery.png" 
                   className="w-8 h-8 object-cover rounded-full shadow-sm" 
                   alt="picture of location"  
                 />

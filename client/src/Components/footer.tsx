@@ -8,7 +8,7 @@ function Footer(): JSX.Element {
   }
 
   return (
-    <footer className="flex items-center justify-between px-10 py-4 bg-gray-100 text-sm text-gray-700 border-t border-gray-300 mt-auto">
+    <footer className="flex flex-row items-center justify-between px-10 py-4 bg-gray-100 text-sm text-gray-700 border-t border-gray-300">
       {/* Name and Year in the center */}
       <div className="absolute left-1/2 transform -translate-x-1/2 text-[#38436C]">
         © 2025 Placay

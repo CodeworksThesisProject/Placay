@@ -20,21 +20,23 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
-        <Navbar />
-
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile/>} />
-          <Route path="/dashboard" element={<AdminRoute><Admin /></AdminRoute>} />
-          <Route path="/about" element={<About />} />
-          <Route path="/legal" element={<Legal />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/tours" element={<Tour />} />
-          <Route path="/AuthTest" element={<AuthTest />} />
-        </Routes>
-
-        <Footer />
+        <div className="flex flex-col min-h-screen"> 
+          <Navbar />
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/dashboard" element={<AdminRoute><Admin /></AdminRoute>} />
+              <Route path="/about" element={<About />} />
+              <Route path="/legal" element={<Legal />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/tours" element={<Tour />} />
+              <Route path="/AuthTest" element={<AuthTest />} />
+            </Routes>
+          </div>
+          <Footer />
+        </div>
       </Router>
     </AuthProvider>
   );
