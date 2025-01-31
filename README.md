@@ -5,6 +5,22 @@ Discover *city highlights* and create *personalized itineraries*
 ## Development Documentation
 
 ### User Routes
+* `/api/register` -> post -> put in name, email and password to create a user and save if to the database. first user will be admin by default
+* `/api/login` -> post -> login with email and password
+* `/api/logout` -> ??? -> logout user
+* `/api/check-auth` -> ??? -> ???
+
+### User Profile Routes
+* `/user` -> get -> gives you a name, email and profile picture url for a user. need to be logged in to use it and send a cookie token with it
+* `/user` -> post -> update your name, email and passwort. need to be logged in to use it and send a cookie token with it
+
+### User favorites Routes
+* `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, label and an unique id
+* `/user/favorite` -> post -> lets you add a favorite with latitude, longitude, label and will create an unique id
+* `/user/favorite` -> delete -> send the id of a favorite to delete it
+
+### Cities Route
+* `/city` -> ???
 
 ### Admin Routes
 Need a role `admin` to work

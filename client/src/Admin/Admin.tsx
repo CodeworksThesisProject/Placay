@@ -1,36 +1,45 @@
 import React, { useState, useEffect } from 'react';
 
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
 const AdminPage = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editUserId, setEditUserId] = useState(null);
-  const [editableUser, setEditableUser] = useState(null);
-  const [newUser, setNewUser] = useState({ name: '', email: '', role: 'user', password: '' });
+  const [editableUser, setEditableUser] = useState<User | null>(null);
+  const [newUser, setNewUser] = useState<{ name: string; email: string; role: string; password: string }>({ name: '', email: '', role: 'user', password: '' });
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('/admin/user', {
-          credentials: 'include',
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch users. Maybe not allowed?');
-        }
-
-        const data = await response.json();
-        setUsers(data);
-      } catch (err) {
-        console.error('Fetch error:', err.message);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
+    fetchProfile();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/admin/user', {
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch users. Maybe not allowed?');
+      }
+
+      const data = await response.json();
+      setUsers(data);
+    } catch (err: unknown) {
+      console.error('Fetch error:', err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const refreshUsers = async () => {
     try {
@@ -98,6 +107,10 @@ const AdminPage = () => {
 
   const handleAddUser = async () => {
     try {
+      if (!newUser.name || !newUser.email || !newUser.password) {
+        alert("Please fill in all fields.");
+        return;
+      }
       const response = await fetch('/admin/user', {
         method: 'POST',
         headers: {
@@ -118,12 +131,30 @@ const AdminPage = () => {
     }
   };
 
+  const fetchProfile = async () => {
+    try {
+      const response = await fetch('/user', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUserName(data.name);
+      } else {
+        setUserName(null);
+      }
+    } catch (error) {
+      console.error('Failed to get Profile name:', error);
+      setUserName(null);
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">{userName ? `Hello ${userName}, welcome to ` : ''}Admin Dashboard</h1>
       <table className="w-full border-collapse border border-gray-300">
         <thead>
           <tr>

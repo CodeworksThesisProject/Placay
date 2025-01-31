@@ -1,11 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setIsAuthenticated, checkAuth, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +38,7 @@ const Login: React.FC = () => {
       }
 
       const data = await response.json();
+      setIsAuthenticated(true);
       navigate('/');
     } catch (err) {
       console.error('Login error:', err);

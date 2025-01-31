@@ -1,26 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const { setIsAuthenticated, checkAuth, isAuthenticated } = useAuth();
+  
+
+useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess(false);
 
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
         credentials: 'include',
       });
@@ -32,35 +40,31 @@ const Register: React.FC = () => {
       }
 
       const data = await response.json();
-      setSuccess(true);
-
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      setIsAuthenticated(true);
+      navigate('/');
     } catch (err) {
       console.error('Registration error:', err);
-      setError('An unexpected error occurred. Please try again later.');
+      setError(`Error: ${err.message || err}`);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen dark">
       <div className="w-full max-w-md bg-gray-200 rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-black mb-4">Create a new account on <span className="text-[#0366fc]">Placay</span></h2>
-        <div className="text-sm font-normal mb-4 text-center text-black">Sign up to get started</div>
-        {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-        {success && <div className="text-green-500 text-sm mb-4">Registration successful!</div>}
+        <h2 className="text-2xl font-bold text-black mb-4 text-center">Create a new account on <span className="text-[#0366fc]">Placay</span></h2>
+        <div className="text-sm font-normal mb-4 text-center text-black">Sign up for free</div>
+        {error && <div className="text-red-500 text-sm mb-4 text-center">{error}</div>}
         <form className="flex flex-col gap-3" onSubmit={handleRegister}>
           <div className="block relative">
             <label htmlFor="name" className="block text-black cursor-text text-sm leading-[140%] font-normal mb-2">
-              Full Name
+              Name
             </label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your full name"
+              placeholder="Enter your name"
               className="bg-gray-500 text-gray-200 border-0 rounded-md p-2 mb-4 focus:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full"
             />
           </div>
@@ -99,9 +103,9 @@ const Register: React.FC = () => {
         </form>
         <div className="text-sm text-center mt-[1.6rem] text-black">
           Already have an account?{' '}
-          <Link className="text-sm text-[#0366fc]" to="/login">
+          <a href="/login" className="text-blue-500 hover:underline">
             Log in here!
-          </Link>
+          </a>
         </div>
       </div>
     </div>

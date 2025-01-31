@@ -1,9 +1,25 @@
 @import "tailwindcss";
+@layer components {
+  .bg-black {
+    background-color: #000000bf !important;
+  }
+}
 
 :root{
   --background-grey:#f5f6f7;
   --orange: #c93102;
   --router:#f56e20;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 }
 
 body,
@@ -24,6 +40,7 @@ html {
   display: flex;
   flex-direction: column;
   position: relative;
+  z-index: 1;
 }
 .pac-target-input {
   background-color: white;
@@ -35,4 +52,10 @@ html {
   top: 10px;
   left: 55px;
   z-index: 9999;
+}
+
+
+div:has(.custom-modal-backdrop) {
+  background-color: rgba(0, 0, 0, 0.254);
+  backdrop-filter: blur(4px);
 }
