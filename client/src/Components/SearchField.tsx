@@ -65,7 +65,7 @@ const PlaceAutocomplete = ({ onPlaceSelect }: PlaceAutocompleteProps) => {
   }, [onPlaceSelect, placeAutocomplete]);
 
   return (
-    <div className=" w-full  mx-auto p-2 absolute top-[4px] left-[40px] z-[99999]">
+    <div className=" w-80 mx-auto p-2 absolute top-[4px] left-[40px] z-[99999]">
       <input
         ref={inputRef}
         placeholder="Search a city"

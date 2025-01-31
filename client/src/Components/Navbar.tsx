@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
         {isAuthenticated && user?.role === 'admin' ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
         ) : ("")}
-      </div>
+    </div>
 
       <div className="md:hidden">
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>
