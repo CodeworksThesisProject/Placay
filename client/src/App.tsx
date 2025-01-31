@@ -20,9 +20,9 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
-        <div className="flex flex-col min-h-screen"> 
+        {/* <div className="flex flex-col min-h-screen">  */}
           <Navbar />
-          <div className="flex-grow">
+          {/* <div className="flex-grow"> */}
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
@@ -34,9 +34,9 @@ const App: React.FC = () => {
               <Route path="/tours" element={<Tour />} />
               <Route path="/AuthTest" element={<AuthTest />} />
             </Routes>
-          </div>
+          {/* </div> */}
           <Footer />
-        </div>
+        {/* </div> */}
       </Router>
     </AuthProvider>
   );
