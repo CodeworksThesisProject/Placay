@@ -84,12 +84,9 @@ const Navbar: React.FC = () => {
       <div className="flex flex-row gap-3 justify-start items-center w-full">
         <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/')}>Map</a>
         <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/tours')}>Tours</a>
-        {/* if user is login then show username btn which redirect to profile page */}
-        <a href="/profile" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/profile')}>profile</a>
-        {/* else  show login btn */}
-        {/* <a href="/login" className="ml-auto px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/login')}>Login</a> */}
+        
         {isAuthenticated ? (
-          <div className="relative">
+          <div className="relative ml-auto">
             <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={toggleDropdown}>{user ? `${user.name} ` : ""}Profile</button>
             {isDropdownOpen && (
               <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-50">
@@ -107,9 +104,9 @@ const Navbar: React.FC = () => {
                 </button>
               </div>
             )}
-          </div>
+           </div>
         ) : (
-          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/login')}>Login</button>
+          <button className="ml-auto px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/login')}>Login</button>
         )}
       </div>
     </div>
