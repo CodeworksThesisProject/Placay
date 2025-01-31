@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
 import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
+import { useEffect, useRef, useState } from 'react';
 //npm install "@vis.gl/react-google-maps"
 //npm i -D @types/google.maps
 //Code source: https://developers.google.com/maps/documentation/javascript/examples/rgm-autocomplete
@@ -29,7 +29,7 @@ const SearchField = ({
 
 
   return (
-    <div className="flex justify-center mt-[65px] w-full">
+    <div className="flex justify-center  w-full">
       <APIProvider apiKey={API_KEY} solutionChannel="GMP_devsite_samples_v3_rgmautocomplete">
         <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
       </APIProvider>
@@ -65,11 +65,11 @@ const PlaceAutocomplete = ({ onPlaceSelect }: PlaceAutocompleteProps) => {
   }, [onPlaceSelect, placeAutocomplete]);
 
   return (
-    <div className="relative z-10 w-full max-w-md mx-auto p-2">
+    <div className=" w-full  mx-auto p-2 absolute top-[4px] left-[40px] z-[99999]">
       <input
         ref={inputRef}
         placeholder="Search a city"
-        className="w-full px-4 py-2 border border-[#38436C] rounded-lg shadow-md"
+        className="w-80 px-4 py-1 border border-[#38436C] rounded-lg shadow-md"
       />
     </div>
   );

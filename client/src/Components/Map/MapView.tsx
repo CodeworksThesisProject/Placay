@@ -102,8 +102,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
         setOpen(!open)
     };
     const [open, setOpen] = React.useState(false);
- 
-//   const handleOpen = () => setOpen(!open);
+
 
     return (
         <>
@@ -111,7 +110,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
 
             <Dialog 
                 open={open} 
+                size="sm"
                 handler={handleCloseModal}
+                animate={{
+                    mount: { scale: 1, y: 0 },
+                    unmount: { scale: 0.9, y: -100 },
+                  }}
             >
                 {selectedLocation && (
                     <div className="flex flex-row justify-center p-4 rounded-lg shadow-lg">
@@ -136,7 +140,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
                             </button>
 
                             <div className="flex justify-between items-center text-center">
-                                <h5>{selectedLocation.name}</h5>
+                                <h1 className="font-bold">{selectedLocation.name}</h1>
                             </div>
 
                             <div className="mb-3 max-h-[150px] overflow-y-auto flex-grow">
@@ -145,7 +149,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
                                 </p>
                             </div>
 
-                            <div className="flex flex-row gap-3 mt-auto">
+                            <div className="flex flex-row gap-3 mt-10">
                                 <button className="bg-blue-500 px-3 py-2 rounded-lg">Contact</button>
                                 <button className="bg-blue-500 px-3 py-2 rounded-lg">Add to Favorites</button>
                             </div>
