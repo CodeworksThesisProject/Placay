@@ -1,4 +1,29 @@
-export default function EditUserForm({profileActive, handleSubmit, formData, handleChange, handleFileChange}) {
+import { useAuth } from '../../context/AuthContext';
+
+interface EditUserFormProps {
+  profileActive: boolean;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  formData: {
+    name: string;
+    email: string;
+    password: string;
+    repeatPassword: string;
+    profilePicture: File | null;
+  };
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export default function EditUserForm({
+  profileActive, 
+  handleSubmit, 
+  formData, 
+  handleChange, 
+  handleFileChange
+} : EditUserFormProps
+) {
+
+  const { user } = useAuth();
   return (
     <div className={`personal-info ${profileActive? '': 'hidden'}`}>
       <h2 className="text-xl font-semibold text-gray-700 mb-4">Update Profile</h2>
@@ -6,7 +31,7 @@ export default function EditUserForm({profileActive, handleSubmit, formData, han
         <input
           type="text"
           name="name"
-          placeholder="Full Name"
+          placeholder={`${user.name}`}
           value={formData.name}
           onChange={handleChange}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -15,7 +40,7 @@ export default function EditUserForm({profileActive, handleSubmit, formData, han
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder={`${user.email}`}
           value={formData.email}
           onChange={handleChange}
           className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
