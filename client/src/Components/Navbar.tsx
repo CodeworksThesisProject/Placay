@@ -7,8 +7,9 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [timePeriods, setTimePeriods] = useState<{ _id: string; startDate: string; endDate: string }[]>([]);
+  const [newStartDate, setNewStartDate] = useState('');
+  const [newEndDate, setNewEndDate] = useState('');
 
   const closeDropdown = () => setIsDropdownOpen(false);
   const toggleDropdown = () => setIsDropdownOpen(prev => !prev);
@@ -53,8 +54,7 @@ const Navbar: React.FC = () => {
       const response = await fetch('/user/timeperiod', { credentials: 'include' });
       if (response.ok) {
         const data = await response.json();
-        setStartDate(data.startDate || '');
-        setEndDate(data.endDate || '');
+        setTimePeriods(data.timePeriods || []);
       }
     } catch (error) {
       console.error('Error fetching time period:', error);
@@ -62,14 +62,23 @@ const Navbar: React.FC = () => {
   };
 
   const handleSaveTimePeriod = async () => {
+    console.log("Sending to API:", { startDate: newStartDate, endDate: newEndDate });
+
+  if (!newStartDate || !newEndDate) {
+    console.error("Start or End are missing");
+    return;
+  }
     try {
       const response = await fetch('/user/timeperiod', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ startDate, endDate })
+        body: JSON.stringify({ startDate: newStartDate, endDate: newEndDate })
       });
-      if (!response.ok) {
+      if (response.ok) {
+        const data = await response.json();
+        setTimePeriods(data.timePeriods);
+      } else {
         console.error('Failed to save time period');
       }
     } catch (error) {
@@ -92,18 +101,19 @@ const Navbar: React.FC = () => {
         {isAuthenticated && user?.role === 'admin' ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
         ) : ("")}
+        {isAuthenticated ? (
         <div className="flex gap-2 items-center">
           <input
             type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            value={newStartDate}
+            onChange={(e) => setNewStartDate(e.target.value)}
             className="border px-2 py-1 rounded"
           />
           <span>-</span>
           <input
             type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            value={newEndDate}
+            onChange={(e) => setNewEndDate(e.target.value)}
             className="border px-2 py-1 rounded"
           />
           <button
@@ -113,7 +123,8 @@ const Navbar: React.FC = () => {
             Save
           </button>
         </div>
-      </div>
+    ) : ("")}
+    </div>
 
       <div className="md:hidden">
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => setIsMenuOpen(!isMenuOpen)}>

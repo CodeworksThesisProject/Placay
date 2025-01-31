@@ -161,3 +161,64 @@ export const uploadProfileImage = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error. So sorry" });
   }
 };
+
+export const getTimeperiod = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.body);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    res.status(200).json({ timePeriods: user.timePeriods });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+export const addTimeperiod = async (req: Request, res: Response) => {
+  try {
+    let { startDate, endDate } = req.body;
+    console.log(req.body);
+    if (!startDate) startDate = new Date().toISOString().split("T")[0];
+    if (!endDate) endDate = new Date().toISOString().split("T")[0];
+
+    const user = await User.findById(req.body);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const newTimePeriod = {
+      _id: new mongoose.Types.ObjectId(),
+      startDate,
+      endDate,
+    };
+
+    user.timePeriods.push(newTimePeriod);
+    await user.save();
+
+    res.status(200).json({ message: "Time period updated successfully", timePeriods: user.timePeriods });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+export const deleteTimePeriod = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.body);
+    const timePeriodId = req.params.id;
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    user.timePeriods = user.timePeriods.filter((tp) => tp._id.toString() !== timePeriodId);
+    await user.save();
+
+    res.status(200).json({ message: "Time period removed successfully", timePeriods: user.timePeriods });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
+};

@@ -9,6 +9,7 @@ export interface IUser extends Document {
   role: string;
   profileImage?: string;
   favorites: IFavorite[];
+  timePeriods: ITimePeriod[];
   generateAuthToken(): string;
 }
 
@@ -17,6 +18,12 @@ export interface IFavorite {
   latitude: number;
   longitude: number;
   label?: string;
+}
+
+export interface ITimePeriod {
+  _id: mongoose.Types.ObjectId;
+  startDate: string;
+  endDate: string;
 }
 
 const userSchema: Schema = new Schema(
@@ -32,6 +39,13 @@ const userSchema: Schema = new Schema(
         latitude: { type: Number, required: true },
         longitude: { type: Number, required: true },
         label: { type: String },
+      },
+    ],
+    timePeriods: [
+      {
+        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+        startDate: { type: String, required: true },
+        endDate: { type: String, required: true },
       },
     ],
   },
