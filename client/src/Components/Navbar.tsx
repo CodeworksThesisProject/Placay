@@ -64,9 +64,9 @@ const Navbar: React.FC = () => {
         <div className="text-[#38436C]">{formatDate(new Date())}</div>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/')}>Map</button>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
-        {isAuthenticated && user?.role === 'admin' ? (
+        {/* {isAuthenticated && user?.role === 'admin' ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        ) : ("")}
+        ) : ("")} */}
     </div>
 
       <div className="md:hidden">
@@ -78,10 +78,6 @@ const Navbar: React.FC = () => {
       <div className={`absolute top-14 left-0 w-full bg-white shadow-md p-3 flex flex-col md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/map')}>Map</button>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
-        {/* <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button> */}
-        {/* {isAuthenticated && user?.role === "admin" ? (
-          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        ) : ("")} */}
         {isAuthenticated ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={handleLogout}>Logout</button>
         ) : (
