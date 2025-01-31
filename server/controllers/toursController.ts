@@ -5,6 +5,7 @@ import { Tour } from "../models/tourModel";
 
 export const getTours = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('method getTours accesed',req.body)
     const { user_id } = req.params;
     const tours = await Tour.find({ user_id });
     res.json(tours);
@@ -16,6 +17,7 @@ export const getTours = async (req: Request, res: Response): Promise<void> => {
 
 export const postTours = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('method postTours accesed',req.body)
     const { user_id } = req.params;
     const {title, city, country, duration, locations}=req.body
     const newTour = new Tour({ user_id, title, city, country, duration, locations });
@@ -29,6 +31,7 @@ export const postTours = async (req: Request, res: Response): Promise<void> => {
 
 export const editTours = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('method editTours accesed',req.body)
     const { tour_id } = req.params;
     const updates=req.body
     const updatedTour = await Tour.findByIdAndUpdate(tour_id,updates, { new: true });
@@ -44,9 +47,9 @@ export const editTours = async (req: Request, res: Response): Promise<void> => {
 
 export const deleteTours = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('method deleteTours accesed',req.body)
     const { tour_id } = req.params;
-
-    const deletedTour = await Tour.findByIdAndDelete(tour_id);
+    const deletedTour = await Tour.findByIdAndDelete({ _id: tour_id });
     if (deletedTour) {
       res.json(deletedTour);
       return;

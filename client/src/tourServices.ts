@@ -10,6 +10,7 @@ export async function getTours(user_id: string): Promise<any> {
     return { error: 'Error fetching user tours' };
   }
 }
+//await getTours('603d2fbb4f6d5b29e8b49d49')
 
 export async function postTours(user_id: string, title: string, city: string, country: string, duration: string, locations: any[]): Promise<any> {
   try {
@@ -27,11 +28,24 @@ export async function postTours(user_id: string, title: string, city: string, co
       }),
     });
     const data = await response.json();
+    console.log('the response is:', data)
     return data;
   } catch (err) {
     console.error('Error:', err);
   }
 }
+/*
+const user_id = "12345";
+const title = "Tour a la montaña";
+const city = "Barcelona";
+const country = "España";
+const duration = "3 días";
+const locations = [
+  { name: "Monte Everest", coordinates: { lat: 27.9881, lng: 86.9250 } },
+  { name: "Kilimanjaro", coordinates: { lat: -3.0674, lng: 37.3556 } }
+];
+await postTours(user_id, title, city, country, duration, locations)
+*/
 
 export async function editTours(tour_id: string, title?: string, city?: string, country?: string, duration?: string, locations?: []): Promise<any> {
   try {
@@ -49,11 +63,14 @@ export async function editTours(tour_id: string, title?: string, city?: string, 
       }),
     });
     const data = await response.json();
+    console.log('the response is:', data)
     return data;
   } catch (err) {
     console.error('Error:', err);
   }
 }
+//await editTours('679c92c03d750045c2c31c38',"New Title", undefined, "New Country", "3 days", undefined);
+//set undefined in the fields you don't want to modify
 
 export async function deleteTours(tour_id: string): Promise<any> {
   try {
@@ -61,27 +78,14 @@ export async function deleteTours(tour_id: string): Promise<any> {
       method: 'DELETE',
     });
     const data = await response.json();
+    console.log('the response is:', data)
     return data;
   } catch (err) {
     console.error('Error:', err);
     return { error: 'Error deleting the tour' };
   }
 }
-
-
-const user_id = "603d2fbb4f6d5b29e8b49d49";  // ID de usuario de ejemplo (un ObjectId de MongoDB)
-const title = "Tour por Barcelona";
-const city = "Barcelona";
-const country = "España";  // Aunque el campo 'country' debería ser un número (probablemente el código de país), aquí lo he puesto como texto para ilustrar
-const duration = "5 días";
-const locations = [
-  { name: "Parc Güell", coordinates: { lat: 41.4145, lng: 2.1527 } },
-  { name: "Sagrada Familia", coordinates: { lat: 41.4036, lng: 2.1744 } },
-  { name: "La Rambla", coordinates: { lat: 41.3800, lng: 2.1910 } }
-];
-
-// Llamada a la función
-postTours(user_id, title, city,country,duration, locations);
+//await deleteTours('679c926ecbb6cd198a40b6cf');
 
 
 
