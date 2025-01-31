@@ -78,10 +78,10 @@ const Navbar: React.FC = () => {
       <div className={`absolute top-14 left-0 w-full bg-white shadow-md p-3 flex flex-col md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/map')}>Map</button>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        {isAuthenticated && user?.role === 'admin' ? (
+        {/* <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button> */}
+        {/* {isAuthenticated && user?.role === "admin" ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        ) : ("")}
+        ) : ("")} */}
         {isAuthenticated ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={handleLogout}>Logout</button>
         ) : (
@@ -94,8 +94,12 @@ const Navbar: React.FC = () => {
         {isAuthenticated ? (
           <div className="relative ml-auto">
             <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={toggleDropdown}>{user ? `${user.name} ` : ""}Profile</button>
+            
             {isDropdownOpen && (
               <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-50">
+                {isAuthenticated && user?.role === "admin" ? (
+                  <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
+                ) : ("")}
                 <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { navigate('/profile'); closeDropdown(); }}>
                   View Profile
                 </button>
