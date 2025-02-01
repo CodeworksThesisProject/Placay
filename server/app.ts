@@ -10,6 +10,7 @@ import adminRoutes from "./routes/adminRoute";
 import cityRouter from "./routes/cityRoute";
 import tourRouter from "./routes/toursRoute";
 import profileRoutes from "./routes/profileRoute";
+import GoogleRoute from "./routes/GoogleRoute";
 
 // Load enviroment variables
 process.env.NODE_ENV == 'develop'
@@ -40,5 +41,6 @@ app.use("/admin", adminRoutes);
 app.use("/city", cityRouter);
 app.use("/profile", profileRoutes);
 app.use("/tour", tourRouter);
+app.use("/google", GoogleRoute);
 
 export default app;
