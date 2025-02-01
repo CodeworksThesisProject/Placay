@@ -19,6 +19,13 @@ Discover *city highlights* and create *personalized itineraries*
 * `/user/favorite` -> post -> lets you add a favorite with latitude, longitude, label and will create an unique id
 * `/user/favorite` -> delete -> send the id of a favorite to delete it
 
+### Tours Routes
+* `/tour/:user_id`-> get -> retrieves all tours (itineraries) for a specific user. Should contain a title, destination (combining city and country), duration (e.g., "3 days"), and a set of days with individual locations
+* `/tour/:user_id` -> post -> Creates a new tour. Required fields in the request body are:`title` (Tour title), `destination` (Main travel destination, e.g., "Paris, France"), `duration` (e.g., "3 days"), Optionally, `days` (structured data to specify individual days and locations), will have its own tour_ID
+* `/tour/:tour_id` -> put -> updates an existing tour based on its ID
+* `/tour/:tour_id` -> delete -> Deletes a tour based on its ID
+* `/tour/one/:tour_id` -> get -> will give you the details of just this one tour based on its ID
+
 ### Cities Route
 * `/city` -> ???
 

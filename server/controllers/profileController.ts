@@ -98,31 +98,6 @@ export const getFavorites = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteFavorite = async (req: Request, res: Response) => {
-  try {
-    const user = req.body;
-    const favoriteId = req.params.id;
-
-    if (!user) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const favoriteIndex = user.favorites.findIndex((fav: IFavorite) => fav._id.toString() === favoriteId);
-
-    if (favoriteIndex === -1) {
-      return res.status(404).json({ error: "Favorite not found" });
-    }
-
-    user.favorites.splice(favoriteIndex, 1);
-    await user.save();
-
-    res.status(200).json({ message: "Favorite removed successfully", favorites: user.favorites });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error." });
-  }
-};
-
 export const uploadProfileImage = async (req: Request, res: Response) => {
   try {
     const user = req.body;

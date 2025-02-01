@@ -1,6 +1,8 @@
 import express from "express";
 import { profileMiddleware } from "../middleware/profileMiddleware";
-import { getProfile, updateProfile, uploadProfileImage, addFavorite, getFavorites, deleteFavorite } from "../controllers/profileController";
+import { authMiddleware } from "../middleware/authMiddleware";
+import { getProfile, updateProfile, uploadProfileImage } from "../controllers/profileController";
+import { postFavorite, getFavorites, deleteFavorite } from "../controllers/favoriteController";
 import { asyncHandler } from "../middleware/asyncHandler";
 
 const router = express.Router();
@@ -8,8 +10,9 @@ const router = express.Router();
 router.get("/", profileMiddleware, asyncHandler(getProfile));
 router.put("/", profileMiddleware, asyncHandler(updateProfile));
 router.post("/image", profileMiddleware, asyncHandler(uploadProfileImage));
-router.get("/favorite", profileMiddleware, asyncHandler(getFavorites));
-router.post("/favorite", profileMiddleware, asyncHandler(addFavorite));
-router.delete("/favorite/:id", profileMiddleware, asyncHandler(deleteFavorite));
+
+router.get("/favorite", authMiddleware, asyncHandler(getFavorites));
+router.post("/favorite/", authMiddleware, asyncHandler(postFavorite));
+router.delete("/favorite/:id", authMiddleware, asyncHandler(deleteFavorite));
 
 export default router;

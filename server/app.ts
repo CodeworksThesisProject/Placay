@@ -39,7 +39,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api", authRoute);
 app.use("/admin", adminRoutes);
 app.use("/city", cityRouter);
-app.use("/profile", profileRoutes);
+app.use("/user", profileRoutes);
 app.use("/tour", tourRouter);
 app.use("/google", GoogleRoute);
 

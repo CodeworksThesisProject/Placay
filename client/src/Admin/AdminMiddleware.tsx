@@ -5,8 +5,12 @@ import { AdminRouteProps } from '../types/allTypes';
 // Check if user is Admin. If not, navigate to root
 
 const AdminRoute = ({ children }: AdminRouteProps) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
   if (!isAuthenticated || user?.role !== 'admin') {
     return <Navigate to="/" replace />;
   }

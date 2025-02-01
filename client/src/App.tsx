@@ -1,4 +1,3 @@
-
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Admin from './Admin/Admin';
 import AdminRoute from './Admin/AdminMiddleware';
@@ -14,6 +13,7 @@ import Home from './Pages/Home';
 import Legal from './Pages/Legal';
 import Tour from './Pages/Tour';
 import Profile from './Pages/UserProfile';
+import FunctionTest from './Pages/FunctionTest';
 
 const App: React.FC = () => {
 
@@ -31,6 +31,7 @@ const App: React.FC = () => {
               <Route path="/" element={<Home />} />
               <Route path="/tours" element={<Tour />} />
               <Route path="/AuthTest" element={<AuthTest />} />
+              <Route path="/function-test" element={<AdminRoute><FunctionTest /></AdminRoute>} />
             </Routes>
           <Footer />
       </Router>

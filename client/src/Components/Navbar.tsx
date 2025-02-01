@@ -44,15 +44,6 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-// <<<<<<< HEAD
-    // <div className="bg-white border-b border-gray-200 shadow-sm flex flex-row items-center ">
-    //   <img src="/asserts/images/placay-just-logo.png" alt="Placay Logo" className="w-15 mx-3 cursor-pointer" onClick={() => navigate('/')} />
-    //   <div className="border-r border-l border-gray-300 px-2 h-15 flex items-center whitespace-nowrap text-[#38436C]">{new Date().toLocaleDateString()}</div>
-    //   <div className="flex flex-row gap-3 justify-start items-center w-full">
-    //     <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/')}>Map</a>
-    //     <a className="px-4 hover:text-blue-400 text-[#38436C] cursor-pointer" onClick={() => navigate('/tours')}>Tours</a>
-        
-/* ======= */
     <div className="bg-white border-b border-gray-200 shadow-sm flex items-center p-3 justify-between">
       <div className="flex items-center gap-3 px-3">
         <img
@@ -86,16 +77,12 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="relative hidden md:flex items-center">
-{/* >>>>>>> develop */}
         {isAuthenticated ? (
           <div className="relative ml-auto">
             <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={toggleDropdown}>{user ? `${user.name} ` : ""}Profile</button>
             
             {isDropdownOpen && (
               <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-50">
-                {isAuthenticated && user?.role === "admin" ? (
-                  <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-                ) : ("")}
                 <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { navigate('/profile'); closeDropdown(); }}>
                   View Profile
                 </button>
@@ -105,6 +92,13 @@ const Navbar: React.FC = () => {
                 <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { navigate('/mylocations'); closeDropdown(); }}>
                   My Locations
                 </button>
+                {isAuthenticated && user?.role === "admin" ? (
+                  <div>
+                  <button className="block px-4 py-2 text-[#38436C] hover:bg-orange-100 w-full text-center cursor-pointer" onClick={() => { navigate('/dashboard'); closeDropdown(); }}>Dashboard</button>
+                  <button className="block px-4 py-2 text-[#38436C] hover:bg-orange-100 w-full text-center cursor-pointer" onClick={() => { navigate('/authTest'); closeDropdown(); }}>AuthTest</button>
+                  <button className="block px-4 py-2 text-[#38436C] hover:bg-orange-100 w-full text-center cursor-pointer" onClick={() => { navigate('/function-test'); closeDropdown(); }}>Function Test</button>
+                  </div>
+                ) : ("")}
                 <button className="block px-4 py-2 text-[#38436C] hover:bg-red-100 w-full text-center cursor-pointer" onClick={() => { handleLogout(); closeDropdown(); }}>
                   Logout
                 </button>
