@@ -98,6 +98,8 @@ export const getFavorites = async (req: Request, res: Response) => {
   }
 };
 
+const UPLOAD_DIR = path.join(process.cwd(), process.env.UPLOAD_DIR || 'uploads');
+
 export const uploadProfileImage = async (req: Request, res: Response) => {
   try {
     const user = req.body;
@@ -105,19 +107,18 @@ export const uploadProfileImage = async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    if (!req.files || !req.files.image) {
+    if (!req.files || !req.files.profileImage) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const imageFile = req.files.image as UploadedFile;
-    const uploadDir = path.join(__dirname, "../../uploads");
-
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    const imageFile = req.files.profileImage as UploadedFile;
+    
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
     }
 
     const fileName = `${Date.now()}_${imageFile.name}`;
-    const filePath = path.join(uploadDir, fileName);
+    const filePath = path.join(UPLOAD_DIR, fileName);
 
     imageFile.mv(filePath, async (err: any) => {
       if (err) {

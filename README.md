@@ -13,6 +13,7 @@ Discover *city highlights* and create *personalized itineraries*
 ### User Profile Routes
 * `/user` -> get -> gives you a name, email and profile picture url for a user. need to be logged in to use it and send a cookie token with it
 * `/user` -> post -> update your name, email and passwort. need to be logged in to use it and send a cookie token with it
+* `/user/profileimage` -> post -> Fileupload for a picture to folder /uploads with input type="file" name="profileImage", will set the profileImage field of user to file
 
 ### User favorites Routes
 * `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, label and an unique id

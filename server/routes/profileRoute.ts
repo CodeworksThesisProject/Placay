@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.get("/", profileMiddleware, asyncHandler(getProfile));
 router.put("/", profileMiddleware, asyncHandler(updateProfile));
-router.post("/image", profileMiddleware, asyncHandler(uploadProfileImage));
+router.post("/profileimage", profileMiddleware, asyncHandler(uploadProfileImage));
 
 router.get("/favorite", authMiddleware, asyncHandler(getFavorites));
 router.post("/favorite/", authMiddleware, asyncHandler(postFavorite));

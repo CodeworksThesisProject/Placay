@@ -36,3 +36,6 @@ dist
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Ignore uploads in uploads folder
+/server/uploads/

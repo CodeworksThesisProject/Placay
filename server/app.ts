@@ -12,11 +12,6 @@ import tourRouter from "./routes/toursRoute";
 import profileRoutes from "./routes/profileRoute";
 import GoogleRoute from "./routes/GoogleRoute";
 
-// Load enviroment variables
-process.env.NODE_ENV == 'develop'
-  ? require('dotenv').config({ path: '.env.development.local' })
-  : require('dotenv').config({ path: '.env.production.local' });
-
 const app: Application = express();
 
 // To get info from cookies
@@ -33,7 +28,8 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Routes for Data Uploads
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+const UPLOAD_DIR = path.join(process.cwd(), process.env.UPLOAD_DIR || 'uploads');
+app.use("/uploads", express.static(path.join(__dirname, UPLOAD_DIR)));
 
 // Routes used for Requests
 app.use("/api", authRoute);
