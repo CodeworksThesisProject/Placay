@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 // Frontend User Model (without Passwort and Methodes)
 export interface User {
   _id: string;
+  id: string;
   name: string;
   email: string;
   role: "user" | "admin";
