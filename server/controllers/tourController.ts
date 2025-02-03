@@ -3,14 +3,14 @@ import { Tour } from "../models/tourModel";
 
 // GET /tour/:user_id -> get all tours of a user
 export const getTours = async (req: Request, res: Response): Promise<void> => {
-  const user_id = (req as any).user._id;
-  const tours = await Tour.find({ user_id });
+  const userId = (req as any).user._id;
+  const tours = await Tour.find({ user_id: userId });
   res.json(tours);
 };
 
 //  POST /tour/:user_id -> Saves a new tour and needs title, destination, startDate, endDate, (optinal: days)
 export const postTours = async (req: Request, res: Response): Promise<void> => {
-  const user_id = (req as any).user._id;
+  const userId = (req as any).user._id;
   const { title, destination, startDate, endDate, days } = req.body;
 
   if (!title || !destination || !startDate || !endDate) {
@@ -19,7 +19,7 @@ export const postTours = async (req: Request, res: Response): Promise<void> => {
   }
 
   const newTour = new Tour({
-    user_id,
+    user_id: userId,
     title,
     destination,
     startDate,

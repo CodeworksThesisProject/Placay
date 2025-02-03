@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Favorite } from "../models/favoriteModel";
-import { User, IFavorite } from "../models/userModel";
 
 // GET /user/favorite
 export const getFavorites = async (req: Request, res: Response): Promise<void> => {
