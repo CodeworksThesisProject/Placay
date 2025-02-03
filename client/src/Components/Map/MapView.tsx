@@ -3,9 +3,9 @@ import { Dialog } from "@material-tailwind/react";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React, { useEffect, useRef, useState } from 'react';
-import { getPointsOfInterest } from '../../getplacesService';
-import { getPOIDetails } from '../../getPOIDetails';
-   
+import { getPointsOfInterest } from '../../Services/getplacesService';
+import { getPOIDetails } from '../../Services/getPOIDetailsService';
+
 
 interface MapComponentProps {
     coordinates: [number, number];
@@ -58,7 +58,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
     useEffect(() => {
         if (locations.length > 0 && mapRef.current) {
             locations.forEach((location) => {
-                if (location.latitude && location.longitude) {
+                if (location.latitude && location.longitude && mapRef.current) {
                     const marker = L.marker([location.latitude, location.longitude])
                         .addTo(mapRef.current)
                         .bindPopup(`<b>${location.name}</b>`);
@@ -106,8 +106,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
         <>
             <div id="map" style={{ height: '100%', width: '100%' }}></div>
 
-            <Dialog 
-                open={open} 
+            <Dialog
+                open={open}
                 size="sm"
                 handler={handleCloseModal}
                 animate={{
@@ -129,9 +129,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
                         </div>
 
                         {/* Right Section: Details */}
-                        
+
                         <div className="flex flex-col h-full">
-                            <button className="ml-auto cursor-pointer" onClick={handleCloseModal} > 
+                            <button className="ml-auto cursor-pointer" onClick={handleCloseModal} >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                 </svg>
