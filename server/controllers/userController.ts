@@ -4,7 +4,7 @@ import { User } from "../models/userModel";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, profileImage } = req.body;
     const userCount = await User.countDocuments();
     const role = userCount === 0 ? "admin" : "user";
 
@@ -15,7 +15,7 @@ export const register = async (req: Request, res: Response) => {
     if (password.length < 6)
       return res.status(400).json({ error: "password is too short" });
 
-    const newUser = new User({ name, email, password, role });
+    const newUser = new User({ name, email, password, role, profileImage });
     await newUser.save();
 
     const token = newUser.generateAuthToken();
