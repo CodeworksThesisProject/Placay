@@ -37,12 +37,11 @@ const Login: React.FC = () => {
         return;
       }
 
-      const data = await response.json();
       setIsAuthenticated(true);
       navigate('/');
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Login error:', err);
-      setError(`Error: ${err.message || err}`);
+      setError(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   };
 

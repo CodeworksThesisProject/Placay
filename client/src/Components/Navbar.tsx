@@ -55,9 +55,9 @@ const Navbar: React.FC = () => {
         <div className="text-[#38436C]">{formatDate(new Date())}</div>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/')}>Map</button>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
-        {isAuthenticated && user?.role === 'admin' ? (
+        {/* {isAuthenticated && user?.role === 'admin' ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        ) : ("")}
+        ) : ("")} */}
     </div>
 
       <div className="md:hidden">
@@ -69,10 +69,6 @@ const Navbar: React.FC = () => {
       <div className={`absolute top-14 left-0 w-full bg-white shadow-md p-3 flex flex-col md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/map')}>Map</button>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/tours')}>Tours</button>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        {isAuthenticated && user?.role === 'admin' ? (
-          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/dashboard')}>Dashboard</button>
-        ) : ("")}
         {isAuthenticated ? (
           <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={handleLogout}>Logout</button>
         ) : (
@@ -82,8 +78,9 @@ const Navbar: React.FC = () => {
 
       <div className="relative hidden md:flex items-center">
         {isAuthenticated ? (
-          <div className="relative">
+          <div className="relative ml-auto">
             <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={toggleDropdown}>{user ? `${user.name} ` : ""}Profile</button>
+            
             {isDropdownOpen && (
               <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-50">
                 <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { navigate('/profile'); closeDropdown(); }}>
@@ -95,14 +92,21 @@ const Navbar: React.FC = () => {
                 <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { navigate('/mylocations'); closeDropdown(); }}>
                   My Locations
                 </button>
+                {isAuthenticated && user?.role === "admin" ? (
+                  <div>
+                  <button className="block px-4 py-2 text-[#38436C] hover:bg-orange-100 w-full text-center cursor-pointer" onClick={() => { navigate('/dashboard'); closeDropdown(); }}>Dashboard</button>
+                  <button className="block px-4 py-2 text-[#38436C] hover:bg-orange-100 w-full text-center cursor-pointer" onClick={() => { navigate('/authTest'); closeDropdown(); }}>AuthTest</button>
+                  <button className="block px-4 py-2 text-[#38436C] hover:bg-orange-100 w-full text-center cursor-pointer" onClick={() => { navigate('/function-test'); closeDropdown(); }}>Function Test</button>
+                  </div>
+                ) : ("")}
                 <button className="block px-4 py-2 text-[#38436C] hover:bg-red-100 w-full text-center cursor-pointer" onClick={() => { handleLogout(); closeDropdown(); }}>
                   Logout
                 </button>
               </div>
             )}
-          </div>
+           </div>
         ) : (
-          <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/login')}>Login</button>
+          <button className="ml-auto px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => navigate('/login')}>Login</button>
         )}
       </div>
     </div>

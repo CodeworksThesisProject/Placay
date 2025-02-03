@@ -122,7 +122,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
 
                         <div className="mr-5 flex-grow-0 flex-shrink-0 basis-[250px]">
                             <img
-                                src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${selectedLocation.pictures[0]}&key=AIzaSyCvozyO1DrWrDC89o80QcD_v3u9um20wlc`}
+                                src={`http://localhost:3000/google/photo?photoReference=${selectedLocation.pictures[0]}`}
                                 alt={selectedLocation.name}
                                 style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
                             />

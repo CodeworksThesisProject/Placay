@@ -25,7 +25,7 @@ const userSchema: Schema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
-    profileImage: { type: String, default: "" },
+    profileImage: { type: String, default: "Example" },
     favorites: [
       {
         _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
@@ -50,7 +50,7 @@ userSchema.pre<IUser>("save", async function (next) {
 userSchema.methods.generateAuthToken = function (): string {
   const user = this as IUser;
 
-  const jsonWebTokenKey = process.env.JWT_SECRET || "your_jwt_secret";
+  const jsonWebTokenKey = process.env.JWT_SECRET || "token";
   const token = jwt.sign({ id: this._id, }, jsonWebTokenKey, {
     expiresIn: "1h",
   });

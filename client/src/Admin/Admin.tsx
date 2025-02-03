@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from 'react';
-
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-}
+import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { User, EditableUser } from '../types/allTypes';
 
 const AdminPage = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [editUserId, setEditUserId] = useState(null);
-  const [editableUser, setEditableUser] = useState<User | null>(null);
+  const { user } = useAuth();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [editUserId, setEditUserId] = useState<string | null>(null);
+  const [editableUser, setEditableUser] = useState<EditableUser | null>(null);
   const [newUser, setNewUser] = useState<{ name: string; email: string; role: string; password: string }>({ name: '', email: '', role: 'user', password: '' });
-  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUsers();
-    fetchProfile();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (isRefreshing: boolean = false) => {
+    if (!isRefreshing) setLoading(true);
+
     try {
       const response = await fetch('/admin/user', {
         credentials: 'include',
@@ -31,39 +27,22 @@ const AdminPage = () => {
         throw new Error('Failed to fetch users. Maybe not allowed?');
       }
 
-      const data = await response.json();
+      const data: User[] = await response.json();
       setUsers(data);
     } catch (err: unknown) {
-      console.error('Fetch error:', err.message);
-      setError(err.message);
+      console.error('Fetch error:', err);
+      setError(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
-      setLoading(false);
+      if (!isRefreshing) setLoading(false);
     }
   };
 
-  const refreshUsers = async () => {
-    try {
-      const response = await fetch('/admin/user', {
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to refresh users');
-      }
-
-      const data = await response.json();
-      setUsers(data);
-    } catch (err) {
-      alert('Error refreshing users: ' + err.message);
-    }
-  };
-
-  const handleEdit = (user) => {
+  const handleEdit = (user: User) => {
     setEditUserId(user._id);
     setEditableUser({ ...user });
   };
 
-  const handleSave = async (id) => {
+  const handleSave = async (id: string) => {
     try {
       const response = await fetch(`/admin/user/${id}`, {
         method: 'PUT',
@@ -78,15 +57,15 @@ const AdminPage = () => {
         throw new Error('Failed to update user');
       }
 
-      await refreshUsers();
+      await fetchUsers();
       setEditUserId(null);
       setEditableUser(null);
-    } catch (err) {
-      alert('Error updating user: ' + err.message);
+    } catch (err: unknown) {
+      alert('Error updating user: ' + (err instanceof Error ? err.message : 'Unknown error'));
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         const response = await fetch(`/admin/user/${id}`, {
@@ -98,9 +77,9 @@ const AdminPage = () => {
           throw new Error('Failed to delete user');
         }
 
-        await refreshUsers();
-      } catch (err) {
-        alert('Error deleting user: ' + err.message);
+        await fetchUsers();
+      } catch (err: unknown) {
+        alert('Error deleting user: ' + (err instanceof Error ? err.message : 'Unknown error'));
       }
     }
   };
@@ -124,28 +103,10 @@ const AdminPage = () => {
         throw new Error('Failed to add user');
       }
 
-      await refreshUsers();
+      await fetchUsers();
       setNewUser({ name: '', email: '', role: 'user', password: '' });
     } catch (err) {
-      alert('Error adding user: ' + err.message);
-    }
-  };
-
-  const fetchProfile = async () => {
-    try {
-      const response = await fetch('/user', {
-        method: 'GET',
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setUserName(data.name);
-      } else {
-        setUserName(null);
-      }
-    } catch (error) {
-      console.error('Failed to get Profile name:', error);
-      setUserName(null);
+      alert('Error adding user: ' + (err instanceof Error ? err.message : 'Unknown error'));
     }
   };
 
@@ -154,7 +115,7 @@ const AdminPage = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">{userName ? `Hello ${userName}, welcome to ` : ''}Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4">{user ? `Hello ${user.name}, welcome to ` : ''}Admin Dashboard</h1>
       <table className="w-full border-collapse border border-gray-300">
         <thead>
           <tr>
@@ -174,7 +135,7 @@ const AdminPage = () => {
                 {editUserId === user._id ? (
                   <input
                     type="text"
-                    value={editableUser.name}
+                    value={editableUser?.name || ''}
                     onChange={(e) => setEditableUser({ ...editableUser, name: e.target.value })}
                     className="border p-1"
                   />
@@ -186,8 +147,8 @@ const AdminPage = () => {
                 {editUserId === user._id ? (
                   <input
                     type="email"
-                    value={editableUser.email}
-                    onChange={(e) => setEditableUser({ ...editableUser, email: e.target.value })}
+                    value={editableUser?.email || ''}
+                    onChange={(e) => setEditableUser({ ...editableUser!, email: e.target.value })}
                     className="border p-1"
                   />
                 ) : (
@@ -197,8 +158,8 @@ const AdminPage = () => {
               <td className="border border-gray-300 p-2">
                 {editUserId === user._id ? (
                   <select
-                    value={editableUser.role}
-                    onChange={(e) => setEditableUser({ ...editableUser, role: e.target.value })}
+                    value={editableUser?.role || 'user'}
+                    onChange={(e) => setEditableUser({ ...editableUser, role: e.target.value as "user" | "admin" })}
                     className="border p-1"
                   >
                     <option value="admin">Admin</option>
@@ -212,7 +173,7 @@ const AdminPage = () => {
                 {editUserId === user._id ? (
                   <input
                     type="password"
-                    value={editableUser.password || ''}
+                    value={editableUser?.password ?? ''}
                     onChange={(e) => setEditableUser({ ...editableUser, password: e.target.value })}
                     className="border p-1"
                     autoComplete="new-password"

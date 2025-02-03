@@ -98,30 +98,7 @@ export const getFavorites = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteFavorite = async (req: Request, res: Response) => {
-  try {
-    const user = req.body;
-    const favoriteId = req.params.id;
-
-    if (!user) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const favoriteIndex = user.favorites.findIndex((fav: IFavorite) => fav._id.toString() === favoriteId);
-
-    if (favoriteIndex === -1) {
-      return res.status(404).json({ error: "Favorite not found" });
-    }
-
-    user.favorites.splice(favoriteIndex, 1);
-    await user.save();
-
-    res.status(200).json({ message: "Favorite removed successfully", favorites: user.favorites });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error." });
-  }
-};
+const UPLOAD_DIR = path.join(process.cwd(), process.env.UPLOAD_DIR || 'uploads');
 
 export const uploadProfileImage = async (req: Request, res: Response) => {
   try {
@@ -130,19 +107,18 @@ export const uploadProfileImage = async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    if (!req.files || !req.files.image) {
+    if (!req.files || !req.files.profileImage) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const imageFile = req.files.image as UploadedFile;
-    const uploadDir = path.join(__dirname, "../../uploads");
-
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    const imageFile = req.files.profileImage as UploadedFile;
+    
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
     }
 
     const fileName = `${Date.now()}_${imageFile.name}`;
-    const filePath = path.join(uploadDir, fileName);
+    const filePath = path.join(UPLOAD_DIR, fileName);
 
     imageFile.mv(filePath, async (err: any) => {
       if (err) {
