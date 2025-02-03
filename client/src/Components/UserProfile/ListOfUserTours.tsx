@@ -1,12 +1,19 @@
-export default function ListOfUserTours( {profileActive }) {
+import { useNavigate } from 'react-router-dom';
+interface ListOfUserToursProps {
+  profileActive: string;
+}
+export default function ListOfUserTours( {profileActive }: ListOfUserToursProps) {
+  const navigate = useNavigate();
+
   return (
-    <div className={`tour flex flex-col gap-5  ${profileActive? 'hidden': ''}`}>
-        <a 
-        href="/" 
-        className="bg-blue-500 ml-auto text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex text-center"
-        >
+    <div className={`tour flex flex-col gap-5  ${profileActive === 'tour' ? '': 'hidden'}`}>
+        
+        <button 
+          onClick={() => navigate('/add-tour')}
+          className="bg-blue-500 ml-auto text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex text-center">
           Add New Tour
-        </a>
+        </button>
+        
 
         <div className="divider w-full h-0.5 bg-gray-200"></div>
           
