@@ -14,6 +14,7 @@ const UserProfile: React.FC = () => {
       <p>Email: {user?.email}</p>
       <p>Role: {user?.role}</p>      
       <p>Profile pic {user?.profileImage}</p>
+      <img src="asserts/images/profilePictures/Prof4.jpg" alt="Profile" className="h-20 w-20 rounded-full"/>
     </div>
   );
 };
