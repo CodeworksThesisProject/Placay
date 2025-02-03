@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import { asyncHandler } from "../middleware/asyncHandler";
 import { authMiddleware } from "../middleware/authMiddleware";
-import { getTours, postTours, editTours, deleteTours, getTourById } from "../controllers/toursController";
+import { getTours, postTours, editTours, deleteTours, getTourById } from "../controllers/tourController";
 
 router.get('/:user_id', authMiddleware, asyncHandler(getTours));
 router.post('/:user_id', authMiddleware, asyncHandler(postTours));

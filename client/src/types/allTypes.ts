@@ -53,9 +53,10 @@ export interface ITourPlace {
 // Frontend Model for Favorites
 export interface Favorite {
   _id: string;
+  label?: string;
   latitude: number;
   longitude: number;
-  label?: string;
+  googlePOIId?: string;
 }
 
 // Props for AdminRoute Middleware

@@ -30,6 +30,7 @@ const tourPlaceSchema = new Schema({
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
   label: { type: String },
+  googlePOIId: { type: String },
 });
 
 const tourDaySchema = new Schema({

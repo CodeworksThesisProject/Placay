@@ -21,6 +21,7 @@ function FunctionTest(): JSX.Element {
   const [toursList, setToursList] = useState<Tour[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedTourId, setSelectedTourId] = useState<string>('');
+  const [favoriteTourMapping, setFavoriteTourMapping] = useState<{ [favoriteId: string]: string }>({});
 
   // Auth & Profile
   const handleCheckAuth = async (): Promise<void> => {
@@ -113,7 +114,7 @@ function FunctionTest(): JSX.Element {
     }
     try {
       const payload = { ...tourData, days: [] };
-      const res = await fetch(`/tour/${user.id}`, {
+      const res = await fetch(`/tour/${user._id}`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -130,7 +131,7 @@ function FunctionTest(): JSX.Element {
   const fetchTours = useCallback(async (): Promise<void> => {
     if (!user) return;
     try {
-      const res = await fetch(`/tour/${user.id}`, { method: 'GET', credentials: 'include' });
+      const res = await fetch(`/tour/${user._id}`, { method: 'GET', credentials: 'include' });
       const data = await res.json();
       setToursList(data);
     } catch (error) {
@@ -239,7 +240,7 @@ function FunctionTest(): JSX.Element {
       return;
     }
     const updatedDays = tour.days.map(day => {
-      if(day._id === dayId) {
+      if (day._id === dayId) {
         return { ...day, locations: day.locations.filter(loc => loc._id !== locationId) };
       }
       return day;
@@ -257,6 +258,56 @@ function FunctionTest(): JSX.Element {
       await fetchTours();
     } catch (error) {
       setResponseMessage("Error removing location from tour: " + error);
+    }
+  };
+
+  // Add a favorite to a tour
+  const handleFavoriteTourChange = (favoriteId: string, tourId: string) => {
+    setFavoriteTourMapping(prev => ({ ...prev, [favoriteId]: tourId }));
+  };
+
+  const handleAddFavoriteToTour = async (favorite: Favorite): Promise<void> => {
+    const tourId = favoriteTourMapping[favorite._id];
+    if (!tourId) {
+      setResponseMessage("Please select a tour for this favorite");
+      return;
+    }
+    const tour = toursList.find(t => t._id === tourId);
+    if (!tour) {
+      setResponseMessage("Selected tour not found");
+      return;
+    }
+    const newLocation = {
+      label: favorite.label,
+      latitude: favorite.latitude,
+      longitude: favorite.longitude,
+      googlePOIId: favorite.googlePOIId
+    };
+
+    let updatedDays;
+    if (!tour.days || tour.days.length === 0) {
+      updatedDays = [{
+        date: tour.startDate,
+        locations: [newLocation],
+      }];
+    } else {
+      updatedDays = [...tour.days];
+      updatedDays[0].locations = [...updatedDays[0].locations, newLocation];
+    }
+
+    try {
+      const payload = { days: updatedDays };
+      const res = await fetch(`/tour/${tourId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      setResponseMessage(JSON.stringify(data, null, 2));
+      await fetchTours();
+    } catch (error) {
+      setResponseMessage("Error adding favorite to tour: " + error);
     }
   };
 
@@ -305,7 +356,7 @@ function FunctionTest(): JSX.Element {
           <button onClick={handleCheckAuth} style={{ marginRight: '10px' }}>Check Auth</button>
           <button onClick={handleGetProfile} style={{ marginRight: '10px' }}>Get Profile</button>
           {user?.profileImage && (
-            <img src="http://localhost:3000/uploads/{user.profileImage}" alt="Profile Image" className="h-10 w-10 rounded-full fixed top-4 right-4" />
+            <img src="http://localhost:3000/uploads/{user.profileImage}" alt="Profile Image" className="h-10 w-10 rounded-full fixed top-20 right-20" />
           )}
           <hr />
           <h2>Favorites</h2>
@@ -363,8 +414,23 @@ function FunctionTest(): JSX.Element {
             <ul>
               {favoritesList.map((fav) => (
                 <li key={fav._id}>
-                  {fav.label} ({fav.latitude}, {fav.longitude}) | Favorite _id: {fav._id} |
-                  <button onClick={() => handleDeleteFavorite(fav._id)} style={{ marginLeft: '10px' }}>Delete</button>
+                  {fav.label} ({fav.latitude}, {fav.longitude}) | Favorite _id: {fav._id} | POI: {fav.googlePOIId} |
+                  <button onClick={() => handleDeleteFavorite(fav._id)} style={{ marginLeft: '10px' }}>Delete</button> |
+                  <select
+                    value={favoriteTourMapping[fav._id] || ""}
+                    onChange={(e) => handleFavoriteTourChange(fav._id, e.target.value)}
+                    style={{ marginLeft: '10px' }}
+                  >
+                    <option value="">-- Select a Tour --</option>
+                    {toursList.map(tour => (
+                      <option key={tour._id} value={tour._id}>
+                        {tour.title}
+                      </option>
+                    ))}
+                  </select>
+                  <button onClick={() => handleAddFavoriteToTour(fav)} style={{ marginLeft: '10px' }}>
+                    Add to Tour
+                  </button>
                 </li>
               ))}
             </ul>
@@ -412,7 +478,7 @@ function FunctionTest(): JSX.Element {
               {toursList.map((tour) => (
                 <li key={tour._id}>
                   <div>
-                  {tour.title} - {tour.destination} | ({tour.startDate} to {tour.endDate}), Duration: {tour.duration} | Tour _ID: {tour._id}, Tour User ID: {tour.user_id}
+                    {tour.title} - {tour.destination} | ({tour.startDate} to {tour.endDate}), Duration: {tour.duration} | Tour _ID: {tour._id}, Tour User ID: {tour.user_id}
                   </div>
 
                   {tour.days && tour.days.length > 0 && (
@@ -427,7 +493,7 @@ function FunctionTest(): JSX.Element {
                               {day.locations.map((loc) => (
                                 <li key={loc._id}>
                                   {loc.label ? loc.label : 'No Label'} ({loc.latitude}, {loc.longitude})
-                                  {loc.googlePOIId && <> | POI: {loc.googlePOIId}</>}
+                                  {loc.googlePOIId && <> | POI: {loc.googlePOIId}</>} |
                                   <button onClick={() => handleRemoveLocationFromTour(tour._id, day._id, loc._id!)} style={{ marginLeft: '10px' }}>
                                     Delete
                                   </button>
@@ -445,7 +511,7 @@ function FunctionTest(): JSX.Element {
                   <button onClick={() => handleDeleteTour(tour._id)} style={{ marginLeft: '10px' }}>Delete</button>
                   <hr style={{ marginTop: '10px' }} />
                 </li>
-                
+
               ))}
             </ul>
           </div>
