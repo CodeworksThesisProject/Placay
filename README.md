@@ -7,13 +7,13 @@ Discover *city highlights* and create *personalized itineraries*
 ### User Routes
 * `/api/register` -> post -> put in name, email and password to create a user and save if to the database. first user will be admin by default
 * `/api/login` -> post -> login with email and password
-* `/api/logout` -> ??? -> logout user
-* `/api/check-auth` -> ??? -> ???
+* `/api/logout` -> post -> logout user
+* `/api/check-auth` -> get -> Check user authentication status
 
 ### User Profile Routes
 * `/user` -> get -> gives you a name, email and profile picture url for a user. need to be logged in to use it and send a cookie token with it
 * `/user` -> post -> update your name, email and passwort. need to be logged in to use it and send a cookie token with it
-* `/user/profileimage` -> post -> Fileupload for a picture to folder /uploads with input type="file" name="profileImage", will set the profileImage field of user to file
+* `/user/profileimage` -> post -> Fileupload for a picture to folder /uploads with input type="file" name="profileImage", will set the profileImage field of user to file without base url /uploads/NameOFImage (Name is auto generated when uploading an image)
 
 ### User favorites Routes
 * `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, label and an unique id
@@ -40,6 +40,46 @@ Need a role `admin` to work
 * `/admin/user` -> post -> will add a new User
 * `/admin/user:User ID` -> put -> will update an existing User
 * `/admin/user:User ID` -> delete -> will delete a User
+
+### User Model
+* Fields:
+  * name (String, required)
+  * email (String, required, unique)
+  * password (String, required, hashed)
+  * role (String, default: "user", values: "user", "admin")
+  * profileImage (String, optional, Link to default image or user image in /uploads)
+  * favorites (Array of Favorite references, see Favorite Model)
+* Dependencies:  
+  Linked with the Favorite Model through the favorites array
+* Token Authentication:  
+  Uses JWT (generateAuthToken method) for secure authentication
+
+### Favorite Model
+* Fields:
+  * user (ObjectId, references User, required)
+  * label (String, optional, for Name or user can use an own name)
+  * latitude (Number, required)
+  * longitude (Number, required)
+  * googlePOIId (String, optional, can be used to get Name and Description)
+* Dependencies:  
+  Directly linked to a User Model via the user field
+* Usage:  
+  Represents favorite locations for each user
+
+### Tour Model
+* Fields:
+  * user_id (String, required, references User)
+  * title (String, required, a name for the Tour, users should put in one they like)
+  * destination (String, required, maybe create automatic in Frontend)
+  * startDate (Date, required, YYYY.MM.DD)
+  * endDate (Date, required, YYYY.MM.DD)
+  * duration (Virtual field, auto-calculated between startDate and endDate)
+  * days (Array of day objects)
+* Each day contains:
+  * date (Date, required)
+  * locations (Array of locations with latitude, longitude, optional label and googlePOIID, should reflect Favorites informations but is independend)
+* Dependencies:  
+  Linked to a User Model via user_id.
 
 ## Prerequisites
 Before starting, ensure you have the following installed:

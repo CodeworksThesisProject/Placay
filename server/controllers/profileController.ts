@@ -6,16 +6,16 @@ import path from "path";
 
 export const getProfile = async (req: Request, res: Response) => {
   try {
-    const user = (req as any).user;
+    const userId = req.body;
 
-    if (!user) {
+    if (!userId) {
       return res.status(404).json({ message: "User not found." });
     }
 
     res.status(200).json({
-      name: user.name,
-      email: user.email,
-      profileImage: user.profileImage || "",
+      name: userId.name,
+      email: userId.email,
+      profileImage: userId.profileImage || "",
     });
   } catch (error) {
     console.error(error);

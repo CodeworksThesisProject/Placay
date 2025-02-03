@@ -526,7 +526,7 @@ function FunctionTest(): JSX.Element {
       )}
       <hr />
       <h2>Response:</h2>
-      <pre style={{ backgroundColor: '#f4f4f4', padding: '10px' }}>
+      <pre style={{ backgroundColor: '#f4f4f4', padding: '10px', overflow: 'auto', maxHeight: '200px', whiteSpace: 'pre-wrap' }}>
         {responseMessage}
       </pre>
     </div>
