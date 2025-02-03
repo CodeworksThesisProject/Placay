@@ -53,6 +53,7 @@ export interface ITourPlace {
 // Frontend Model for Favorites
 export interface Favorite {
   _id: string;
+  user?: string;
   label?: string;
   latitude: number;
   longitude: number;
