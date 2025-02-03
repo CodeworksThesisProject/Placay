@@ -12,7 +12,8 @@ const UserProfile: React.FC = () => {
       <h1>User Profile</h1>
       <p>Name: {user?.name}</p>
       <p>Email: {user?.email}</p>
-      <p>Role: {user?.role}</p>
+      <p>Role: {user?.role}</p>      
+      <p>Profile pic {user?.profileImage}</p>
     </div>
   );
 };

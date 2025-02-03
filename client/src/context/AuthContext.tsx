@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
-import { UserAuth, AuthContextType, AuthProviderProps } from '../types/allTypes';
+import { User, AuthContextType, AuthProviderProps } from '../types/allTypes';
 
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -15,7 +15,7 @@ export const useAuth = (): AuthContextType => {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [user, setUser] = useState<UserAuth | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

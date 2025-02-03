@@ -25,7 +25,7 @@ const userSchema: Schema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
-    profileImage: { type: String, default: "" },
+    profileImage: { type: String, default: "Example" },
     favorites: [
       {
         _id: { type: mongoose.Schema.Types.ObjectId, auto: true },

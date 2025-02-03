@@ -62,17 +62,9 @@ export interface AdminRouteProps {
   children: ReactNode;
 }
 
-
-export interface UserAuth {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
-
 export interface AuthContextType {
   isAuthenticated: boolean;
-  user: UserAuth | null;
+  user: User | null;
   checkAuth: () => void;
   setIsAuthenticated: (auth: boolean) => void;
   loading: boolean;
