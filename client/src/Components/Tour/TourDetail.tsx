@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
+
 const TourDetail: React.FC = () => {
 
   const [liked, setLiked] = useState<boolean>(false);
 
   return (
       <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm" >
-            
+
             <div className="header flex flex-row justify-between text-gray-800 mx-5">
               <div className="flex flex-row gap-2 text-sm items-center">
                 <p>title of route</p>
@@ -29,11 +30,11 @@ const TourDetail: React.FC = () => {
 
             <div className="tour-locations grid grid-cols-2 gap-4">
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="../../../asserts/images/tours/tv-tower.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
-                />
+                <img
+                  src="../../../asserts/images/tours/tv-tower.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
+                  />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
                   <p className="text-[10px] text-gray-500">TV Tower</p>
@@ -41,11 +42,11 @@ const TourDetail: React.FC = () => {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="../../../asserts/images/tours/brandenburg.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
-                />
+                <img
+                  src="../../../asserts/images/tours/brandenburg.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
+                  />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
                   <p className="text-[10px] text-gray-500">Brandenburg Gate</p>
@@ -53,11 +54,11 @@ const TourDetail: React.FC = () => {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="../../../asserts/images/tours/catedral.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
-                />
+                <img
+                  src="../../../asserts/images/tours/catedral.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
+                  />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
                   <p className="text-[10px] text-gray-500">Berlin Cathedral</p>
@@ -65,11 +66,11 @@ const TourDetail: React.FC = () => {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="../../../asserts/images/tours/zoo.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
-                />
+                <img
+                  src="../../../asserts/images/tours/zoo.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
+                  />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
                   <p className="text-[10px] text-gray-500">Zoological Garden</p>
@@ -77,10 +78,10 @@ const TourDetail: React.FC = () => {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="../../../asserts/images/tours/east-side-gallery.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="../../../asserts/images/tours/east-side-gallery.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -90,7 +91,7 @@ const TourDetail: React.FC = () => {
             </div>
 
             <div className="border-t-1 border-gray-200 flex flex-row gap-3 items-center pt-3 pl-2 text-gray-600">
-            
+
             <div className="cursor-pointer" onClick={() => setLiked(!liked)}>
               {!liked ? (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
@@ -108,7 +109,7 @@ const TourDetail: React.FC = () => {
 
 
             </div>
-      </div>
+        </div>
   );
 };
 

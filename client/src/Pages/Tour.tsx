@@ -34,7 +34,7 @@ const Tour: React.FC = () => {
         <TourDetail/>
         <TourDetail/>
         <TourDetail/>
-        
+
       </div>
     </div>
   );
