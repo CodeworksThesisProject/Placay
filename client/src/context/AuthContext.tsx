@@ -1,24 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { UserAuth, AuthContextType, AuthProviderProps } from '../types/allTypes';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  user: User | null;
-  checkAuth: () => void;
-  setIsAuthenticated: (auth: boolean) => void;
-  loading: boolean;
-}
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -32,7 +15,7 @@ export const useAuth = (): AuthContextType => {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserAuth | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

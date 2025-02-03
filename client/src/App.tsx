@@ -14,6 +14,7 @@ import Legal from './Pages/Legal';
 import Tour from './Pages/Tour';
 import Profile from './Pages/UserProfile';
 import FunctionTest from './Pages/FunctionTest';
+import AuthRoute from './context/AuthMiddleware';
 
 const App: React.FC = () => {
 
@@ -24,7 +25,7 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile" element={<AuthRoute><Profile /></AuthRoute>} />
               <Route path="/dashboard" element={<AdminRoute><Admin /></AdminRoute>} />
               <Route path="/about" element={<About />} />
               <Route path="/legal" element={<Legal />} />
