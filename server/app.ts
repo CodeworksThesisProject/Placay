@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Routes for Data Uploads
-const UPLOAD_DIR = path.join(process.cwd(), process.env.UPLOAD_DIR || 'uploads');
+const UPLOAD_DIR = process.env.UPLOAD_DIR || "uploads";
 app.use("/uploads", express.static(path.join(__dirname, UPLOAD_DIR)));
 
 // Routes used for Requests

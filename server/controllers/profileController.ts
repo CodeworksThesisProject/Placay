@@ -3,19 +3,21 @@ import bcrypt from "bcryptjs";
 import { UploadedFile } from "express-fileupload";
 import fs from "fs";
 import path from "path";
+import { User } from "../models/userModel"; 
 
 export const getProfile = async (req: Request, res: Response) => {
   try {
-    const userId = req.body;
+    const userId = (req as any).user._id;
+    const user = await User.findById(userId);
 
-    if (!userId) {
+    if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
 
     res.status(200).json({
-      name: userId.name,
-      email: userId.email,
-      profileImage: userId.profileImage || "",
+      name: user.name,
+      email: user.email,
+      profileImage: user.profileImage || "",
     });
   } catch (error) {
     console.error(error);
@@ -25,8 +27,9 @@ export const getProfile = async (req: Request, res: Response) => {
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const user = (req as any).user;
+    const userId = (req as any).user._id;
     const { name, email, password } = req.body;
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -55,7 +58,9 @@ const UPLOAD_DIR = path.join(process.cwd(), process.env.UPLOAD_DIR || 'uploads')
 
 export const uploadProfileImage = async (req: Request, res: Response) => {
   try {
-    const user = (req as any).user;
+    const userId = (req as any).user._id;
+    const user = await User.findById(userId);
+    
     if (!user) {
       return res.status(401).json({ error: "Unauthorized" });
     }

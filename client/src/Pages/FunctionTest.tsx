@@ -356,7 +356,7 @@ function FunctionTest(): JSX.Element {
           <button onClick={handleCheckAuth} style={{ marginRight: '10px' }}>Check Auth</button>
           <button onClick={handleGetProfile} style={{ marginRight: '10px' }}>Get Profile</button>
           {user?.profileImage && (
-            <img src="http://localhost:3000/uploads/{user.profileImage}" alt="Profile Image" className="h-10 w-10 rounded-full fixed top-20 right-20" />
+            <img src={`http://localhost:3000${user.profileImage}`} alt="Profile Image" className="h-10 w-10 rounded-full fixed top-20 right-20" />
           )}
           <hr />
           <h2>Favorites</h2>
