@@ -18,7 +18,7 @@ export const getFavorites = async (req: Request, res: Response): Promise<void> =
 export const postFavorite = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = (req as any).user.id;
-    const { latitude, longitude, label } = req.body;
+    const { label, latitude, longitude, googlePOIId } = req.body;
 
     if (typeof latitude !== "number" || typeof longitude !== "number") {
       res.status(401).json({ error: "Invalid location data" });
@@ -27,9 +27,10 @@ export const postFavorite = async (req: Request, res: Response): Promise<void> =
 
     const newFavorite = new Favorite({
       user: userId,
+      label,
       latitude,
       longitude,
-      label,
+      googlePOIId,
     });
 
     await newFavorite.save();

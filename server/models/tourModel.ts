@@ -21,9 +21,9 @@ export interface ITourDay {
 // Model for Places on one selected day
 export interface ITourPlace {
   _id: mongoose.Types.ObjectId;
+  label?: string;
   latitude: number;
   longitude: number;
-  label?: string;
 }
 
 const tourPlaceSchema = new Schema({

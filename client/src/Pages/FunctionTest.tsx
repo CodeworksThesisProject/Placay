@@ -6,9 +6,10 @@ function FunctionTest(): JSX.Element {
   const { isAuthenticated, user } = useAuth();
   const [responseMessage, setResponseMessage] = useState<string>('');
   const [favoriteData, setFavoriteData] = useState({
-    latitude: '48.8566',
-    longitude: '2.3522',
-    label: 'Paris',
+    label: 'Eiffel Tower',
+    latitude: '48.8584',
+    longitude: '2.2945',
+    googlePOIId: 'ChIJD7fiBh9u5kcRYJSMaMOCCwQ'
   });
   const [favoritesList, setFavoritesList] = useState<Favorite[]>([]);
   const [tourData, setTourData] = useState({
@@ -19,6 +20,7 @@ function FunctionTest(): JSX.Element {
   });
   const [toursList, setToursList] = useState<Tour[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedTourId, setSelectedTourId] = useState<string>('');
 
   // Auth & Profile
   const handleCheckAuth = async (): Promise<void> => {
@@ -55,7 +57,7 @@ function FunctionTest(): JSX.Element {
       return;
     }
     try {
-      const payload = { latitude, longitude, label: favoriteData.label };
+      const payload = { label: favoriteData.label, latitude, longitude, googlePOIId: favoriteData.googlePOIId, };
       const res = await fetch('/user/favorite', {
         method: 'POST',
         credentials: 'include',
@@ -177,6 +179,87 @@ function FunctionTest(): JSX.Element {
     }
   };
 
+  // Add a favorite or place to a Tour
+  const handleAddLocationToTour = async (): Promise<void> => {
+    if (!selectedTourId) {
+      setResponseMessage("No tour selected");
+      return;
+    }
+    const tour = toursList.find(t => t._id === selectedTourId);
+    if (!tour) {
+      setResponseMessage("Selected tour not found");
+      return;
+    }
+    const latitude = parseFloat(favoriteData.latitude);
+    const longitude = parseFloat(favoriteData.longitude);
+    if (isNaN(latitude) || isNaN(longitude)) {
+      setResponseMessage("Invalid latitude or longitude");
+      return;
+    }
+    const newLocation = {
+      label: favoriteData.label,
+      latitude,
+      longitude,
+      googlePOIId: favoriteData.googlePOIId
+    };
+
+    let updatedDays;
+    // If no day is in tour, create a new day and put into fist day
+    if (!tour.days || tour.days.length === 0) {
+      updatedDays = [{
+        date: tour.startDate,
+        locations: [newLocation],
+      }];
+    } else {
+      // Else add to first day
+      updatedDays = [...tour.days];
+      updatedDays[0].locations = [...updatedDays[0].locations, newLocation];
+    }
+
+    try {
+      const payload = { days: updatedDays };
+      const res = await fetch(`/tour/${selectedTourId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      setResponseMessage(JSON.stringify(data, null, 2));
+      await fetchTours();
+    } catch (error) {
+      setResponseMessage("Error adding location to tour: " + error);
+    }
+  };
+
+  const handleRemoveLocationFromTour = async (tourId: string, dayId: string, locationId: string): Promise<void> => {
+    const tour = toursList.find(t => t._id === tourId);
+    if (!tour) {
+      setResponseMessage("Tour not found");
+      return;
+    }
+    const updatedDays = tour.days.map(day => {
+      if(day._id === dayId) {
+        return { ...day, locations: day.locations.filter(loc => loc._id !== locationId) };
+      }
+      return day;
+    });
+    try {
+      const payload = { days: updatedDays };
+      const res = await fetch(`/tour/${tourId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      setResponseMessage(JSON.stringify(data, null, 2));
+      await fetchTours();
+    } catch (error) {
+      setResponseMessage("Error removing location from tour: " + error);
+    }
+  };
+
   // Upload Profile Picture
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -222,7 +305,7 @@ function FunctionTest(): JSX.Element {
           <button onClick={handleCheckAuth} style={{ marginRight: '10px' }}>Check Auth</button>
           <button onClick={handleGetProfile} style={{ marginRight: '10px' }}>Get Profile</button>
           {user?.profileImage && (
-            <img src="http://localhost:3000/uploads/{user.profileImage}" alt="Profile Image" className="h-10 w-10 rounded-full fixed top-4 right-4"/>
+            <img src="http://localhost:3000/uploads/{user.profileImage}" alt="Profile Image" className="h-10 w-10 rounded-full fixed top-4 right-4" />
           )}
           <hr />
           <h2>Favorites</h2>
@@ -251,7 +334,29 @@ function FunctionTest(): JSX.Element {
               onChange={handleFavoriteInputChange}
               className="border border-black mr-2 px-2 py-1"
             />
+            <input
+              type="text"
+              name="googlePOIId"
+              placeholder="Google POI ID"
+              value={favoriteData.googlePOIId}
+              onChange={handleFavoriteInputChange}
+              className="border border-black mr-2 px-2 py-1"
+            />
             <button onClick={handleAddFavorite} style={{ marginRight: '10px' }}>Add to Favorite</button>
+            <label style={{ marginRight: '10px' }}>Select Tour:</label>
+            <select
+              value={selectedTourId}
+              onChange={(e) => setSelectedTourId(e.target.value)}
+              style={{ marginRight: '10px' }}
+            >
+              <option value="">-- Select a Tour --</option>
+              {toursList.map(tour => (
+                <option key={tour._id} value={tour._id}>
+                  {tour.title} ({tour.destination})
+                </option>
+              ))}
+            </select>
+            <button onClick={handleAddLocationToTour} style={{ marginRight: '10px' }}>Add to Tour</button>
           </div>
           <div>
             <h3>Favorites List:</h3>
@@ -299,18 +404,48 @@ function FunctionTest(): JSX.Element {
               onChange={handleTourInputChange}
               className="border border-black mr-2 px-2 py-1"
             />
-            <button onClick={handleCreateTour} style={{ marginRight: '10px' }}>Add to Tour</button>
+            <button onClick={handleCreateTour} style={{ marginRight: '10px' }}>Add this Tour</button>
           </div>
           <div>
             <h3>Tours List:</h3>
             <ul>
               {toursList.map((tour) => (
                 <li key={tour._id}>
-                  {tour.title} - {tour.destination} | ({tour.startDate} to {tour.endDate}), Duration: {tour.duration} | Tour _ID: {tour._id}, Tour User ID: {tour.user_id} |
+                  <div>
+                  {tour.title} - {tour.destination} | ({tour.startDate} to {tour.endDate}), Duration: {tour.duration} | Tour _ID: {tour._id}, Tour User ID: {tour.user_id}
+                  </div>
+
+                  {tour.days && tour.days.length > 0 && (
+                    <ul style={{ marginLeft: '20px', marginTop: '5px' }}>
+                      {tour.days.map((day) => (
+                        <li key={day._id}>
+                          <div>
+                            <strong>Day:</strong> {new Date(day.date).toLocaleDateString()}
+                          </div>
+                          {day.locations && day.locations.length > 0 && (
+                            <ul style={{ marginLeft: '20px' }}>
+                              {day.locations.map((loc) => (
+                                <li key={loc._id}>
+                                  {loc.label ? loc.label : 'No Label'} ({loc.latitude}, {loc.longitude})
+                                  {loc.googlePOIId && <> | POI: {loc.googlePOIId}</>}
+                                  <button onClick={() => handleRemoveLocationFromTour(tour._id, day._id, loc._id!)} style={{ marginLeft: '10px' }}>
+                                    Delete
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
                   <button onClick={() => handleGetTourById(tour._id)} style={{ marginLeft: '10px' }}>Get Tour by ID</button>
                   <button onClick={() => handleUpdateTour(tour._id)} style={{ marginLeft: '10px' }}>Update</button>
                   <button onClick={() => handleDeleteTour(tour._id)} style={{ marginLeft: '10px' }}>Delete</button>
+                  <hr style={{ marginTop: '10px' }} />
                 </li>
+                
               ))}
             </ul>
           </div>

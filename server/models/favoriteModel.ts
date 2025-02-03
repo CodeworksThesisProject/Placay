@@ -2,17 +2,19 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IFavorite extends Document {
   user: mongoose.Types.ObjectId;
+  label?: string;
   latitude: number;
   longitude: number;
-  label?: string;
+  googlePOIId?: string;
 }
 
 const favoriteSchema: Schema = new Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    label: { type: String },
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
-    label: { type: String },
+    googlePOIId: { type: String }
   },
   { timestamps: true }
 );

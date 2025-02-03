@@ -14,9 +14,10 @@ export interface IUser extends Document {
 
 export interface IFavorite {
   _id: mongoose.Types.ObjectId;
+  label?: string;
   latitude: number;
   longitude: number;
-  label?: string;
+  googlePOIId?: string;
 }
 
 const userSchema: Schema = new Schema(
@@ -25,15 +26,7 @@ const userSchema: Schema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
-    profileImage: { type: String, default: "Example" },
-    favorites: [
-      {
-        _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
-        latitude: { type: Number, required: true },
-        longitude: { type: Number, required: true },
-        label: { type: String },
-      },
-    ],
+    profileImage: { type: String, default: "" },
   },
   { timestamps: true }
 );
