@@ -3,14 +3,9 @@ import { Dialog } from "@material-tailwind/react";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React, { useEffect, useRef, useState } from 'react';
-<<<<<<< HEAD
 import { getPointsOfInterest } from '../../Services/getplacesService';
 import { getPOIDetails } from '../../Services/getPOIDetailsService';
 
-=======
-import { getPointsOfInterest } from '../../getplacesService';
-import { getPOIDetails } from '../../getPOIDetails';
->>>>>>> develop
 
 interface MapComponentProps {
     searchedCity: { name: string; lat: number; lng: number };
@@ -162,9 +157,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
                     mount: { scale: 1, y: 0 },
                     unmount: { scale: 0.9, y: -100 },
                 }}
-                placeholder=""
-                onPointerEnterCapture={null}
-                onPointerLeaveCapture={null}
             >
                 {selectedLocation && (
                     <div className="flex flex-row justify-center p-4 rounded-lg shadow-lg">
@@ -183,13 +175,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
 
                         <div className="flex flex-col h-full">
                             <button className="ml-auto cursor-pointer" onClick={handleCloseModal} >
-<<<<<<< HEAD
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-=======
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
->>>>>>> develop
                                 </svg>
                             </button>
 
