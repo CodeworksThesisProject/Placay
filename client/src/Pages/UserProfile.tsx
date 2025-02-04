@@ -1,62 +1,117 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddTour from "../Components/Tour/AddTour";
 import FavouritTour from "../Components/Tour/FavouritTour";
 import EditUserForm from "../Components/UserProfile/EditUserForm";
 import ListOfUserTours from "../Components/UserProfile/ListOfUserTours";
 import { useAuth } from "../context/AuthContext";
+import { EditableUser } from "../types/allTypes";
 
 const UserProfile: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+  const { user, setUser } = useAuth();
+  const [profileActive, setProfileActive] = useState("profile");
+
+  const [formData, setFormData] = useState<EditableUser & { repeatPassword?: string; profileImage?: string }>({
+    name: user?.name || "",
+    email: user?.email || "",
     password: "",
     repeatPassword: "",
-    profilePicture: null as File | null,
+    profileImageFile: null,
+    profileImage: user?.profileImage || "",
   });
-  const { user } = useAuth();
-  const [profileActive, setProfileActive] = useState("profile");
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prevData) => ({
+        ...prevData,
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage || "",
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFormData({ ...formData, profilePicture: e.target.files[0] });
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        profileImageFile: file,
+        profileImage: "",
+      }));
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleDefaultImageSelect = (img: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      profileImage: `/asserts/images/profilePictures/${img}`,
+      profileImageFile: null,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.password !== formData.repeatPassword) {
-      alert("Passwords do not match!");
-      return;
+
+    const passwordEntered = formData.password || formData.repeatPassword;
+    if (passwordEntered) {
+      if (formData.password !== formData.repeatPassword) {
+        alert("Both password fields must be filled with the same value");
+        return;
+      }
     }
-    console.log("Form submitted:", formData);
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name || "");
+    formDataToSend.append("email", formData.email || "");
+
+    if (passwordEntered && formData.password) {
+      formDataToSend.append("password", formData.password);
+    }
+    if (formData.profileImageFile) {
+      formDataToSend.append("profileImage", formData.profileImageFile);
+    } else if (formData.profileImage) {
+      formDataToSend.append("profileImage", formData.profileImage);
+    }
+
+    try {
+      const response = await fetch("/user", {
+        method: "PUT",
+        credentials: "include",
+        body: formDataToSend,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        alert("Update failed: " + (data.error || data.message));
+      } else {
+        alert("Profile updated successfully");
+        if (data.user) {
+          setUser(data.user);
+        }
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("An error occurred");
+    }
   };
 
-  const profileOnClick = () => {
-    setProfileActive("profile");
-  };
-  const tourOnClick = () => {
-    setProfileActive("tour");
-  };
-
-  const addTourOnClick = () => {
-    setProfileActive("add-tour");
-  };
-
-  const favouritOnClick = () => {
-    setProfileActive("favourit");
-  };
+  const profileOnClick = () => setProfileActive("profile");
+  const tourOnClick = () => setProfileActive("tour");
+  const addTourOnClick = () => setProfileActive("add-tour");
+  const favouritOnClick = () => setProfileActive("favourit");
 
   return (
     <div className="grid grid-cols-[20%_80%] px-15 h-full">
-      <div className="bg-blue-500 py-5 text-white flex flex-col gap-5 justify-start items-center">
+      <div className="bg-[#38436C] py-5 text-white flex flex-col gap-5 justify-start items-center">
         <h1 className="text-xl">User Profile</h1>
+        <h2 className="text-lg">{user?.name}</h2>
         <div className="w-30 bg-gray-200 p-2 rounded-full border-8 border-blue-300">
           <img
-            src={user?.profileImage}
+            src={user?.profileImage || "/asserts/images/profilePictures/default-profile-picture.png"}
             alt="user profile pic"
             className="w-full h-full object-cover rounded-full"
           />
@@ -69,9 +124,8 @@ const UserProfile: React.FC = () => {
         <div className="menu mt-10 flex flex-col w-full pl-[20%]">
           {/* Profile Information Tab */}
           <div
-            className={`w-full flex flex-row gap-5 px-2 py-3 cursor-pointer  ${
-              profileActive === "profile" ? "text-white" : "text-blue-200"
-            } `}
+            className={`w-full flex flex-row gap-5 px-2 py-3 cursor-pointer  ${profileActive === "profile" ? "text-white" : "text-blue-200"
+              } `}
             onClick={profileOnClick}
           >
             <svg
@@ -93,9 +147,8 @@ const UserProfile: React.FC = () => {
 
           {/* Shared Tour Tab */}
           <div
-            className={`w-full flex flex-row gap-5 px-2 py-3 text-blue-200 cursor-pointer ${
-              profileActive === "tour" ? "text-white" : "text-blue-200"
-            }`}
+            className={`w-full flex flex-row gap-5 px-2 py-3 text-blue-200 cursor-pointer ${profileActive === "tour" ? "text-white" : "text-blue-200"
+              }`}
             onClick={tourOnClick}
           >
             <svg
@@ -118,9 +171,8 @@ const UserProfile: React.FC = () => {
 
           {/* add Tour Tab */}
           <div
-            className={`w-full flex flex-row gap-5 px-2 py-3 text-blue-200 cursor-pointer ${
-              profileActive === "add-tour" ? "text-white" : "text-blue-200"
-            }`}
+            className={`w-full flex flex-row gap-5 px-2 py-3 text-blue-200 cursor-pointer ${profileActive === "add-tour" ? "text-white" : "text-blue-200"
+              }`}
             onClick={addTourOnClick}
           >
             <svg
@@ -142,9 +194,8 @@ const UserProfile: React.FC = () => {
 
           {/* favourit Tour Tab */}
           <div
-            className={`w-full flex flex-row gap-5 px-2 py-3 text-blue-200 cursor-pointer ${
-              profileActive === "favourit" ? "text-white" : "text-blue-200"
-            }`}
+            className={`w-full flex flex-row gap-5 px-2 py-3 text-blue-200 cursor-pointer ${profileActive === "favourit" ? "text-white" : "text-blue-200"
+              }`}
             onClick={favouritOnClick}
           >
             <svg
@@ -174,6 +225,7 @@ const UserProfile: React.FC = () => {
           formData={formData}
           handleChange={handleChange}
           handleFileChange={handleFileChange}
+          handleDefaultImageSelect={handleDefaultImageSelect}
         />
 
         {/* list of tour */}
@@ -181,7 +233,7 @@ const UserProfile: React.FC = () => {
         <AddTour profileActive={profileActive} />
 
         {/* list of favourit */}
-        <FavouritTour profileActive={profileActive}/>
+        <FavouritTour profileActive={profileActive} />
       </div>
     </div>
   );

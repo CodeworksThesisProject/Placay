@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { UploadedFile } from "express-fileupload";
 import fs from "fs";
 import path from "path";
-import { User } from "../models/userModel"; 
+import { User } from "../models/userModel";
 
 export const getProfile = async (req: Request, res: Response) => {
   try {
@@ -25,10 +25,12 @@ export const getProfile = async (req: Request, res: Response) => {
   }
 };
 
+const UPLOAD_DIR = path.join(process.cwd(), process.env.UPLOAD_DIR || 'uploads');
+
 export const updateProfile = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user._id;
-    const { name, email, password } = req.body;
+    const { name, email, password, profileImage } = req.body;
     const user = await User.findById(userId);
 
     if (!user) {
@@ -38,11 +40,54 @@ export const updateProfile = async (req: Request, res: Response) => {
     if (name) user.name = name;
     if (email) user.email = email;
 
-    if (password) {
+    if (password && password.trim() !== "") {
       if (password.length < 6) {
         return res.status(400).json({ error: "Password must be at least 6 characters long" });
       }
-      user.password = await bcrypt.hash(password, 10);
+      user.password = password;
+    }
+
+    if (req.files && req.files.profileImage) {
+      const imageFile = req.files.profileImage as UploadedFile;
+
+      if (!fs.existsSync(UPLOAD_DIR)) {
+        fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+      }
+
+      const fileName = `${Date.now()}_${imageFile.name}`;
+      const filePath = path.join(UPLOAD_DIR, fileName);
+
+      await new Promise<void>((resolve, reject) => {
+        imageFile.mv(filePath, (err: any) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        });
+      });
+
+      if (user.profileImage && user.profileImage.startsWith("/uploads/")) {
+        const oldImagePath = path.join(process.cwd(), user.profileImage);
+        fs.unlink(oldImagePath, (err) => {
+          if (err) {
+            console.error("Error deleting old image:", err);
+          }
+        });
+      }
+
+      user.profileImage = `/uploads/${fileName}`;
+    } else if (profileImage) {
+
+      if (user.profileImage && user.profileImage.startsWith("/uploads/")) {
+        const oldImagePath = path.join(process.cwd(), user.profileImage);
+        fs.unlink(oldImagePath, (err) => {
+          if (err) {
+            console.error("Error deleting old image:", err);
+          }
+        });
+      }
+
+      user.profileImage = profileImage;
     }
 
     await user.save();
@@ -54,13 +99,11 @@ export const updateProfile = async (req: Request, res: Response) => {
   }
 };
 
-const UPLOAD_DIR = path.join(process.cwd(), process.env.UPLOAD_DIR || 'uploads');
-
 export const uploadProfileImage = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user._id;
     const user = await User.findById(userId);
-    
+
     if (!user) {
       return res.status(401).json({ error: "Unauthorized" });
     }
@@ -70,7 +113,7 @@ export const uploadProfileImage = async (req: Request, res: Response) => {
     }
 
     const imageFile = req.files.profileImage as UploadedFile;
-    
+
     if (!fs.existsSync(UPLOAD_DIR)) {
       fs.mkdirSync(UPLOAD_DIR, { recursive: true });
     }

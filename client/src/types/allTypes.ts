@@ -21,7 +21,10 @@ export interface NewUser {
   favorites: Favorite[];
 }
 
-export type EditableUser = Partial<User> & { password?: string; profileImageFile?: File | null; };
+export type EditableUser = Partial<User> & {
+  password?: string;
+  profileImageFile?: File | null;
+};
 
 // Frontend Model fot Tours
 export interface Tour {
@@ -72,6 +75,7 @@ export interface AuthContextType {
   checkAuth: () => void;
   setIsAuthenticated: (auth: boolean) => void;
   loading: boolean;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 export interface AuthProviderProps {
