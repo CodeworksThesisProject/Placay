@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AddTour from "../Components/Tour/AddTour";
 import FavouritTour from "../Components/Tour/FavouritTour";
 import EditUserForm from "../Components/UserProfile/EditUserForm";
 import ListOfUserTours from "../Components/UserProfile/ListOfUserTours";
@@ -39,6 +40,10 @@ const UserProfile: React.FC = () => {
   };
   const tourOnClick = () => {
     setProfileActive("tour");
+  };
+
+  const addTourOnClick = () => {
+    setProfileActive("add-tour");
   };
 
   const favouritOnClick = () => {
@@ -110,6 +115,31 @@ const UserProfile: React.FC = () => {
             <p>Shared Tours</p>
           </div>
 
+
+          {/* add Tour Tab */}
+          <div
+            className={`w-full flex flex-row gap-5 px-2 py-3 text-blue-200 cursor-pointer ${
+              profileActive === "add-tour" ? "text-white" : "text-blue-200"
+            }`}
+            onClick={addTourOnClick}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
+              />
+            </svg>
+            <p>add Tours</p>
+          </div>
+
           {/* favourit Tour Tab */}
           <div
             className={`w-full flex flex-row gap-5 px-2 py-3 text-blue-200 cursor-pointer ${
@@ -148,9 +178,10 @@ const UserProfile: React.FC = () => {
 
         {/* list of tour */}
         <ListOfUserTours profileActive={profileActive} />
+        <AddTour profileActive={profileActive} />
 
         {/* list of favourit */}
-        <FavouritTour profileActive={profileActive} />
+        <FavouritTour profileActive={profileActive}/>
       </div>
     </div>
   );

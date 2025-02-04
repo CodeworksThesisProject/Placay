@@ -31,6 +31,33 @@ export const postTours = async (req: Request, res: Response): Promise<void> => {
   res.json(newTour);
 };
 
+// POST /tour/:user_id
+export const addNewTour = async (req: Request, res: Response) => {
+  try {
+    const user_id = (req as any).user._id;
+    const { title, location, duration } = req.body;
+
+    if (!location || location.length === 0) {
+      return res.status(400).json({ message: "Tour must have at least one location." });
+    }
+
+    const newTour = new Tour({
+      user_id,
+      title,
+      location,
+      duration
+    });
+
+    await newTour.save();
+
+    return res.status(201).json({ message: "Tour created successfully", tour: newTour });
+
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: "Error creating the tour", error: error.message });
+  }
+};
+
 // PUT /tour/:tour_id -> Updates an existing tour
 export const editTours = async (req: Request, res: Response): Promise<void> => {
   const { tour_id } = req.params;
