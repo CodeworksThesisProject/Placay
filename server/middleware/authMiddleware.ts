@@ -7,7 +7,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
   const token = req.cookies.token;
 
   if (!token) {
-    console.log("No token provided");
     res.status(401).json({ error: "No token, authorization denied" });
     return;
   }
