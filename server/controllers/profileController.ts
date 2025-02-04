@@ -84,6 +84,15 @@ export const uploadProfileImage = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "File upload failed" });
       }
 
+      if (user.profileImage && user.profileImage.startsWith("/uploads/")) {
+        const oldImagePath = path.join(process.cwd(), user.profileImage);
+        fs.unlink(oldImagePath, (err) => {
+          if (err) {
+            console.error("Error deleting old image:", err);
+          }
+        });
+      }
+
       user.profileImage = `/uploads/${fileName}`;
       await user.save();
 

@@ -21,7 +21,7 @@ export interface NewUser {
   favorites: Favorite[];
 }
 
-export type EditableUser = Partial<User> & { password?: string };
+export type EditableUser = Partial<User> & { password?: string; profileImageFile?: File | null; };
 
 // Frontend Model fot Tours
 export interface Tour {
