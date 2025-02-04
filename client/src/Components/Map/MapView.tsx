@@ -3,9 +3,14 @@ import { Dialog } from "@material-tailwind/react";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React, { useEffect, useRef, useState } from 'react';
+<<<<<<< HEAD
 import { getPointsOfInterest } from '../../Services/getplacesService';
 import { getPOIDetails } from '../../Services/getPOIDetailsService';
 
+=======
+import { getPointsOfInterest } from '../../getplacesService';
+import { getPOIDetails } from '../../getPOIDetails';
+>>>>>>> develop
 
 interface MapComponentProps {
     searchedCity: { name: string; lat: number; lng: number };
@@ -95,7 +100,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
                 if (location.latitude && location.longitude && mapRef.current) {
                     const marker = L.marker([location.latitude, location.longitude])
                         .addTo(mapRef.current)
-                        .bindPopup(`<b>${location.name}</b>`);
+                        .bindTooltip(`<b>${location.name}</b>`, {
+                            permanent: false,
+                            direction: "top",
+                            opacity: 0.8,
+                        });
 
                     marker.on('click', () => handleMarkerClick(location));
                 } else {
@@ -141,6 +150,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
 
     return (
         <>
+
             <div id="map" style={{ height: '100%', width: '100%' }}></div>
 
             <Dialog
@@ -173,8 +183,13 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
 
                         <div className="flex flex-col h-full">
                             <button className="ml-auto cursor-pointer" onClick={handleCloseModal} >
+<<<<<<< HEAD
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+=======
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+>>>>>>> develop
                                 </svg>
                             </button>
 

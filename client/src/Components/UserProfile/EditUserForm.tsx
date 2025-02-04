@@ -1,7 +1,7 @@
 import { useAuth } from '../../context/AuthContext';
 
 interface EditUserFormProps {
-  profileActive: boolean;
+  profileActive: string;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   formData: {
     name: string;
@@ -25,7 +25,7 @@ export default function EditUserForm({
 
   const { user } = useAuth();
   return (
-    <div className={`personal-info ${profileActive? '': 'hidden'}`}>
+    <div className={`personal-info ${ profileActive == 'profile' ? '': 'hidden'}`}>
       <h2 className="text-xl font-semibold text-gray-700 mb-4">Update Profile</h2>
       <form onSubmit={handleSubmit} className="space-y-5 ">
         <input

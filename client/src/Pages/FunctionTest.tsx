@@ -352,11 +352,11 @@ function FunctionTest(): JSX.Element {
       {!isAuthenticated && <p>You are not authenticated. Please log in</p>}
       {isAuthenticated && (
         <div>
-          <p>User: {user?.name} ({user?.email})</p>
+          <p>User: {user?.name} (Mail: {user?.email}, User ID: {user?.id})</p>
           <button onClick={handleCheckAuth} style={{ marginRight: '10px' }}>Check Auth</button>
           <button onClick={handleGetProfile} style={{ marginRight: '10px' }}>Get Profile</button>
           {user?.profileImage && (
-            <img src="http://localhost:3000/uploads/{user.profileImage}" alt="Profile Image" className="h-10 w-10 rounded-full fixed top-20 right-20" />
+            <img src={`${user.profileImage}`} alt="Profile Image" className="h-10 w-10 rounded-full fixed top-20 right-20" />
           )}
           <hr />
           <h2>Favorites</h2>
@@ -414,7 +414,7 @@ function FunctionTest(): JSX.Element {
             <ul>
               {favoritesList.map((fav) => (
                 <li key={fav._id}>
-                  {fav.label} ({fav.latitude}, {fav.longitude}) | Favorite _id: {fav._id} | POI: {fav.googlePOIId} |
+                  {fav.label} ({fav.latitude}, {fav.longitude}) | Favorite _id: {fav._id} | POI: {fav.googlePOIId} | User: {fav.user} | 
                   <button onClick={() => handleDeleteFavorite(fav._id)} style={{ marginLeft: '10px' }}>Delete</button> |
                   <select
                     value={favoriteTourMapping[fav._id] || ""}
@@ -493,7 +493,8 @@ function FunctionTest(): JSX.Element {
                               {day.locations.map((loc) => (
                                 <li key={loc._id}>
                                   {loc.label ? loc.label : 'No Label'} ({loc.latitude}, {loc.longitude})
-                                  {loc.googlePOIId && <> | POI: {loc.googlePOIId}</>} |
+                                   | Favorite _id: {loc._id}
+                                   | POI: {loc.googlePOIId} |
                                   <button onClick={() => handleRemoveLocationFromTour(tour._id, day._id, loc._id!)} style={{ marginLeft: '10px' }}>
                                     Delete
                                   </button>
@@ -525,7 +526,7 @@ function FunctionTest(): JSX.Element {
       )}
       <hr />
       <h2>Response:</h2>
-      <pre style={{ backgroundColor: '#f4f4f4', padding: '10px' }}>
+      <pre style={{ backgroundColor: '#f4f4f4', padding: '10px', overflow: 'auto', maxHeight: '200px', whiteSpace: 'pre-wrap' }}>
         {responseMessage}
       </pre>
     </div>

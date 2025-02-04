@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 // Frontend User Model (without Passwort and Methodes)
 export interface User {
   _id: string;
+  id: string;
   name: string;
   email: string;
   role: "user" | "admin";
@@ -53,6 +54,7 @@ export interface ITourPlace {
 // Frontend Model for Favorites
 export interface Favorite {
   _id: string;
+  user?: string;
   label?: string;
   latitude: number;
   longitude: number;

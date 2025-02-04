@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import { Favorite } from "../models/favoriteModel";
-import { User, IFavorite } from "../models/userModel";
 
 // GET /user/favorite
 export const getFavorites = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user._id;
     const favorites = await Favorite.find({ user: userId });
     res.json(favorites);
   } catch (error: any) {
@@ -17,7 +16,7 @@ export const getFavorites = async (req: Request, res: Response): Promise<void> =
 // POST /user/favorite
 export const postFavorite = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user._id;
     const { label, latitude, longitude, googlePOIId } = req.body;
 
     if (typeof latitude !== "number" || typeof longitude !== "number") {
@@ -44,7 +43,7 @@ export const postFavorite = async (req: Request, res: Response): Promise<void> =
 // DELETE /user/favorite/:id
 export const deleteFavorite = async (req: Request, res: Response) => {
   try {
-    const user = (req as any).user.id;
+    const user = (req as any).user._id;
     const favoriteId = req.params.id;
 
     if (!user) {

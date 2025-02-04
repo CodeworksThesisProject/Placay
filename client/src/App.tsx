@@ -5,6 +5,7 @@ import './App.css';
 import AuthTest from './Components/AuthTest/AuthTest';
 import Footer from './Components/footer';
 import Login from './Components/Login/Login';
+import AddTour from './Components/Tour/AddTour';
 import Register from './Components/Login/Register';
 import Navbar from "./Components/Navbar";
 import { AuthProvider } from './context/AuthContext';
@@ -23,6 +24,7 @@ const App: React.FC = () => {
       <Router>
           <Navbar />
             <Routes>
+              <Route path="/add-tour" element={<AddTour />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<AuthRoute><Profile /></AuthRoute>} />
