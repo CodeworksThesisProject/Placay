@@ -16,8 +16,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
     const [locations, setLocations] = useState<any[]>([]);
     const [selectedLocation, setSelectedLocation] = useState<any | null>(null);
     const lastCenterRef = useRef<{ lat: number; lng: number } | null>(null);
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [loadingDetails, setLoadingDetails] = useState<boolean>(false);
     const mapRef = useRef<L.Map | null>(null);
 
     //Loads the city map when searched
@@ -112,7 +110,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
     // Handle marker click - fetch details and update state
     //show modal
     const handleMarkerClick = async (location: any) => {
-        setLoadingDetails(true); // Show loading indicator
         try {
             const details = await getPOIDetails(location.id); // Fetch details using ID
             if (!details.description || !details.images || details.images.length === 0) {
@@ -125,18 +122,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
                 phone: details.phone || 'No phone available',
                 pictures: details.images.map((img: any) => img.photo_reference) || [location.picture],
             });
-            setShowModal(true);
             setOpen(!open);
         } catch (error) {
             console.error('Error fetching POI details:', error);
-        } finally {
-            setLoadingDetails(false);
         }
     };
 
     // Close modal
     const handleCloseModal = () => {
-        setShowModal(false); // Close modal
         setSelectedLocation(null); // Clear selected location
         setOpen(!open)
     };
@@ -157,6 +150,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
                     mount: { scale: 1, y: 0 },
                     unmount: { scale: 0.9, y: -100 },
                 }}
+                {...{} as any}//rest of necessary attributes not needed
             >
                 {selectedLocation && (
                     <div className="flex flex-row justify-center p-4 rounded-lg shadow-lg">
