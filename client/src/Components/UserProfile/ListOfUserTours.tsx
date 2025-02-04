@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 interface ListOfUserToursProps {
   profileActive: string;
-  setProfileActive: React.Dispatch<React.SetStateAction<string>>;
 }
 export default function ListOfUserTours( {profileActive }: ListOfUserToursProps) {
   const navigate = useNavigate();
