@@ -1,18 +1,27 @@
 import { useNavigate } from 'react-router-dom';
 interface ListOfUserToursProps {
   profileActive: string;
+  setProfileActive: React.Dispatch<React.SetStateAction<string>>;
 }
 export default function ListOfUserTours( {profileActive }: ListOfUserToursProps) {
   const navigate = useNavigate();
 
   return (
     <div className={`tour flex flex-col gap-5  ${profileActive === 'tour' ? '': 'hidden'}`}>
+        {/* send setProfileActive: React.Dispatch<React.SetStateAction<string>>; */}
         
-        <button 
+        {/* <button 
           onClick={() => navigate('/add-tour')}
           className="bg-blue-500 ml-auto text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex text-center">
           Add New Tour
+        </button> */}
+
+        <button 
+          onClick={() => navigate('/add-tour', { state: { profileActive: "tour" } })}
+          className="bg-blue-500 ml-auto text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex text-center">
+          Add New Tour
         </button>
+        
         
 
         <div className="divider w-full h-0.5 bg-gray-200"></div>

@@ -1,5 +1,6 @@
 interface ListOfUserToursProps {
   profileActive: string;
+  setProfileActive: React.Dispatch<React.SetStateAction<string>>;
 }
 export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 

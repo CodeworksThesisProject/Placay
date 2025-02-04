@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 import ErrorAlert from "./ErrorAlert";
 
@@ -15,6 +15,9 @@ const AddTour: React.FC = () => {
     selectedLocations: [] as { label: string, latitude: string, longitude: string, googlePOIId: string }[],
   });
   const [error, setError] = useState<string | null>(null);
+
+  const location = useLocation();
+  const profileActive = location.state?.profileActive || "tour";
 
   
   const [favouritLocations, setFavouritLocations] = useState<
@@ -40,7 +43,6 @@ const AddTour: React.FC = () => {
         });
 
         if (!response.ok) {
-          console.log(response);
           throw new Error("Failed to fetch favorite locations");
         }
 
@@ -94,6 +96,7 @@ const AddTour: React.FC = () => {
 
       if (response.ok) {
         setFormData({ title: "", duration: "", latitude: "", longitude: "", selectedLocations: [] });
+        //TODO it should be navigate tp profile page with shared tours active tab
         navigate(-1);
       } else {
         const errorData = await response.json();

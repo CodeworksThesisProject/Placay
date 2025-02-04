@@ -12,6 +12,7 @@ interface EditUserFormProps {
   };
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setProfileActive: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function EditUserForm({

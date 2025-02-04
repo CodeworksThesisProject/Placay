@@ -144,13 +144,14 @@ const UserProfile: React.FC = () => {
           formData={formData}
           handleChange={handleChange}
           handleFileChange={handleFileChange}
+          setProfileActive ={setProfileActive}
         />
 
         {/* list of tour */}
-        <ListOfUserTours profileActive={profileActive} />
+        <ListOfUserTours profileActive={profileActive} setProfileActive={setProfileActive} />
 
         {/* list of favourit */}
-        <FavouritTour profileActive={profileActive} />
+        <FavouritTour profileActive={profileActive} setProfileActive ={setProfileActive} />
       </div>
     </div>
   );
