@@ -7,6 +7,8 @@ import { getPointsOfInterest } from '../../Services/getplacesService';
 import { getPOIDetails } from '../../Services/getPOIDetailsService';
 
 
+
+
 interface MapComponentProps {
     searchedCity: { name: string; lat: number; lng: number };
     setSearchedCity: (city: { name: string; lat: number; lng: number }) => void;
@@ -17,6 +19,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
     const [selectedLocation, setSelectedLocation] = useState<any | null>(null);
     const lastCenterRef = useRef<{ lat: number; lng: number } | null>(null);
     const mapRef = useRef<L.Map | null>(null);
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setSearchedCity({ name: "MovedMap", lat: position.coords.latitude, lng: position.coords.longitude })
+        });
+    }, []);
 
     //Loads the city map when searched
     useEffect(() => {
@@ -74,10 +82,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
                 lat: parseFloat(center.lat.toFixed(5)),
                 lng: parseFloat(center.lng.toFixed(5))
             };
-            console.log("POI visible for zoom lower than 14, actual zoom: ", zoom);
             if (zoom >= 12 && (!lastCenterRef.current || lastCenterRef.current.lat !== newCenter.lat || lastCenterRef.current.lng !== newCenter.lng)) {
                 lastCenterRef.current = newCenter;
                 setSearchedCity({ name: "MovedMap", lat: newCenter.lat, lng: newCenter.lng });
+            } else {
+                console.log("Go closer to see the points of interest");
             }
         };
         movedMap.on("moveend", handleMapMove);
