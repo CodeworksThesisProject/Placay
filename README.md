@@ -21,17 +21,21 @@ Discover *city highlights* and create *personalized itineraries*
 * `/user/favorite` -> delete -> send the id of a favorite to delete it
 
 ### Tours Routes
-* `/tour/:user_id`-> get -> 
-* `/tour/:user_id` -> post -> 
-* `/tour/:tour_id` -> put -> 
-* `/tour/:tour_id` -> delete -> 
-* `/tour/one/:tour_id` -> get -> 
+* `/tour/:user_id`-> get ->
+* `/tour/:user_id` -> post ->
+* `/tour/:tour_id` -> put ->
+* `/tour/:tour_id` -> delete ->
+* `/tour/one/:tour_id` -> get ->
 
 ### Cities Route
-* `/city` -> ???
+* `/city/autocomplete/:input`-> get -> gives you the suggestions (name and placeID) of places related to the input received
+* `/city/details/:placeId`-> get -> receives the placeID of the place searched and returns the coordinates of the place
+* `/city/:cityName` -> post -> receives the coordinates and gives all the points of interest of the location
+* `/city/:point_id`-> get -> gives you the details of the selected point of interest
+
 
 ### Google API Route
-* `/google/photo` -> get with photoReference -> To avoid exposing the Google API key in the frontend, it is now stored in .env and handled by the backend  
+* `/google/photo` -> get with photoReference -> To avoid exposing the Google API key in the frontend, it is now stored in .env and handled by the backend
 Use it: http://localhost:3000/google/photo?photoReference=
 
 ### Admin Routes
@@ -49,9 +53,9 @@ Need a role `admin` to work
   * role (String, default: "user", values: "user", "admin")
   * profileImage (String, optional, Link to default image or user image in /uploads)
   * favorites (Array of Favorite references, see Favorite Model)
-* Dependencies:  
+* Dependencies:
   Linked with the Favorite Model through the favorites array
-* Token Authentication:  
+* Token Authentication:
   Uses JWT (generateAuthToken method) for secure authentication
 
 ### Favorite Model
@@ -61,9 +65,9 @@ Need a role `admin` to work
   * latitude (Number, required)
   * longitude (Number, required)
   * googlePOIId (String, optional, can be used to get Name, Description and Picture from Google)
-* Dependencies:  
+* Dependencies:
   Directly linked to a User Model via the user field
-* Usage:  
+* Usage:
   Represents favorite locations for each user
 
 ## Prerequisites
@@ -86,12 +90,12 @@ Ensure you have a local copy of the Sellio repository. Just clone it
 5. Environment Variables:
   You need to create .env files for variables: `.env.development.local` and `.env.production.local`. For both there are example files `.env.development`and `.env.production`. Rename them and put in the needed information. The files with .local are ignored in .gitignore and should not leave your computer. `.env.development.local` is loaded when `NODE_ENV=develop` is set by a script in `package.json` (e.g. `npm run develop`, see below)
 
-6. Get a Google API Key (for Maps & Places API)  
-- Go to [Google Cloud Console](https://console.cloud.google.com/apis/dashboard)  
-- Create a new project (or select an existing one).  
-- Enable **Maps JavaScript API** & **Places API**.  
-- Generate an **API Key** under **Credentials**.  
-- Restrict the key (Domain/IP restriction recommended).  
+6. Get a Google API Key (for Maps & Places API)
+- Go to [Google Cloud Console](https://console.cloud.google.com/apis/dashboard)
+- Create a new project (or select an existing one).
+- Enable **Maps JavaScript API** & **Places API**.
+- Generate an **API Key** under **Credentials**.
+- Restrict the key (Domain/IP restriction recommended).
 - Add it to `.env.production.local` and `.env.development.local` (backend only!): GOOGLE_MAPS_API_KEY= "your_Google_Maps_API_Key"
 
 8. Use the following commands based on your needs (they do work on both directories):

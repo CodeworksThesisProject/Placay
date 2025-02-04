@@ -7,6 +7,8 @@ import { getPointsOfInterest } from '../../Services/getplacesService';
 import { getPOIDetails } from '../../Services/getPOIDetailsService';
 
 
+
+
 interface MapComponentProps {
     searchedCity: { name: string; lat: number; lng: number };
     setSearchedCity: (city: { name: string; lat: number; lng: number }) => void;
@@ -17,6 +19,13 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
     const [selectedLocation, setSelectedLocation] = useState<any | null>(null);
     const lastCenterRef = useRef<{ lat: number; lng: number } | null>(null);
     const mapRef = useRef<L.Map | null>(null);
+
+    //tracks user location if allowed
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setSearchedCity({ name: "MovedMap", lat: position.coords.latitude, lng: position.coords.longitude })
+        });
+    }, []);
 
     //Loads the city map when searched
     useEffect(() => {
@@ -74,10 +83,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
                 lat: parseFloat(center.lat.toFixed(5)),
                 lng: parseFloat(center.lng.toFixed(5))
             };
-            console.log("POI visible for zoom lower than 14, actual zoom: ", zoom);
             if (zoom >= 12 && (!lastCenterRef.current || lastCenterRef.current.lat !== newCenter.lat || lastCenterRef.current.lng !== newCenter.lng)) {
                 lastCenterRef.current = newCenter;
                 setSearchedCity({ name: "MovedMap", lat: newCenter.lat, lng: newCenter.lng });
+            } else {
+                console.log("Go closer to see the points of interest");
             }
         };
         movedMap.on("moveend", handleMapMove);
@@ -98,7 +108,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
                             direction: "top",
                             opacity: 0.8,
                         });
-
                     marker.on('click', () => handleMarkerClick(location));
                 } else {
                     console.warn('Invalid location coordinates:', location);
@@ -131,7 +140,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
     // Close modal
     const handleCloseModal = () => {
         setSelectedLocation(null); // Clear selected location
-        setOpen(!open)
+        setOpen(false)
     };
     const [open, setOpen] = React.useState(false);
 
@@ -152,46 +161,45 @@ const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCi
                 }}
                 {...{} as any}//rest of necessary attributes not needed
             >
-                {selectedLocation && (
-                    <div className="flex flex-row justify-center p-4 rounded-lg shadow-lg">
+                 {selectedLocation ? (
+                <div className="flex flex-row justify-center p-4 rounded-lg shadow-lg">
+                    {/* Left Section: Image */}
+                    <div className="mr-5 flex-grow-0 flex-shrink-0 basis-[250px]">
+                        <img
+                            src={`http://localhost:3000/google/photo?photoReference=${selectedLocation.pictures[0]}`}
+                            alt={selectedLocation.name}
+                            style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
+                        />
+                    </div>
 
-                        {/* Left Section: Image */}
+                    {/* Right Section: Details */}
+                    <div className="flex flex-col h-full">
+                        <button className="ml-auto cursor-pointer" onClick={handleCloseModal}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                        </button>
 
-                        <div className="mr-5 flex-grow-0 flex-shrink-0 basis-[250px]">
-                            <img
-                                src={`http://localhost:3000/google/photo?photoReference=${selectedLocation.pictures[0]}`}
-                                alt={selectedLocation.name}
-                                style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
-                            />
+                        <div className="flex justify-between items-center text-center">
+                            <h1 className="font-bold">{selectedLocation.name}</h1>
                         </div>
 
-                        {/* Right Section: Details */}
+                        <div className="mb-3 max-h-[150px] overflow-y-auto flex-grow">
+                            <p>
+                                <strong>Description:</strong> {selectedLocation.description}
+                            </p>
+                        </div>
 
-                        <div className="flex flex-col h-full">
-                            <button className="ml-auto cursor-pointer" onClick={handleCloseModal} >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-
-                            <div className="flex justify-between items-center text-center">
-                                <h1 className="font-bold">{selectedLocation.name}</h1>
-                            </div>
-
-                            <div className="mb-3 max-h-[150px] overflow-y-auto flex-grow">
-                                <p>
-                                    <strong>Description:</strong> {selectedLocation.description}
-                                </p>
-                            </div>
-
-                            <div className="flex flex-row gap-3 mt-10">
-                                <button className="bg-blue-500 px-3 py-2 rounded-lg">Contact</button>
-                                <button className="bg-blue-500 px-3 py-2 rounded-lg">Add to Favorites</button>
-                            </div>
+                        <div className="flex flex-row gap-3 mt-10">
+                            <button className="bg-blue-500 px-3 py-2 rounded-lg">Contact</button>
+                            <button className="bg-blue-500 px-3 py-2 rounded-lg">Add to Favorites</button>
                         </div>
                     </div>
-                )}
-            </Dialog>
+                </div>
+            ) : (
+                <div>Loading...</div> // Muestra algo en lugar de null, como un mensaje de carga
+            )}
+        </Dialog>
         </>
     );
 };
