@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 import ErrorAlert from "./ErrorAlert";
+import SuccessAlert from "./SuccessAlert";
 
-const AddTour: React.FC = () => {
+interface AddToursProps {
+  profileActive: string;
+}
+export default function AddTour( {profileActive }: AddToursProps) {
+// const AddTour: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   
@@ -15,10 +20,7 @@ const AddTour: React.FC = () => {
     selectedLocations: [] as { label: string, latitude: string, longitude: string, googlePOIId: string }[],
   });
   const [error, setError] = useState<string | null>(null);
-
-  const location = useLocation();
-  const profileActive = location.state?.profileActive || "tour";
-
+  const [success, setSuccess] = useState<string | null>(null);
   
   const [favouritLocations, setFavouritLocations] = useState<
     { label?: string; latitude: string; longitude: string; googlePOIId?: string }[]
@@ -96,8 +98,8 @@ const AddTour: React.FC = () => {
 
       if (response.ok) {
         setFormData({ title: "", duration: "", latitude: "", longitude: "", selectedLocations: [] });
-        //TODO it should be navigate tp profile page with shared tours active tab
-        navigate(-1);
+        setSuccess(`The Tour was added successfully`); 
+        
       } else {
         const errorData = await response.json();
         setError(`Error creating tour: ${errorData.message || 'Unknown error'}`);
@@ -107,9 +109,13 @@ const AddTour: React.FC = () => {
     }
   };
 
+
+
   return (
-    <div className="max-w-4xl mx-auto p-5">
+    <div className={`tour flex flex-col gap-5  ${profileActive === 'add-tour' ? '': 'hidden'}`}>
+     {/* <div className="max-w-4xl mx-auto p-5"> */}
       {error && <ErrorAlert message={error} onClose={() => setError(null)} />}
+      {success &&  <SuccessAlert message={success} onClose={() => setSuccess(null)} />}
 
       <h1 className="text-2xl font-semibold mb-5">Create a New Tour</h1>
       <form onSubmit={handleSubmit} className="bg-white p-5 rounded-lg shadow-md border border-gray-200">
@@ -135,10 +141,10 @@ const AddTour: React.FC = () => {
         </div>
 
         <h2 className="text-lg font-semibold mt-5">Select Locations from Favorites:</h2>
-        
+        <div className=" max-h-50	 min-h-20 overflow-auto border p-3 rounded-md bg-gray-50 mt-2">
         {favouritLocations.length > 0 ? (
           favouritLocations.map((location, index) => (
-            <div className="h-40 overflow-auto border p-3 rounded-md bg-gray-50 mt-2">
+            
             <label
               key={index}
               className="flex items-center gap-3 bg-white px-3 py-2 border border-gray-200 rounded-md text-gray-800 mb-2 cursor-pointer"
@@ -151,12 +157,12 @@ const AddTour: React.FC = () => {
               />
               {location.label}
             </label>
-            </div>
+            
           ))
         ) : (
           <p className="text-gray-500 text-center">No favorite locations saved.</p>
         )}
-        
+        </div>
 
         <h2 className="text-lg font-semibold mt-5">Add a Custom Location:</h2>
         <div className="flex gap-2 mt-2">
@@ -187,5 +193,3 @@ const AddTour: React.FC = () => {
     </div>
   );
 };
-
-export default AddTour;

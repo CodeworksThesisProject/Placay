@@ -7,21 +7,12 @@ export default function ListOfUserTours( {profileActive }: ListOfUserToursProps)
 
   return (
     <div className={`tour flex flex-col gap-5  ${profileActive === 'tour' ? '': 'hidden'}`}>
-        {/* send setProfileActive: React.Dispatch<React.SetStateAction<string>>; */}
         
-        {/* <button 
+        <button 
           onClick={() => navigate('/add-tour')}
           className="bg-blue-500 ml-auto text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex text-center">
           Add New Tour
-        </button> */}
-
-        <button 
-          onClick={() => navigate('/add-tour', { state: { profileActive: "tour" } })}
-          className="bg-blue-500 ml-auto text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300 flex text-center">
-          Add New Tour
         </button>
-        
-        
 
         <div className="divider w-full h-0.5 bg-gray-200"></div>
           
@@ -112,6 +103,7 @@ export default function ListOfUserTours( {profileActive }: ListOfUserToursProps)
               </div>
             </div>
           </div>
+          
           {/* -------------------------------------------------- */}
           <div className="flex flex-col gap-3  w-sm bg-white p-3 rounded-xs shadow-sm" >
             
