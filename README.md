@@ -16,16 +16,16 @@ Discover *city highlights* and create *personalized itineraries*
 * `/user/profileimage` -> post -> Fileupload for a picture to folder /uploads with input type="file" name="profileImage", will set the profileImage field of user to file without base url /uploads/NameOFImage (Name is auto generated when uploading an image)
 
 ### User favorites Routes
-* `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, label and an unique id
-* `/user/favorite` -> post -> lets you add a favorite with latitude, longitude, label and will create an unique id
+* `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, label, Google Point-of-Interest ID and an unique id
+* `/user/favorite` -> post -> lets you add a favorite with latitude, longitude, label, Google Point-of-Interest ID and will create an unique id
 * `/user/favorite` -> delete -> send the id of a favorite to delete it
 
 ### Tours Routes
-* `/tour/:user_id`-> get -> retrieves all tours (itineraries) for a specific user. Should contain a title, destination (combining city and country), duration (e.g., "3 days"), and a set of days with individual locations
-* `/tour/:user_id` -> post -> Creates a new tour. Required fields in the request body are:`title` (Tour title), `destination` (Main travel destination, e.g., "Paris, France"), `duration` (e.g., "3 days"), Optionally, `days` (structured data to specify individual days and locations), will have its own tour_ID
-* `/tour/:tour_id` -> put -> updates an existing tour based on its ID
-* `/tour/:tour_id` -> delete -> Deletes a tour based on its ID
-* `/tour/one/:tour_id` -> get -> will give you the details of just this one tour based on its ID
+* `/tour/:user_id`-> get -> 
+* `/tour/:user_id` -> post -> 
+* `/tour/:tour_id` -> put -> 
+* `/tour/:tour_id` -> delete -> 
+* `/tour/one/:tour_id` -> get -> 
 
 ### Cities Route
 * `/city` -> ???
@@ -60,26 +60,11 @@ Need a role `admin` to work
   * label (String, optional, for Name or user can use an own name)
   * latitude (Number, required)
   * longitude (Number, required)
-  * googlePOIId (String, optional, can be used to get Name and Description)
+  * googlePOIId (String, optional, can be used to get Name, Description and Picture from Google)
 * Dependencies:  
   Directly linked to a User Model via the user field
 * Usage:  
   Represents favorite locations for each user
-
-### Tour Model
-* Fields:
-  * user_id (String, required, references User)
-  * title (String, required, a name for the Tour, users should put in one they like)
-  * destination (String, required, maybe create automatic in Frontend)
-  * startDate (Date, required, YYYY.MM.DD)
-  * endDate (Date, required, YYYY.MM.DD)
-  * duration (Virtual field, auto-calculated between startDate and endDate)
-  * days (Array of day objects)
-* Each day contains:
-  * date (Date, required)
-  * locations (Array of locations with latitude, longitude, optional label and googlePOIID, should reflect Favorites informations but is independend)
-* Dependencies:  
-  Linked to a User Model via user_id.
 
 ## Prerequisites
 Before starting, ensure you have the following installed:

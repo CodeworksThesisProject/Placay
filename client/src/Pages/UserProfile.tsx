@@ -51,14 +51,14 @@ const UserProfile: React.FC = () => {
         <h1 className="text-xl">User Profile</h1>
         <div className="w-30 bg-gray-200 p-2 rounded-full border-8 border-blue-300">
           <img
-            src={`asserts/images/profilePictures/${user?.profileImage}`}
+            src={user?.profileImage}
             alt="user profile pic"
             className="w-full h-full object-cover rounded-full"
           />
         </div>
 
         <div className="email flex flex-col items-center ">
-          <h1>user@gmail.com</h1>
+          <h1>{user?.email}</h1>
         </div>
 
         <div className="menu mt-10 flex flex-col w-full pl-[20%]">
