@@ -3,13 +3,16 @@ import MapView from '../Components/Map/MapView';
 import SearchField from '../Components/SearchField';
 
 const Home: React.FC = () => {
-  const [coordinates, setCoordinates] = useState<[number, number]>([51.5072178, -0.1275862]);
-  const [searchedCity, setSearchedCity] = useState<string>("London");
+  const [searchedCity, setSearchedCity] = useState<{ name: string; lat: number; lng: number }>({
+    name: "London",
+    lat: 51.5072178,
+    lng: -0.1275862,
+  });
 
   return (
     <div className="map-container relative"> {/* Añadido relative */}
-      <SearchField setCoordinates={setCoordinates} setSearchedCity={setSearchedCity} />
-      <MapView coordinates={coordinates} searchedCity={searchedCity} />
+      <SearchField setSearchedCity={setSearchedCity} />
+      <MapView searchedCity={searchedCity} setSearchedCity={setSearchedCity}/>
     </div>
   );
 };

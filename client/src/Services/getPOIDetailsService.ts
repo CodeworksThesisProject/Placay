@@ -6,7 +6,6 @@ export async function getPOIDetails(point_id: string) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("ESTO:", data);
       return data;
     } else {
       const error = await response.json();

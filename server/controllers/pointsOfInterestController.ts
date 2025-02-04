@@ -5,16 +5,21 @@ import { Details } from "../models/POIDetailsModel";
 
 export const getPointsOfInterest = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { latitude, longitude, radius = 50000 } = req.body;
+    const { latitude, longitude, radius = 20000 } = req.body;
     const { cityName } = req.params;
-    const savedCity = await City.findOne({ cityName });
-    if (savedCity) {
-      res.json(savedCity.pointsOfInterest);
-      return;
+
+    if (cityName != "MovedMap") {
+      const savedCity = await City.findOne({ cityName });
+      if (savedCity) {
+        res.json(savedCity.pointsOfInterest);
+        return;
+      }
     }
     const pointsOfInterest = await fetchPoints(latitude, longitude, radius);
     if (pointsOfInterest) {
-      await saveCityData(cityName, latitude, longitude, pointsOfInterest);
+      if (cityName != "MovedMap") {
+        await saveCityData(cityName, latitude, longitude, pointsOfInterest);
+      }
       res.json(pointsOfInterest);
     } else {
       res.json("Unable to reach API data");
@@ -48,14 +53,12 @@ export const getDetails = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-
-/* TODO change the key to an .env file */const API_KEY = "AIzaSyB57oCWBiCU7ET0vWR_dGrO5tIcy9ed71E";
 async function fetchPoints(latitude: number = 51.5072178, longitude: number = -0.1275862, radius: number): Promise<any> {
   let pointsOfInterest = [];
   try {
     const types = ['tourist_attraction', 'museum', 'park', 'historic_site', 'art_gallery', 'amusement_park'];
     const promises = types.map(type =>
-      fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${API_KEY}`)
+      fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${process.env.GOOGLE_MAPS_API_KEY}`)
         .then(response => response.json())
         .then(data => data.results)
     );
@@ -77,7 +80,7 @@ async function fetchPoints(latitude: number = 51.5072178, longitude: number = -0
 
 
 async function fetchDetails(place_id: string): Promise<any> {
-  const url = `https://maps.googleapis.com/maps/api/place/details/json?fields=name,editorial_summary,photos,formatted_phone_number&place_id=${place_id}&key=${API_KEY}`;
+  const url = `https://maps.googleapis.com/maps/api/place/details/json?fields=name,editorial_summary,photos,formatted_phone_number&place_id=${place_id}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
   try {
     const response = await fetch(url);
     const data = await response.json();
@@ -87,7 +90,7 @@ async function fetchDetails(place_id: string): Promise<any> {
     const details = {
       name: data.result.name,
       description: data.result.editorial_summary ? data.result.editorial_summary.overview : 'No description available',
-      phone:data.result.formatted_phone_number ? data.result.formatted_phone_number : 'No phone available',
+      phone: data.result.formatted_phone_number ? data.result.formatted_phone_number : 'No phone available',
       images: data.result.photos && data.result.photos.length > 0 ? data.result.photos : null,
     }
     return details;
@@ -106,7 +109,7 @@ async function saveCityData(cityName: string, latitude: number, longitude: numbe
   }
 }
 
-async function saveDetailsData(point_id: string, name: string, description: string, phone:string, images: string[]): Promise<void> {
+async function saveDetailsData(point_id: string, name: string, description: string, phone: string, images: string[]): Promise<void> {
   try {
     const newDetails = new Details({ point_id, name, description, phone, images });
     await newDetails.save();

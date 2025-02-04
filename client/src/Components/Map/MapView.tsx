@@ -8,20 +8,49 @@ import { getPOIDetails } from '../../Services/getPOIDetailsService';
 
 
 interface MapComponentProps {
-    coordinates: [number, number];
-    searchedCity: string;
+    searchedCity: { name: string; lat: number; lng: number };
+    setSearchedCity: (city: { name: string; lat: number; lng: number }) => void;
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }): JSX.Element | null => {
+const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCity }): JSX.Element | null => {
     const [locations, setLocations] = useState<any[]>([]);
     const [selectedLocation, setSelectedLocation] = useState<any | null>(null);
+    const lastCenterRef = useRef<{ lat: number; lng: number } | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [loadingDetails, setLoadingDetails] = useState<boolean>(false);
     const mapRef = useRef<L.Map | null>(null);
 
+    //Loads the city map when searched
+    useEffect(() => {
+        if (!searchedCity || typeof searchedCity.lat !== "number" || typeof searchedCity.lng !== "number") {
+            console.error("Invalid coordinates:", searchedCity);
+            return;
+        }
+        if (!mapRef.current) {
+            mapRef.current = L.map('map').setView([searchedCity.lat, searchedCity.lng], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(mapRef.current);
+        } else {
+            mapRef.current.setView([searchedCity.lat, searchedCity.lng], 14);
+        }
+    }, [searchedCity.name]);
+
+    //Load the points of interest around the searched city
+    useEffect(() => {
+        if (mapRef.current) {
+            mapRef.current.eachLayer((layer) => {
+                if (layer instanceof L.Marker) {
+                    mapRef.current?.removeLayer(layer);
+                }
+            });
+        }
+        fetchLocations();
+    }, [searchedCity.lat, searchedCity.lng]);
+
     const fetchLocations = async () => {
         try {
-            const data = await getPointsOfInterest(searchedCity, ...coordinates);
+            const data = await getPointsOfInterest(searchedCity.name, searchedCity.lat, searchedCity.lng);
             const formattedLocations = data.map((item: any) => ({
                 name: item.name,
                 id: item.id,
@@ -36,25 +65,30 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
         }
     };
 
+    //Loads the POI when the user moves the map and zoom <14
     useEffect(() => {
-        if (!mapRef.current) {
-            mapRef.current = L.map('map').setView(coordinates, 14);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            }).addTo(mapRef.current);
-        }
-        return () => {
-            if (mapRef.current) {
-                mapRef.current.remove();
-                mapRef.current = null;
+        if (!mapRef.current) return;
+        const movedMap = mapRef.current;
+        const handleMapMove = () => {
+            const center = movedMap.getCenter();
+            const zoom = movedMap.getZoom();
+            const newCenter = {
+                lat: parseFloat(center.lat.toFixed(5)),
+                lng: parseFloat(center.lng.toFixed(5))
+            };
+            console.log("POI visible for zoom lower than 14, actual zoom: ", zoom);
+            if (zoom >= 12 && (!lastCenterRef.current || lastCenterRef.current.lat !== newCenter.lat || lastCenterRef.current.lng !== newCenter.lng)) {
+                lastCenterRef.current = newCenter;
+                setSearchedCity({ name: "MovedMap", lat: newCenter.lat, lng: newCenter.lng });
             }
         };
-    }, [coordinates]);
+        movedMap.on("moveend", handleMapMove);
+        return () => {
+            movedMap.off("moveend", handleMapMove);
+        };
+    }, [mapRef.current]);
 
-    useEffect(() => {
-        fetchLocations();
-    }, [coordinates]);
-
+    //Puts the markers on the map when POI are loaded
     useEffect(() => {
         if (locations.length > 0 && mapRef.current) {
             locations.forEach((location) => {
@@ -77,9 +111,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
         setLoadingDetails(true); // Show loading indicator
         try {
             const details = await getPOIDetails(location.id); // Fetch details using ID
+            if (!details.description || !details.images || details.images.length === 0) {
+                return;
+            }
             setSelectedLocation({
                 ...location,
-                name: details.name || location.name,
+                name: location.name,
                 description: details.description || location.description,
                 phone: details.phone || 'No phone available',
                 pictures: details.images.map((img: any) => img.photo_reference) || [location.picture],
@@ -109,11 +146,15 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
             <Dialog
                 open={open}
                 size="sm"
+                className="custom-dialog-class"
                 handler={handleCloseModal}
                 animate={{
                     mount: { scale: 1, y: 0 },
                     unmount: { scale: 0.9, y: -100 },
-                  }}
+                }}
+                placeholder=""
+                onPointerEnterCapture={null}
+                onPointerLeaveCapture={null}
             >
                 {selectedLocation && (
                     <div className="flex flex-row justify-center p-4 rounded-lg shadow-lg">
@@ -132,8 +173,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ coordinates, searchedCity }
 
                         <div className="flex flex-col h-full">
                             <button className="ml-auto cursor-pointer" onClick={handleCloseModal} >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                                 </svg>
                             </button>
 
