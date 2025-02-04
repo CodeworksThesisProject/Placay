@@ -7,6 +7,7 @@ export const register = async (req: Request, res: Response) => {
     const { name, email, password, profileImage } = req.body;
     const userCount = await User.countDocuments();
     const role = userCount === 0 ? "admin" : "user";
+    const fullProfileImagePath = "/asserts/images/profilePictures/" + profileImage;
 
     const userExists = await User.findOne({ email });
     if (userExists)
@@ -15,7 +16,7 @@ export const register = async (req: Request, res: Response) => {
     if (password.length < 6)
       return res.status(400).json({ error: "password is too short" });
 
-    const newUser = new User({ name, email, password, role, profileImage });
+    const newUser = new User({ name, email, password, role, profileImage: fullProfileImagePath });
     await newUser.save();
 
     const token = newUser.generateAuthToken();
