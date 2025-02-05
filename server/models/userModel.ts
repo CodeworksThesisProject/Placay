@@ -14,7 +14,7 @@ export interface IUser extends Document {
 
 export interface IFavorite {
   _id: mongoose.Types.ObjectId;
-  label?: string;
+  name?: string;
   latitude: number;
   longitude: number;
   googlePOIId?: string;

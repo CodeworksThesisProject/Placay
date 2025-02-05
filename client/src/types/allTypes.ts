@@ -48,7 +48,7 @@ export interface ITourDay {
 // Model for Places on one selected day
 export interface ITourPlace {
   _id?: string;
-  label?: string;
+  name?: string;
   latitude: number;
   longitude: number;
   googlePOIId?: string;
@@ -58,7 +58,7 @@ export interface ITourPlace {
 export interface Favorite {
   _id: string;
   user?: string;
-  label?: string;
+  name?: string;
   latitude: number;
   longitude: number;
   googlePOIId?: string;

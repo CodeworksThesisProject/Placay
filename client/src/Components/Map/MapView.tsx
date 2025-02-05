@@ -201,7 +201,7 @@ const MapComponent = ({
     if (!selectedLocation) return;
 
     const payload = {
-      label: selectedLocation.name,
+      name: selectedLocation.name,
       latitude: selectedLocation.latitude,
       longitude: selectedLocation.longitude,
       googlePOIId: selectedLocation.id,
@@ -217,7 +217,7 @@ const MapComponent = ({
 
       if (res.ok) {
         console.log("Favorite added");
-        await fetchFavorites(); 
+        await fetchFavorites();
         setIsFavorite(true);
       } else {
         console.error("Error adding to favorites");

@@ -10,7 +10,7 @@ Before starting, ensure you have the following installed:
 ## Getting Started
 To set up and run Placay, follow these steps:
 
-1. Clone the Repository  
+1. Clone the Repository
 Ensure you have a local copy of the Sellio repository. Just clone it
 
 2. Navigate to the `/server` directory to manage the backend, and the `/client` directory for the frontend
@@ -19,7 +19,7 @@ Ensure you have a local copy of the Sellio repository. Just clone it
 
 4. Make sure MongoDB is installed and running, you can get it with `brew services start mongodb-community@8.0` in Terminal on a Mac
 
-5. Environment Variables:  
+5. Environment Variables:
   You need to create .env files for variables: `.env.development.local` and `.env.production.local`. For both there are example files `.env.development`and `.env.production`. Rename them and put in the needed information. The files with .local are ignored in .gitignore and should not leave your computer. `.env.development.local` is loaded when `NODE_ENV=develop` is set by a script in `package.json` (e.g. `npm run develop`, see below)
 
 6. Get a Google API Key (for Maps & Places API)
@@ -49,8 +49,8 @@ Ensure you have a local copy of the Sellio repository. Just clone it
 * `/user/profileimage` -> post -> Fileupload for a picture to folder /uploads with input type="file" name="profileImage", will set the profileImage field of user to file without base url /uploads/NameOFImage (Name is auto generated when uploading an image)
 
 ### User favorites Routes
-* `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, label, Google Point-of-Interest ID and an unique id
-* `/user/favorite` -> post -> lets you add a favorite with latitude, longitude, label, Google Point-of-Interest ID and will create an unique id
+* `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, name, Google Point-of-Interest ID and an unique id
+* `/user/favorite` -> post -> lets you add a favorite with latitude, longitude, name, Google Point-of-Interest ID and will create an unique id
 * `/user/favorite` -> delete -> send the id of a favorite to delete it
 
 ### Tours Routes
@@ -96,7 +96,7 @@ If you need an Admin User, use `npm run seed` to create one. Yo can change the D
 ### Favorite Model
 * Fields:
   * user (ObjectId, references User, required)
-  * label (String, optional, for Name or user can use an own name)
+  * name (String, optional, for Name or user can use an own name)
   * latitude (Number, required)
   * longitude (Number, required)
   * googlePOIId (String, optional, can be used to get Name, Description and Picture from Google)
