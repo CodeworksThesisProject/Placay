@@ -1,65 +1,62 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import L from "leaflet";
-import "leaflet-routing-machine"; // Import Routing Machine
-
-const streetConnectedFavorites = [
-    { name: "Berlin Hauptbahnhof", latitude: 52.5251, longitude: 13.3694 }, // Start Point
-    { name: "Alexanderplatz", latitude: 52.5219, longitude: 13.4132 },
-    { name: "Checkpoint Charlie", latitude: 52.5076, longitude: 13.3904 },
-    { name: "Potsdamer Platz", latitude: 52.5096, longitude: 13.3759 },
-    { name: "Kurfürstendamm", latitude: 52.5030, longitude: 13.3327 } // End Point
-];
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine";
 
 interface PathTourProps {
-    map: L.Map | null;
+  points: { name: string; latitude: number; longitude: number }[];
 }
 
-const PathTour: React.FC<PathTourProps> = ({ map }) => {
-    useEffect(() => {
-        if (!map || streetConnectedFavorites.length < 2) return;
+const PathTour: React.FC<PathTourProps> = ({ points }) => {
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
-        // Create routing control WITHOUT instructions panel
-        const routingControl = L.Routing.control({
-            waypoints: streetConnectedFavorites.map((place) =>
-                L.latLng(place.latitude, place.longitude)
-            ),
-            routeWhileDragging: true,
-            createMarker: function (i, waypoint, n) {
-                // Define colors for start, end, and waypoints
-                let color = i === 0 ? "green" : i === streetConnectedFavorites.length - 1 ? "red" : "blue";
+  useEffect(() => {
+    if (!mapContainerRef.current || points.length < 1) return;
 
-                // Use Leaflet's circle marker instead of icons
-                return L.circleMarker(waypoint.latLng, {
-                    radius: 10, // Size of the marker
-                    fillColor: color,
-                    color: "black", // Outer stroke
-                    weight: 2,
-                    opacity: 1,
-                    fillOpacity: 0.9
-                }).bindTooltip(`${streetConnectedFavorites[i].name}`, { permanent: false });
-            },
-            lineOptions: {
-                styles: [{ color: "blue", weight: 4 }]
-            },
-            show: false, //  Hide instructions
-            addWaypoints: false,
-            draggableWaypoints: false
-        }).addTo(map);
+    // Create the map
+    const map = L.map(mapContainerRef.current).setView([points[0].latitude, points[0].longitude], 12);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-        //  Remove instructions panel if it still appears
-        setTimeout(() => {
-            const instructionsPanel = document.querySelector(".leaflet-routing-container");
-            if (instructionsPanel) instructionsPanel.remove();
-        }, 500);
+    // Create the routre
+    const routingControl = L.Routing.control({
+      waypoints: points.map(p => L.latLng(p.latitude, p.longitude)),
+      routeWhileDragging: true,
+      show: false,
+      addWaypoints: false,
+      draggableWaypoints: false,
+      createMarker: (i: number, waypoint: L.LatLng, n: number) => {
 
-        return () => {
-            if (routingControl) {
-                map.removeControl(routingControl);
-            }
-        };
-    }, [map]);
+        // Markers personalization
+        const color = i === 0 ? "green" : i === points.length - 1 ? "red" : "blue";
+        return L.circleMarker(waypoint.latLng, {
+          radius: 8,
+          fillColor: color,
+          color: "black",
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.9
+        }).bindTooltip(points[i].name, { permanent: false });
+      },
+      lineOptions: {
+        styles: [{ color: "blue", weight: 4 }] // Personalización de la ruta: azul y grosor 4
+      },
+      router: L.Routing.osrmv1({ serviceUrl: "https://router.project-osrm.org/route/v1" })
+    }).addTo(map);
 
-    return null;
+    // Remove instructions
+    setTimeout(() => {
+      const instructionsPanel = document.querySelector(".leaflet-routing-container");
+      if (instructionsPanel) instructionsPanel.remove();
+    }, 100);
+
+    // Unmount
+    return () => {
+      routingControl.remove();
+      map.remove();
+    };
+  }, [points]);
+
+  return <div ref={mapContainerRef} className="h-full w-full rounded-lg shadow-md"></div>;
 };
 
 export default PathTour;
