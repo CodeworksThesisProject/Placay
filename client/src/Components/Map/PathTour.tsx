@@ -14,7 +14,7 @@ interface PathTourProps {
     map: L.Map | null;
 }
 
-const PathTour: React.FC<PathTourProps> = ({ map }) => {
+const PathTour = ({ map }: PathTourProps) => {
     useEffect(() => {
         if (!map || streetConnectedFavorites.length < 2) return;
 

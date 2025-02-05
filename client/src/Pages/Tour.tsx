@@ -1,6 +1,6 @@
 import TourDetail from "../Components/Tour/TourDetail";
 
-const Tour: React.FC = () => {
+const Tour = () => {
 
   return (
     <div className="pt-5">

@@ -9,7 +9,7 @@ The backend decodes the token stored in the cookies, retrieves the user's data b
 ```tsx
 import { useAuth } from '../../context/AuthContext';
 
-const UserProfile: React.FC = () => {
+const UserProfile = () => {
   const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {

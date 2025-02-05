@@ -5,7 +5,7 @@ interface ErrorAlertProps {
   onClose: () => void;
 }
 
-const ErrorAlert: React.FC<ErrorAlertProps> = ({ message, onClose }) => {
+const ErrorAlert = ({ message, onClose }: ErrorAlertProps): JSX.Element => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {

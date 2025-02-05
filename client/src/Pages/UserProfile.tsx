@@ -6,7 +6,7 @@ import ListOfUserTours from "../Components/UserProfile/ListOfUserTours";
 import { useAuth } from "../context/AuthContext";
 import { EditableUser } from "../types/allTypes";
 
-const UserProfile: React.FC = () => {
+const UserProfile = () => {
   const { user, setUser } = useAuth();
   const [profileActive, setProfileActive] = useState("profile");
 

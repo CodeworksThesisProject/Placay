@@ -1,4 +1,3 @@
-'use strict'
 import { Dialog } from "@material-tailwind/react";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -14,7 +13,7 @@ interface MapComponentProps {
     setSearchedCity: (city: { name: string; lat: number; lng: number }) => void;
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ searchedCity, setSearchedCity }): JSX.Element | null => {
+const MapComponent = ({ searchedCity, setSearchedCity }: MapComponentProps): JSX.Element | null => {
     const [locations, setLocations] = useState<any[]>([]);
     const [selectedLocation, setSelectedLocation] = useState<any | null>(null);
     const lastCenterRef = useRef<{ lat: number; lng: number } | null>(null);

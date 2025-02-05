@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-const TourDetail: React.FC = () => {
+const TourDetail = () => {
 
   const [liked, setLiked] = useState<boolean>(false);
 
