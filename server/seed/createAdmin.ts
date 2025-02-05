@@ -1,22 +1,25 @@
-import { User } from "../models/userModel";
-import bcrypt from "bcryptjs";
+import dotenv from 'dotenv';
 import { connectDB } from "../config/db";
+import { User } from "../models/userModel";
 
-process.env.NODE_ENV == 'develop'
-  ? require('dotenv').config({ path: '.env.development.local' })
-  : require('dotenv').config({ path: '.env.production.local' });
+dotenv.config({ path: process.env.NODE_ENV === 'develop' ? '.env.development.local' : '.env.production.local' });
 
 const createAdminUser = async () => {
   try {
     await connectDB();
 
-    const hashedPassword = await bcrypt.hash("admin", 10);
+    const existingAdmin = await User.findOne({ role: "admin" });
+    if (existingAdmin) {
+      console.log("An admin user already exists, no need to create one. E-Mail of admin:", existingAdmin.email);
+      process.exit();
+    }
 
     const adminUser = new User({
-      name: "admin",
+      name: "Admin",
       email: "admin@example.com",
-      password: hashedPassword,
+      password: "admin1",
       role: "admin",
+      profileImage: "/asserts/images/profilePictures/default-profile-picture.png",
     });
 
     await adminUser.save();
