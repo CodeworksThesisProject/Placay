@@ -31,6 +31,7 @@ const userSchema: Schema = new Schema(
   { timestamps: true }
 );
 
+// If a Password is set or changed, it is automatically hashed here:
 userSchema.pre<IUser>("save", async function (next) {
   const user = this;
   if (!user.isModified("password")) return next();
