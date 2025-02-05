@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PathTour from "../Map/PathTour";
+import { getPOIDetails } from "../../Services/getPOIDetailsService";
 
 interface Location {
   name: string;
   latitude: number;
   longitude: number;
   googlePOIId: string
+  image:any
 }
 
 interface Tour {
@@ -20,6 +22,35 @@ interface TourDetailProps {
 
 const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
   const [liked, setLiked] = useState<boolean>(false);
+  const [loadingImages, setLoadingImages] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchLocationImages = async () => {
+      const updatedLocations = [...tour.locations];
+
+      for (const location of updatedLocations) {
+        try {
+          const details = await getPOIDetails(location.googlePOIId);
+          if (details && details.images && details.images.length > 0) {
+            const imageUrl = details.images[0]?.photo_reference
+              ? `http://localhost:3000/google/photo?photoReference=${details.images[0].photo_reference}`
+              : null;
+
+            if (imageUrl) {
+              location.image = imageUrl;
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching POI details:", error);
+        }
+      }
+
+      // Después de cargar las imágenes, marcamos como "no cargando"
+      setLoadingImages(false);
+    };
+
+    fetchLocationImages();
+  }, [tour]);
 
   return (
     <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm">
@@ -58,6 +89,14 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
           <div key={index} className="px-4 flex flex-row gap-3">
             <div className="flex flex-col">
               <p className="text-[10px] text-gray-500">{location.name}</p>
+              {/* If we have a location image, display it */}
+              {location.image && (
+                <img
+                  src={location.image}
+                  alt={location.name}
+                  className="w-20 h-20 object-cover rounded-lg"
+                />
+              )}
             </div>
           </div>
         ))}
