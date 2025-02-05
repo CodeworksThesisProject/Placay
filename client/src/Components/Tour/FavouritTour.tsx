@@ -5,21 +5,21 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 
   return (
     <div className={`tour flex flex-col gap-5 pb-20 ${profileActive === 'favourit' ? '': 'hidden'}`}>
-        
-          
+
+
         <div className="flex flex-row flex-wrap gap-5 justify-start">
-        
+
           {/* -------------------------------------------------- */}
           <div className="flex flex-col gap-3 w-sm bg-white p-3 rounded-xs shadow-sm" >
-            
+
             <div className="header flex flex-row justify-between text-gray-800 mx-5">
               <div className="flex flex-row gap-2 text-sm items-center">
                 <p>title of route</p>
               </div>
 
               <div className="flex flex-row gap-2 text-sm items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 <p>2 days tour</p>
               </div>
@@ -34,10 +34,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 
             <div className="tour-locations grid grid-cols-2 gap-4">
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/tv-tower.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/tv-tower.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -46,10 +46,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/brandenburg.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/brandenburg.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -58,10 +58,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/catedral.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/catedral.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -70,10 +70,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/zoo.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/zoo.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -82,10 +82,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/east-side-gallery.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/east-side-gallery.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -97,15 +97,15 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 
           {/* -------------------------------------------------- */}
           <div className="flex flex-col gap-3  w-sm bg-white p-3 rounded-xs shadow-sm" >
-            
+
             <div className="header flex flex-row justify-between text-gray-800 mx-5">
               <div className="flex flex-row gap-2 text-sm items-center">
                 <p>title of route</p>
               </div>
 
               <div className="flex flex-row gap-2 text-sm items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 <p>2 days tour</p>
               </div>
@@ -119,10 +119,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 
             <div className="tour-locations grid grid-cols-2 gap-4">
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/tv-tower.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/tv-tower.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -131,10 +131,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/brandenburg.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/brandenburg.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -143,10 +143,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/catedral.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/catedral.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -155,10 +155,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/zoo.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/zoo.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -167,10 +167,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/east-side-gallery.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/east-side-gallery.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -182,15 +182,15 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 
           {/* -------------------------------------------------- */}
           <div className="flex flex-col gap-3  w-sm bg-white p-3 rounded-xs shadow-sm" >
-            
+
             <div className="header flex flex-row justify-between text-gray-800 mx-5">
               <div className="flex flex-row gap-2 text-sm items-center">
                 <p>title of route</p>
               </div>
 
               <div className="flex flex-row gap-2 text-sm items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 <p>2 days tour</p>
               </div>
@@ -204,10 +204,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 
             <div className="tour-locations grid grid-cols-2 gap-4">
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/tv-tower.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/tv-tower.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -216,10 +216,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="asserts/images/tours/brandenburg.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="asserts/images/tours/brandenburg.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -228,10 +228,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="../../asserts/images/tours/catedral.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="../../asserts/images/tours/catedral.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -240,10 +240,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="../../asserts/images/tours/zoo.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="../../asserts/images/tours/zoo.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>
@@ -252,10 +252,10 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
               </div>
 
               <div className="px-4 flex flex-row gap-3">
-                <img 
-                  src="../../asserts/images/tours/east-side-gallery.png" 
-                  className="w-8 h-8 object-cover rounded-full shadow-sm" 
-                  alt="picture of location"  
+                <img
+                  src="../../asserts/images/tours/east-side-gallery.png"
+                  className="w-8 h-8 object-cover rounded-full shadow-sm"
+                  alt="picture of location"
                 />
                 <div className="flex flex-col">
                   <p className="text-xs">Berlin, Germany</p>

@@ -55,10 +55,10 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
   };
 
   const handleCheckboxChange = (location: { name: string; latitude: string; longitude: string }) => {
-    setFormData((prevFormData) => {
-      const isSelected = prevFormData.selectedLocations.some((loc) => loc.name === location.name);
+    setFormData((prevFormData:any) => {
+      const isSelected = prevFormData.selectedLocations.some((loc:any) => loc.name === location.name);
       const updatedLocations = isSelected
-        ? prevFormData.selectedLocations.filter((loc) => loc.name !== location.name)
+        ? prevFormData.selectedLocations.filter((loc:any) => loc.name !== location.name)
         : [...prevFormData.selectedLocations, location];
       return { ...prevFormData, selectedLocations: updatedLocations };
     });
@@ -96,19 +96,10 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
         const errorData = await response.json();
         setError(`Error creating tour: ${errorData.message || 'Unknown error'}`);
       }
-    } catch (error) {
+    } catch (error:any) {
       setError(`An error occurred while submitting the tour: ${error.message || error}`);
     }
   };
-  const tourPoints = [
-    { name: "Berlin Hauptbahnhof", latitude: 52.5251, longitude: 13.3694 },
-    { name: "Alexanderplatz", latitude: 52.5219, longitude: 13.4132 },
-    { name: "Checkpoint Charlie", latitude: 52.5076, longitude: 13.3904 },
-    { name: "Potsdamer Platz", latitude: 52.5096, longitude: 13.3759 },
-    { name: "Kurfürstendamm", latitude: 52.5030, longitude: 13.3327 }
-  ];
-
-
 
   return (
     <div className={`tour flex flex-col gap-5  ${profileActive === 'add-tour' ? '' : 'hidden'}`}>
