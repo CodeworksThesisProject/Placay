@@ -51,7 +51,7 @@ export default function ListOfUserTours( {profileActive }: ListOfUserToursProps)
       }
     };
     fetchTours();
-  }, [user]);
+  }, [user, profileActive]);
 
   return (
     <div className={`tour flex flex-col gap-5  ${profileActive === 'tour' ? '': 'hidden'}`}> 

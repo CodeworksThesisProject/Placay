@@ -9,6 +9,7 @@ export interface User {
   role: "user" | "admin";
   profileImage?: string;
   favorites: Favorite[];
+  likedTours: Tour[];
 }
 
 // Frontend User Model for new Users (while Register)

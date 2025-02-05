@@ -15,6 +15,7 @@ export default function AddTour( {profileActive }: AddToursProps) {
     latitude: "",
     longitude: "",
     selectedLocations: [] as { label: string, latitude: string, longitude: string, googlePOIId: string }[],
+    customLocations: [] as { latitude: string, longitude: string }[],
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -65,6 +66,19 @@ export default function AddTour( {profileActive }: AddToursProps) {
       selectedLocations: [...prevFormData.selectedLocations, location] 
     }));
   };
+
+  const addCustomLocation = () => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      customLocations: [...prevFormData.customLocations, { latitude: "", longitude: "" }]
+    }));
+  };
+
+  const updateCustomLocation = (index: number, field: string, value: string) => {
+    const updatedLocations = [...formData.customLocations];
+    updatedLocations[index] = { ...updatedLocations[index], [field]: value };
+    setFormData(prevFormData => ({ ...prevFormData, customLocations: updatedLocations }));
+  };
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +94,8 @@ export default function AddTour( {profileActive }: AddToursProps) {
       duration: formData.duration,
       location: [
         ...formData.selectedLocations, // Favorited locations
-        { latitude: formData.latitude, longitude: formData.longitude }, // Custom location
+        // { latitude: formData.latitude, longitude: formData.longitude }, // Custom location
+        ...formData.customLocations,  // Custom location
       ].filter(location => location.latitude && location.longitude),
     };
 
@@ -94,7 +109,8 @@ export default function AddTour( {profileActive }: AddToursProps) {
       });
 
       if (response.ok) {
-        setFormData({ title: "", duration: "", latitude: "", longitude: "", selectedLocations: [] });
+        // setFormData({ title: "", duration: "", latitude: "", longitude: "", selectedLocations: [] });
+        setFormData({ title: "", duration: "", selectedLocations: [], customLocations: [] });
         setSuccess(`The Tour was added successfully`); 
         
       } else {
@@ -162,7 +178,37 @@ export default function AddTour( {profileActive }: AddToursProps) {
         </div>
 
         <h2 className="text-lg font-semibold mt-5">Add a Custom Location:</h2>
-        <div className="flex gap-2 mt-2">
+        
+          {formData.customLocations.map((location, index) => (
+            <div key={index} className="flex flex-row gap-2 mt-2">
+              <input
+                type="text"
+                placeholder="Enter Latitude"
+                value={location.latitude}
+                onChange={(e) => updateCustomLocation(index, "latitude", e.target.value)}
+                className="border p-2 rounded-md "
+              />
+              <input
+                type="text"
+                placeholder="Enter Longitude"
+                value={location.longitude}
+                onChange={(e) => updateCustomLocation(index, "longitude", e.target.value)}
+                className="border p-2 rounded-md "
+              />
+            </div>
+          ))}
+          <div>
+          
+          <button 
+            type="button" 
+            onClick={addCustomLocation} 
+            className="mt-2 bg-orange-500 text-white px-3 py-1 rounded-full w-30"
+          >
+            Add Location
+          </button>
+          </div>
+        
+        {/* <div className="flex gap-2 mt-2">
           <input
             type="text"
             name="latitude"
@@ -179,7 +225,7 @@ export default function AddTour( {profileActive }: AddToursProps) {
             onChange={handleChange}
             className="border p-2 rounded-md w-full"
           />
-        </div>
+        </div> */}
 
         <button type="submit" className="mt-5 bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition">
           Create Tour

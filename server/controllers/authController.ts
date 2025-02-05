@@ -11,6 +11,7 @@ export const checkAuth = (req: Request, res: Response) => {
       role: user.role,
       profileImage: user.profileImage,
       favorites: user.favorites,
+      likedTours: user.likedTours,
     },
   });
 };

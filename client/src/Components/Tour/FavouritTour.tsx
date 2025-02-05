@@ -29,7 +29,7 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
       const fetchTours = async () => {
         if (!user) return;
         try {
-          const response = await fetch(`/user/favorite/${user.id}`, {
+          const response = await fetch(`/user/likedTour/${user.id}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -39,8 +39,9 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 
           if (response.ok) {
             const data = await response.json();
-  
-            setFavourits(data);
+            const favouritTours = data.tours;
+            console.log(favouritTours);
+            setFavourits(favouritTours);
           }
         } catch (error) {
           console.log(error);
@@ -56,9 +57,13 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
           
         <div className="flex flex-row flex-wrap gap-5 justify-start">
 
-            {favourits.map((favourits: Tour) => (
-                  <TourDetail key={favourits._id} tour={favourits} />
-            ))}
+            { favourits.length > 0 ? (
+              favourits.map((favourits: Tour) => (
+                <TourDetail key={favourits._id} tour={favourits} />
+              ))
+            ): (
+              <p className="text-gray-500 text-center">No liked tour exist!</p>
+            )}
         
         </div>
     </div>

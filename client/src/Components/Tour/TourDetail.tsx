@@ -23,31 +23,71 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
   const { user } = useAuth();
 
   const [liked, setLiked] = useState<boolean>(false);
+  const [numLikedTours, setNumLikedTours] = useState<number>(0);
+
 
   useEffect(() => {
-      const fetchLike = async () => {
-        
-        try {
-          setLiked(!liked);
-          ///tour/liked/:userId/:tourId
-          const response = await fetch(`/tour/liked/${user?._id}/${tour._id}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          if (!response.ok) {
-            throw Error('some problem happend!')
-          }
-        } catch (error) {
-          setLiked(!liked);
-          console.log(error);
-          // setErrorMsg(`Error fetching tours`)
+    const updateUserLike = async () => { //likedTours
+      try {
+        //Get /user/like/:userId/:tourId update user like icon state
+        const response = await fetch(`/user/like/${user.id}/${tour._id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const likeState = data.response;
+          setLiked(likeState);
         }
-      };
-      fetchLike();
-    }, [liked]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const fetchLike = async () => {
+      try {
+        //Get /tour/like/:tourId just get numbers
+        const response = await fetch(`/tour/liked/${tour._id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setNumLikedTours(data.tourLiked);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchLike();
+    updateUserLike();
+  }, [liked]);
+
+  const likeClickHandler = async () => {
+    try {
+      //POST /tour/like/:userId/:tourId
+      const response = await fetch(`/tour/liked/${user.id}/${tour._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.ok) {
+        setLiked(!liked);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
       <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm" >
@@ -136,7 +176,8 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
             </div>
 
             <div className="border-t-1 border-gray-200 flex flex-row gap-3 items-center pt-3 pl-2 text-gray-600">
-              <div className="cursor-pointer" onClick={() => setLiked(!liked)}>
+              {/* TODO if user is login then can click */}
+              <div className="cursor-pointer" onClick={likeClickHandler}>
                 {!liked ? (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
@@ -147,7 +188,7 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
                   </svg>
                 )}
               </div>
-              <p>23 likes</p>
+              <p>{ numLikedTours } likes</p>
 
             </div>
         </div>

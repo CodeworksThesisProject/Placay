@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mongoose, { Document, Schema } from "mongoose";
+import { ITour } from "./tourModel";
 
 export interface IUser extends Document {
   name: string;
@@ -9,6 +10,7 @@ export interface IUser extends Document {
   role: string;
   profileImage?: string;
   favorites: IFavorite[];
+  likedTours: ITour[];
   generateAuthToken(): string;
 }
 
@@ -27,6 +29,7 @@ const userSchema: Schema = new Schema(
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
     profileImage: { type: String, default: "" },
+    likedTours: [{ type: Schema.Types.ObjectId, ref: "Tour" }],
   },
   { timestamps: true }
 );
