@@ -6,8 +6,7 @@ export default function ListOfUserTours( {profileActive }: ListOfUserToursProps)
   const navigate = useNavigate();
 
   return (
-    <div className={`tour flex flex-col gap-5  ${profileActive === 'tour' ? '': 'hidden'}`}>
-                  
+    <div className={`tour flex flex-col gap-5  ${profileActive === 'tour' ? '': 'hidden'}`}>          
         <div className="flex flex-row flex-wrap gap-5 justify-start">
         
           {/* -------------------------------------------------- */}
