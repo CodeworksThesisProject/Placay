@@ -5,7 +5,7 @@ interface SuccessAlertProps {
   onClose: () => void;
 }
 
-const SuccessAlert: React.FC<SuccessAlertProps> = ({ message, onClose }) => {
+const SuccessAlert = ({ message, onClose }: SuccessAlertProps): JSX.Element => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {

@@ -4,35 +4,7 @@ import "leaflet/dist/leaflet.css";
 import PathTour from "../Components/Map/PathTour";
 import TourDetail from "../Components/Tour/TourDetail";
 
-const tourPoints = [
-  { name: "Berlin Hauptbahnhof", latitude: 52.5251, longitude: 13.3694 },
-  { name: "Alexanderplatz", latitude: 52.5219, longitude: 13.4132 },
-  { name: "Checkpoint Charlie", latitude: 52.5076, longitude: 13.3904 },
-  { name: "Potsdamer Platz", latitude: 52.5096, longitude: 13.3759 },
-  { name: "Kurfürstendamm", latitude: 52.5030, longitude: 13.3327 }
-];
-
-const Tour: React.FC = () => {
-  const mapRef = useRef<L.Map | null>(null);
-  const [mapLoaded, setMapLoaded] = useState(false); // Track map loading
-
-  useEffect(() => {
-    if (!mapRef.current) {
-      mapRef.current = L.map("map").setView([52.5200, 13.4050], 12);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap contributors"
-      }).addTo(mapRef.current);
-
-      setMapLoaded(true); // Ensure map is loaded before PathTour
-    }
-
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
-    };
-  }, []);
+const Tour = () => {
 
   return (
     <div className="flex flex-row h-screen p-5 gap-4">
