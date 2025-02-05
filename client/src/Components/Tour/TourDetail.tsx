@@ -1,7 +1,23 @@
 import React, { useState } from 'react';
 
+interface Tour {
+  _id: string;
+  user_id: string;
+  title: string;
+  duration?: string;
+  location: {
+    latitude: number;
+    longitude: number;
+    label?: string;
+    googlePOIId?: string;
+  }[];
+}
 
-const TourDetail: React.FC = () => {
+interface TourDetailProps {
+  tour: Tour;
+}
+
+const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
 
   const [liked, setLiked] = useState<boolean>(false);
 
@@ -10,14 +26,14 @@ const TourDetail: React.FC = () => {
 
             <div className="header flex flex-row justify-between text-gray-800 mx-5">
               <div className="flex flex-row gap-2 text-sm items-center">
-                <p>title of route</p>
+                <p>{tour.title}</p>
               </div>
 
               <div className="flex flex-row gap-2 text-sm items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-                <p>2 days tour</p>
+                <p>{ tour.duration}</p>
               </div>
 
             </div>

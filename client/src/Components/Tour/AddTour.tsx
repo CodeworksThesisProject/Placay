@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import ErrorAlert from "../../Components/Alert/ErrorAlert";
+import SuccessAlert from "../../Components/Alert/SuccessAlert";
 import { useAuth } from '../../context/AuthContext';
-import ErrorAlert from "./ErrorAlert";
-import SuccessAlert from "./SuccessAlert";
 
 interface AddToursProps {
   profileActive: string;
 }
 export default function AddTour( {profileActive }: AddToursProps) {
-// const AddTour: React.FC = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   
   const [formData, setFormData] = useState({
