@@ -7,7 +7,6 @@ export default function ListOfUserTours( {profileActive }: ListOfUserToursProps)
 
   return (
     <div className={`tour flex flex-col gap-5  ${profileActive === 'tour' ? '': 'hidden'}`}>
-
         <div className="flex flex-row flex-wrap gap-5 justify-start">
 
           {/* -------------------------------------------------- */}
