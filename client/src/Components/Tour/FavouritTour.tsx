@@ -23,11 +23,20 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
   
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const token = localStorage.getItem("token") || "";
+
   useEffect(() => {
       const fetchTours = async () => {
         if (!user) return;
         try {
-          const response = await fetch(`/user/favorite/${user.id}`);
+          const response = await fetch(`/user/favorite/${user.id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
           if (response.ok) {
             const data = await response.json();
   

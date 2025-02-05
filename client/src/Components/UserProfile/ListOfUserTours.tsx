@@ -25,12 +25,21 @@ export default function ListOfUserTours( {profileActive }: ListOfUserToursProps)
   const [tours, setTours] = useState<Tour[]>([]);
   
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const token = localStorage.getItem("token") || "";
     
   useEffect(() => {
     const fetchTours = async () => {
       if (!user) return;
       try {
-        const response = await fetch(`/tour/${user.id}`);
+        const response = await fetch(`/tour/${user.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         if (response.ok) {
           const data = await response.json();
 
