@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 interface Tour {
   _id: string;
@@ -18,8 +19,35 @@ interface TourDetailProps {
 }
 
 const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
+  const token = localStorage.getItem("token") || "";
+  const { user } = useAuth();
 
   const [liked, setLiked] = useState<boolean>(false);
+
+  useEffect(() => {
+      const fetchLike = async () => {
+        
+        try {
+          setLiked(!liked);
+          ///tour/liked/:userId/:tourId
+          const response = await fetch(`/tour/liked/${user?._id}/${tour._id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (!response.ok) {
+            throw Error('some problem happend!')
+          }
+        } catch (error) {
+          setLiked(!liked);
+          console.log(error);
+          // setErrorMsg(`Error fetching tours`)
+        }
+      };
+      fetchLike();
+    }, [liked]);
 
   return (
       <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm" >
@@ -45,6 +73,7 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
             </div>
 
             <div className="tour-locations grid grid-cols-2 gap-4">
+              
               <div className="px-4 flex flex-row gap-3">
                 <img
                   src="../../../asserts/images/tours/tv-tower.png"
@@ -107,7 +136,6 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
             </div>
 
             <div className="border-t-1 border-gray-200 flex flex-row gap-3 items-center pt-3 pl-2 text-gray-600">
-              
               <div className="cursor-pointer" onClick={() => setLiked(!liked)}>
                 {!liked ? (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
@@ -119,7 +147,6 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
                   </svg>
                 )}
               </div>
-              
               <p>23 likes</p>
 
             </div>

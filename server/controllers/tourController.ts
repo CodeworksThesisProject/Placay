@@ -18,6 +18,38 @@ export const getAllTours = async (req: Request, res: Response): Promise<void> =>
   res.json(tours);
 };
 
+//  POST /tour/liked/:userId/:tourId
+export const likedTours = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { tourId, userId } = req.params;
+
+    const tour = await Tour.findById(tourId);
+    if (!tour) {
+      res.status(404).json({ error: "Tour not found" });
+      return;
+    }
+
+    if (!tour.like) {
+      tour.like = [];
+    }
+
+    const userIndex = tour.like.indexOf(userId);
+    if (userIndex === -1) {
+      tour.like.push(userId);
+    } else {
+      tour.like.splice(userIndex, 1);
+    }
+
+    await tour.save();
+
+    res.json({ message: "Like updated", likes: tour.like.length });
+  } catch (error: any) {
+    console.error("Error updating like:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 //  POST /tour/:user_id -> Saves a new tour and needs title, destination, startDate, endDate, (optinal: days)
 export const postTours = async (req: Request, res: Response): Promise<void> => {
   const userId = (req as any).user._id;
