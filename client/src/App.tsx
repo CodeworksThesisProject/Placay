@@ -17,14 +17,14 @@ import Profile from './Pages/UserProfile';
 import FunctionTest from './Pages/FunctionTest';
 import AuthRoute from './context/AuthMiddleware';
 
-const App: React.FC = () => {
+const App = () => {
 
   return (
     <AuthProvider>
       <Router>
           <Navbar />
             <Routes>
-              <Route path="/add-tour" element={<AddTour />} />
+              <Route path="/add-tour" element={<AddTour profileActive="true" />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<AuthRoute><Profile /></AuthRoute>} />

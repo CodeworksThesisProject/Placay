@@ -8,7 +8,7 @@ interface AddToursProps {
   profileActive: string;
 }
 export default function AddTour( {profileActive }: AddToursProps) {
-// const AddTour: React.FC = () => {
+
   const navigate = useNavigate();
   const { user } = useAuth();
   

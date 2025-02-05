@@ -1,5 +1,5 @@
 
-const About: React.FC = () => {
+const About = () => {
   return (
       <div className="flex flex-col md:flex-row items-center justify-between mx-auto p-6 max-w-6xl">
         {/* Left: Image */}
