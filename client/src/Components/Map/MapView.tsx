@@ -75,7 +75,7 @@ const MapComponent = ({
         searchedCity.lat,
         searchedCity.lng
       );
-      console.log(data[0]);
+      console.log("Mapview 79",data[0]);
       const formattedLocations = data.map((item: any) => ({
         name: item.name,
         id: item.id,
@@ -148,7 +148,7 @@ const MapComponent = ({
   const handleMarkerClick = async (location: any) => {
     try {
       const details = await getPOIDetails(location.id);
-      console.log(details);
+
 
       if (
         !details.description ||

@@ -41,6 +41,7 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
       if (!response.ok) { throw new Error("Failed to fetch favorite locations"); }
       const data = await response.json();
       setFavouritLocations(data);
+
     } catch (error: any) {
       setError(error.message || error);
     }

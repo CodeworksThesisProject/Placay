@@ -28,7 +28,7 @@ export async function postTours(user_id: string, title: string, city: string, co
       }),
     });
     const data = await response.json();
-    console.log('the response is:', data)
+    console.log('Tourservices 31:', data)
     return data;
   } catch (err) {
     console.error('Error:', err);
@@ -63,7 +63,7 @@ export async function editTours(tour_id: string, title?: string, city?: string, 
       }),
     });
     const data = await response.json();
-    console.log('the response is:', data)
+    console.log('TourServices 66:', data)
     return data;
   } catch (err) {
     console.error('Error:', err);
@@ -78,7 +78,7 @@ export async function deleteTours(tour_id: string): Promise<any> {
       method: 'DELETE',
     });
     const data = await response.json();
-    console.log('the response is:', data)
+    console.log('TourServices 81:', data)
     return data;
   } catch (err) {
     console.error('Error:', err);
