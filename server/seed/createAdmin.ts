@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { connectDB } from "../config/db";
 import { User } from "../models/userModel";
+// The userModel contains the function to hash the password, so no need to do it here
 
 dotenv.config({ path: process.env.NODE_ENV === 'develop' ? '.env.development.local' : '.env.production.local' });
 
