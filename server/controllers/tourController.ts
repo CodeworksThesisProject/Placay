@@ -8,6 +8,16 @@ export const getTours = async (req: Request, res: Response): Promise<void> => {
   res.json(tours);
 };
 
+// GET /tour/tours -> get all tours 
+export const getAllTours = async (req: Request, res: Response): Promise<void> => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit =  10;
+  const skip = (page - 1) * limit;
+
+  const tours = await Tour.find().skip(skip).limit(limit);
+  res.json(tours);
+};
+
 //  POST /tour/:user_id -> Saves a new tour and needs title, destination, startDate, endDate, (optinal: days)
 export const postTours = async (req: Request, res: Response): Promise<void> => {
   const userId = (req as any).user._id;

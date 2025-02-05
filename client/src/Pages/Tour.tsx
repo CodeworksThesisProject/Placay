@@ -26,7 +26,7 @@ const Tour: React.FC = () => {
     const fetchTours = async () => {
       if (!user) return;
       try {
-        const response = await fetch(`/tour/${user.id}`);
+        const response = await fetch(`/tour/tours`);
         if (response.ok) {
           const data = await response.json();
 

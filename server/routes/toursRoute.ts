@@ -1,9 +1,10 @@
 import express from "express";
-import { addNewTour, deleteTours, editTours, getTourById, getTours } from "../controllers/tourController";
+import { addNewTour, deleteTours, editTours, getAllTours, getTourById, getTours } from "../controllers/tourController";
 import { asyncHandler } from "../middleware/asyncHandler";
 import { authMiddleware } from "../middleware/authMiddleware";
 const router = express.Router();
 
+router.get('/tours', authMiddleware, asyncHandler(getAllTours));
 router.get('/:user_id', authMiddleware, asyncHandler(getTours));
 // router.post('/:user_id', authMiddleware, asyncHandler(postTours));
 router.post('/:user_id', authMiddleware, asyncHandler(addNewTour));
