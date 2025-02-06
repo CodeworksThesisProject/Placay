@@ -233,7 +233,6 @@ const MapComponent = ({
       });
 
       if (res.ok) {
-        console.log("Favorite added");
         await fetchFavorites();
         setIsFavorite(true);
       } else {
