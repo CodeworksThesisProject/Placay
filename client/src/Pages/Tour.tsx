@@ -2,7 +2,6 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import ErrorAlert from "../Components/Alert/ErrorAlert";
 import TourDetail from "../Components/Tour/TourDetail";
-import { useAuth } from "../context/AuthContext";
 
 interface Tour {
   _id: string;
@@ -18,14 +17,12 @@ interface Tour {
 }
 
 const Tour: React.FC = () => {
-  const { user } = useAuth();
   const [tours, setTours] = useState<Tour[]>([]);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   
   useEffect(() => {
     const fetchTours = async () => {
-      if (!user) return;
       try {
         const response = await fetch(`/tour/tours`);
         if (response.ok) {
@@ -39,7 +36,7 @@ const Tour: React.FC = () => {
       }
     };
     fetchTours();
-  }, [user]);
+  }, []);
 
   return (
     <div className="pt-5">

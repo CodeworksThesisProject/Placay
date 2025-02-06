@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getPOIDetails } from "../../Services/getPOIDetailsService";
 import { useAuth } from '../../context/AuthContext';
+import PathTour from "../Map/PathTour";
 
 // interface Tour {
 //   _id: string;
@@ -32,7 +33,7 @@ interface Tour {
   user_id: string;
   title: string;
   duration: string;
-  locations: Location[];
+  location: Location[];
 }
 
 interface TourDetailProps {
@@ -48,7 +49,7 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
 
   useEffect(() => {
     const fetchLocationImages = async () => {
-      const updatedLocations = [...tour.locations];
+      const updatedLocations = [...tour.location];
       for (const location of updatedLocations) {
         try {
           const details = await getPOIDetails(location.googlePOIId);
@@ -164,21 +165,21 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
       </div>
 
       {/* Map Image */}
-      {/* <div id="map-container" className="h-96 w-full ">
-        <PathTour points={tour.locations} />
-      </div> */}
+      <div id="map-container" className="h-96 w-full ">
+        <PathTour points={tour.location} />
+      </div>
 
       {/* Locations */}
       <div className="tour-locations grid grid-cols-2 gap-4">
-        {tour.locations.map((location, index) => (
+        {tour.location.map((loc, index) => (
           <div key={index} className="px-4 flex flex-row gap-3">
             <div className="flex flex-col">
-              <p className="text-[10px] text-gray-500">{location.name}</p>
+              <p className="text-[10px] text-gray-500">{loc.name}</p>
               {/* If we have a location image, display it */}
-              {location.image && (
+              {loc.image && (
                 <img
-                  src={location.image}
-                  alt={location.name}
+                  src={loc.image}
+                  alt={loc.name}
                   className="w-20 h-20 object-cover rounded-lg"
                 />
               )}

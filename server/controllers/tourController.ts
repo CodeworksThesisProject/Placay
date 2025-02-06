@@ -12,7 +12,7 @@ export const getTours = async (req: Request, res: Response): Promise<void> => {
 // GET /tour/tours -> get all tours 
 export const getAllTours = async (req: Request, res: Response): Promise<void> => {
   const page = parseInt(req.query.page as string) || 1;
-  const limit =  10;
+  const limit =  20;
   const skip = (page - 1) * limit;
 
   const tours = await Tour.find().skip(skip).limit(limit);
