@@ -135,9 +135,6 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
     }
   };
 
-  console.log("tour =>");
-  console.log(tour);
-
   return (
     <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm">
       {/* Header */}
