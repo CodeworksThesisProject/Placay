@@ -86,9 +86,7 @@ const Navbar = () => {
 
       <div className={`absolute top-14 left-0 w-full bg-white shadow-md p-3 flex flex-col md:hidden ${isMenuOpen ? 'block' : 'hidden'} z-51`}>
         <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => { closeDropdown(); navigate('/profile'); }}>View Profile</button>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => { closeDropdown(); navigate('/map'); }}>Map</button>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => { closeDropdown(); navigate('/mytours') }}>My Tours</button>
-        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => { closeDropdown(); navigate('/mylocations') }}>My Locations</button>
+        <button className="px-4 py-2 text-[#38436C] hover:text-blue-400 cursor-pointer" onClick={() => { closeDropdown(); navigate('/map'); }}>Map</button>     
         {isAuthenticated && user?.role === "admin" ? (
           <div>
             <button className="px-4 py-2 text-[#38436C] hover:bg-orange-100 w-full cursor-pointer" onClick={() => { closeDropdown(); navigate('/dashboard'); }}>Dashboard</button>
