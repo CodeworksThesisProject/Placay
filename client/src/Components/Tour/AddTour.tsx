@@ -17,11 +17,11 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
     duration: "",
     latitude: "",
     longitude: "",
-    selectedLocations: [] as { name: string, latitude: number, longitude: number }[],
+    selectedLocations: [] as { label: string, latitude: number, longitude: number }[],
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [favouritLocations, setFavouritLocations] = useState<{ name?: string; latitude: string; longitude: string }[]>([]);
+  const [favouritLocations, setFavouritLocations] = useState<{ label?: string; latitude: string; longitude: string }[]>([]);
   const token = localStorage.getItem("token") || "";
 
   const fetchFavorites = async () => {
@@ -54,11 +54,11 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCheckboxChange = (location: { name: string; latitude: string; longitude: string }) => {
+  const handleCheckboxChange = (location: { label: string; latitude: string; longitude: string }) => {
     setFormData((prevFormData) => {
-      const isSelected = prevFormData.selectedLocations.some((loc) => loc.name === location.name);
+      const isSelected = prevFormData.selectedLocations.some((loc) => loc.label === location.label);
       const updatedLocations = isSelected
-        ? prevFormData.selectedLocations.filter((loc) => loc.name !== location.name)
+        ? prevFormData.selectedLocations.filter((loc) => loc.label !== location.label)
         : [...prevFormData.selectedLocations, location];
       return { ...prevFormData, selectedLocations: updatedLocations };
     });
@@ -91,7 +91,6 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
       if (response.ok) {
         setFormData({ title: "", duration: "", latitude: "", longitude: "", selectedLocations: [] });
         setSuccess(`The Tour was added successfully`);
-
       } else {
         const errorData = await response.json();
         setError(`Error creating tour: ${errorData.message || 'Unknown error'}`);
@@ -100,19 +99,9 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
       setError(`An error occurred while submitting the tour: ${error.message || error}`);
     }
   };
-  const tourPoints = [
-    { name: "Berlin Hauptbahnhof", latitude: 52.5251, longitude: 13.3694 },
-    { name: "Alexanderplatz", latitude: 52.5219, longitude: 13.4132 },
-    { name: "Checkpoint Charlie", latitude: 52.5076, longitude: 13.3904 },
-    { name: "Potsdamer Platz", latitude: 52.5096, longitude: 13.3759 },
-    { name: "Kurfürstendamm", latitude: 52.5030, longitude: 13.3327 }
-  ];
-
-
 
   return (
     <div className={`tour flex flex-col gap-5  ${profileActive === 'add-tour' ? '' : 'hidden'}`}>
-      {/* <div className="max-w-4xl mx-auto p-5"> */}
       {error && <ErrorAlert message={error} onClose={() => setError(null)} />}
       {success && <SuccessAlert message={success} onClose={() => setSuccess(null)} />}
 
@@ -140,10 +129,9 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
         </div>
 
         <h2 className="text-lg font-semibold mt-5">Select Locations from Favorites:</h2>
-        <div className=" max-h-50	 min-h-20 overflow-auto border p-3 rounded-md bg-gray-50 mt-2">
+        <div className="max-h-50 min-h-20 overflow-auto border p-3 rounded-md bg-gray-50 mt-2">
           {favouritLocations.length > 0 ? (
             favouritLocations.map((location, index) => (
-
               <label
                 key={index}
                 className="flex items-center gap-3 bg-white px-3 py-2 border border-gray-200 rounded-md text-gray-800 mb-2 cursor-pointer"
@@ -151,12 +139,11 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
                 <input
                   type="checkbox"
                   className="appearance-none w-5 h-5 border-2 border-blue-500 rounded-full checked:bg-blue-500 checked:border-transparent transition-all duration-300 cursor-pointer"
-                  checked={formData.selectedLocations.some((loc) => loc.name === location.name)}
+                  checked={formData.selectedLocations.some((loc) => loc.label === location.label)}
                   onChange={() => handleCheckboxChange(location)}
                 />
-                {location.name}
+                {location.label}
               </label>
-
             ))
           ) : (
             <p className="text-gray-500 text-center">No favorite locations saved.</p>
@@ -187,11 +174,9 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
           Create Tour
         </button>
       </form>
-      <div id="map-container" className="h-96 w-full ">
+      <div id="map-container" className="h-96 w-full">
         <PathTour points={formData.selectedLocations} />
       </div>
-
-
     </div>
   );
 };

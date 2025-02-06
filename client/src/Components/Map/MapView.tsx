@@ -1,7 +1,7 @@
 import { Dialog } from "@material-tailwind/react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import React, { useEffect, useRef, useState, useCallback, } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { getPointsOfInterest } from "../../Services/getplacesService";
 import { getPOIDetails } from "../../Services/getPOIDetailsService";
 
@@ -75,7 +75,6 @@ const MapComponent = ({
         searchedCity.lat,
         searchedCity.lng
       );
-      console.log(data[0]);
       const formattedLocations = data.map((item: any) => ({
         name: item.name,
         id: item.id,
@@ -148,8 +147,6 @@ const MapComponent = ({
   const handleMarkerClick = async (location: any) => {
     try {
       const details = await getPOIDetails(location.id);
-      console.log(details);
-
       if (
         !details.description ||
         !details.images ||
@@ -178,24 +175,32 @@ const MapComponent = ({
     }
   };
 
-  const fetchFavorites = useCallback(async (): Promise<void> => {
+  useEffect(() => {
+    fetchFavorites();
+  }, []);
+
+  const fetchFavorites = async () => {
     try {
       const res = await fetch("/user/favorite", {
         method: "GET",
         credentials: "include",
       });
       const data = await res.json();
-      setFavoritesList(data.favorites || data);
+      setFavoritesList(data); // Actualizar favoritos
     } catch (error) {
       console.log("Error fetching favorites: " + error);
     }
-  }, []);
-
+  };
   const checkIfFavorite = (googlePOIId: string) => {
     return favoritesList.some(
       (favorite) => favorite.googlePOIId === googlePOIId
     );
   };
+  useEffect(() => {
+    if (selectedLocation) {
+      setIsFavorite(checkIfFavorite(selectedLocation.id));
+    }
+  }, [favoritesList, selectedLocation]);
 
   const addToFavorites = async () => {
     if (!selectedLocation) return;
@@ -216,14 +221,15 @@ const MapComponent = ({
       });
 
       if (res.ok) {
-        console.log("Favorite added");
-        await fetchFavorites(); 
-        setIsFavorite(true);
+        const newFavorite = await res.json();
+        setFavoritesList((prevFavorites) => [...prevFavorites, newFavorite]);
+      } else if (res.status === 409) {
+        console.warn("El favorito ya existe");
       } else {
-        console.error("Error adding to favorites");
+        console.error("Error al añadir a favoritos");
       }
     } catch (error) {
-      console.error("Error adding to favorites:", error);
+      console.error("Error al añadir a favoritos:", error);
     }
   };
 
@@ -298,19 +304,17 @@ const MapComponent = ({
               </div>
 
               <div className="flex flex-row gap-3 mt-10">
-                <button className="bg-blue-500 px-3 py-2 rounded-lg">
+                <button className="bg-blue-500 px-3 py-2 rounded-lg cursor-pointer">
                   Contact
                 </button>
                 <button
-                  className={`bg-blue-500 px-3 py-2 rounded-lg ${
-                    selectedLocation.isFavorite ? "bg-green-500" : ""
+                  className={`bg-blue-500 px-3 py-2 rounded-lg cursor-pointer ${
+                    isFavorite ? "bg-green-500" : ""
                   }`}
                   onClick={addToFavorites}
-                  disabled={selectedLocation.isFavorite}
+                  disabled={isFavorite}
                 >
-                  {selectedLocation.isFavorite
-                    ? "Added to Favorites"
-                    : "Add to Favorites"}
+                  {isFavorite ? "Added to Favorites" : "Add to Favorites"}
                 </button>
               </div>
             </div>
