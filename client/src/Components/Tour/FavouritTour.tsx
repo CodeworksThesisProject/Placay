@@ -39,8 +39,7 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
 
           if (response.ok) {
             const data = await response.json();
-            const favouritTours = data.tours;
-            console.log(favouritTours);
+            const favouritTours = data.tours;            
             setFavourits(favouritTours);
           }
         } catch (error) {
