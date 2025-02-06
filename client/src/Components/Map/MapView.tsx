@@ -75,6 +75,7 @@ const MapComponent = ({
         searchedCity.lat,
         searchedCity.lng
       );
+      console.log("Mapview 79",data[0]);
       const formattedLocations = data.map((item: any) => ({
         name: item.name,
         id: item.id,
@@ -147,6 +148,8 @@ const MapComponent = ({
   const handleMarkerClick = async (location: any) => {
     try {
       const details = await getPOIDetails(location.id);
+
+
       if (
         !details.description ||
         !details.images ||
@@ -206,7 +209,7 @@ const MapComponent = ({
     if (!selectedLocation) return;
 
     const payload = {
-      label: selectedLocation.name,
+      name: selectedLocation.name,
       latitude: selectedLocation.latitude,
       longitude: selectedLocation.longitude,
       googlePOIId: selectedLocation.id,
@@ -221,10 +224,9 @@ const MapComponent = ({
       });
 
       if (res.ok) {
-        const newFavorite = await res.json();
-        setFavoritesList((prevFavorites) => [...prevFavorites, newFavorite]);
-      } else if (res.status === 409) {
-        console.warn("El favorito ya existe");
+        console.log("Favorite added");
+        await fetchFavorites();
+        setIsFavorite(true);
       } else {
         console.error("Error al añadir a favoritos");
       }

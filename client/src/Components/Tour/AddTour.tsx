@@ -41,6 +41,7 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
       if (!response.ok) { throw new Error("Failed to fetch favorite locations"); }
       const data = await response.json();
       setFavouritLocations(data);
+
     } catch (error: any) {
       setError(error.message || error);
     }
@@ -54,11 +55,11 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCheckboxChange = (location: { label: string; latitude: string; longitude: string }) => {
-    setFormData((prevFormData) => {
-      const isSelected = prevFormData.selectedLocations.some((loc) => loc.label === location.label);
+  const handleCheckboxChange = (location: { name: string; latitude: string; longitude: string }) => {
+    setFormData((prevFormData:any) => {
+      const isSelected = prevFormData.selectedLocations.some((loc:any) => loc.name === location.name);
       const updatedLocations = isSelected
-        ? prevFormData.selectedLocations.filter((loc) => loc.label !== location.label)
+        ? prevFormData.selectedLocations.filter((loc:any) => loc.name !== location.name)
         : [...prevFormData.selectedLocations, location];
       return { ...prevFormData, selectedLocations: updatedLocations };
     });
@@ -95,7 +96,7 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
         const errorData = await response.json();
         setError(`Error creating tour: ${errorData.message || 'Unknown error'}`);
       }
-    } catch (error) {
+    } catch (error:any) {
       setError(`An error occurred while submitting the tour: ${error.message || error}`);
     }
   };

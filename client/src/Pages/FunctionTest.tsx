@@ -6,7 +6,7 @@ function FunctionTest(): JSX.Element {
   const { isAuthenticated, user } = useAuth();
   const [responseMessage, setResponseMessage] = useState<string>('');
   const [favoriteData, setFavoriteData] = useState({
-    label: 'Eiffel Tower',
+    name: 'Eiffel Tower',
     latitude: '48.8584',
     longitude: '2.2945',
     googlePOIId: 'ChIJD7fiBh9u5kcRYJSMaMOCCwQ'
@@ -58,7 +58,7 @@ function FunctionTest(): JSX.Element {
       return;
     }
     try {
-      const payload = { label: favoriteData.label, latitude, longitude, googlePOIId: favoriteData.googlePOIId, };
+      const payload = { name: favoriteData.name, latitude, longitude, googlePOIId: favoriteData.googlePOIId, };
       const res = await fetch('/user/favorite', {
         method: 'POST',
         credentials: 'include',
@@ -198,7 +198,7 @@ function FunctionTest(): JSX.Element {
       return;
     }
     const newLocation = {
-      label: favoriteData.label,
+      name: favoriteData.name,
       latitude,
       longitude,
       googlePOIId: favoriteData.googlePOIId
@@ -278,7 +278,7 @@ function FunctionTest(): JSX.Element {
       return;
     }
     const newLocation = {
-      label: favorite.label,
+      name: favorite.name,
       latitude: favorite.latitude,
       longitude: favorite.longitude,
       googlePOIId: favorite.googlePOIId
@@ -363,9 +363,9 @@ function FunctionTest(): JSX.Element {
           <div style={{ marginBottom: '10px' }}>
             <input
               type="text"
-              name="label"
-              placeholder="Label"
-              value={favoriteData.label}
+              name="name"
+              placeholder="Name"
+              value={favoriteData.name}
               onChange={handleFavoriteInputChange}
               className="border border-black mr-2 px-2 py-1"
             />
@@ -414,7 +414,7 @@ function FunctionTest(): JSX.Element {
             <ul>
               {favoritesList.map((fav) => (
                 <li key={fav._id}>
-                  {fav.label} ({fav.latitude}, {fav.longitude}) | Favorite _id: {fav._id} | POI: {fav.googlePOIId} | User: {fav.user} | 
+                  {fav.name} ({fav.latitude}, {fav.longitude}) | Favorite _id: {fav._id} | POI: {fav.googlePOIId} | User: {fav.user} |
                   <button onClick={() => handleDeleteFavorite(fav._id)} style={{ marginLeft: '10px' }}>Delete</button> |
                   <select
                     value={favoriteTourMapping[fav._id] || ""}
@@ -492,7 +492,7 @@ function FunctionTest(): JSX.Element {
                             <ul style={{ marginLeft: '20px' }}>
                               {day.locations.map((loc) => (
                                 <li key={loc._id}>
-                                  {loc.label ? loc.label : 'No Label'} ({loc.latitude}, {loc.longitude})
+                                  {loc.name ? loc.name : 'No name'} ({loc.latitude}, {loc.longitude})
                                    | Favorite _id: {loc._id}
                                    | POI: {loc.googlePOIId} |
                                   <button onClick={() => handleRemoveLocationFromTour(tour._id, day._id, loc._id!)} style={{ marginLeft: '10px' }}>

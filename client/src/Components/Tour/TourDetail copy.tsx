@@ -27,6 +27,7 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
   useEffect(() => {
     const fetchLocationImages = async () => {
       const updatedLocations = [...tour.locations];
+
       for (const location of updatedLocations) {
         try {
           const details = await getPOIDetails(location.googlePOIId);
@@ -34,6 +35,7 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
             const imageUrl = details.images[0]?.photo_reference
               ? `http://localhost:3000/google/photo?photoReference=${details.images[0].photo_reference}`
               : null;
+
             if (imageUrl) {
               location.image = imageUrl;
             }
@@ -42,8 +44,11 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
           console.error("Error fetching POI details:", error);
         }
       }
+
+      // Después de cargar las imágenes, marcamos como "no cargando"
       setLoadingImages(false);
     };
+
     fetchLocationImages();
   }, [tour]);
 
