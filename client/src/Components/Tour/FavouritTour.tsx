@@ -20,7 +20,7 @@ interface ListOfUserToursProps {
 export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
   const { user } = useAuth();
   const [favourits, setFavourits] = useState<Tour[]>([]);
-  
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const token = localStorage.getItem("token") || "";
@@ -40,7 +40,6 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
           if (response.ok) {
             const data = await response.json();
             const favouritTours = data.tours;
-            console.log(favouritTours);
             setFavourits(favouritTours);
           }
         } catch (error) {
@@ -54,7 +53,7 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
   return (
     <div className={`tour flex flex-col gap-5 pb-20 ${profileActive === 'favourit' ? '': 'hidden'}`}>
         {errorMsg && <ErrorAlert message={errorMsg} onClose={() => setErrorMsg(null)} />}
-          
+
         <div className="flex flex-row flex-wrap gap-5 justify-start">
 
             { favourits.length > 0 ? (
@@ -64,7 +63,7 @@ export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
             ): (
               <p className="text-gray-500 text-center">No liked tour exist!</p>
             )}
-        
+
         </div>
     </div>
   );
