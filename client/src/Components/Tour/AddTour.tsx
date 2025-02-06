@@ -17,11 +17,11 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
     duration: "",
     latitude: "",
     longitude: "",
-    selectedLocations: [] as { label: string, latitude: number, longitude: number }[],
+    selectedLocations: [] as { name: string, latitude: number, longitude: number }[],
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [favouritLocations, setFavouritLocations] = useState<{ label?: string; latitude: string; longitude: string }[]>([]);
+  const [favouritLocations, setFavouritLocations] = useState<{ name?: string; latitude: string; longitude: string }[]>([]);
   const token = localStorage.getItem("token") || "";
 
   const fetchFavorites = async () => {
@@ -140,10 +140,10 @@ const AddTour: React.FC<AddToursProps> = ({ profileActive }) => {
                 <input
                   type="checkbox"
                   className="appearance-none w-5 h-5 border-2 border-blue-500 rounded-full checked:bg-blue-500 checked:border-transparent transition-all duration-300 cursor-pointer"
-                  checked={formData.selectedLocations.some((loc) => loc.label === location.label)}
+                  checked={formData.selectedLocations.some((loc) => loc.name === location.name)}
                   onChange={() => handleCheckboxChange(location)}
                 />
-                {location.label}
+                {location.name}
               </label>
             ))
           ) : (

@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { getPointsOfInterest } from "../../Services/getplacesService";
 import { getPOIDetails } from "../../Services/getPOIDetailsService";
+import { useAuth } from "../../context/AuthContext";
 
 interface MapComponentProps {
   searchedCity: { name: string; lat: number; lng: number };
@@ -20,6 +21,7 @@ const MapComponent = ({
   const mapRef = useRef<L.Map | null>(null);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [favoritesList, setFavoritesList] = useState<any[]>([]);
+  const { isAuthenticated } = useAuth();
 
   //tracks user location if allowed
   useEffect(() => {
@@ -74,8 +76,7 @@ const MapComponent = ({
         searchedCity.name,
         searchedCity.lat,
         searchedCity.lng
-      );
-      console.log("Mapview 79",data[0]);
+      );      
       const formattedLocations = data.map((item: any) => ({
         name: item.name,
         id: item.id,
@@ -170,6 +171,7 @@ const MapComponent = ({
         ],
         latitude: location.latitude,
         longitude: location.longitude,
+        id: location.id,
         isFavorite, // Add isFavorite flag
       });
       setOpen(!open);
@@ -179,8 +181,10 @@ const MapComponent = ({
   };
 
   useEffect(() => {
-    fetchFavorites();
-  }, []);
+    if (isAuthenticated) {
+      fetchFavorites();
+    }
+  }, [isAuthenticated]);
 
   const fetchFavorites = async () => {
     try {
@@ -188,14 +192,19 @@ const MapComponent = ({
         method: "GET",
         credentials: "include",
       });
-      const data = await res.json();
-      setFavoritesList(data); // Actualizar favoritos
+      if (res.ok) {
+        const data = await res.json();
+        setFavoritesList(Array.isArray(data) ? data : []); 
+      } else {
+        setFavoritesList([]);
+      }
     } catch (error) {
       console.log("Error fetching favorites: " + error);
+      setFavoritesList([]);
     }
   };
   const checkIfFavorite = (googlePOIId: string) => {
-    return favoritesList.some(
+    return Array.isArray(favoritesList) && favoritesList.some(
       (favorite) => favorite.googlePOIId === googlePOIId
     );
   };
@@ -233,7 +242,7 @@ const MapComponent = ({
     } catch (error) {
       console.error("Error al añadir a favoritos:", error);
     }
-  };
+  };  
 
   // Close modal
   const handleCloseModal = () => {
@@ -309,15 +318,17 @@ const MapComponent = ({
                 <button className="bg-blue-500 px-3 py-2 rounded-lg cursor-pointer">
                   Contact
                 </button>
-                <button
-                  className={`bg-blue-500 px-3 py-2 rounded-lg cursor-pointer ${
-                    isFavorite ? "bg-green-500" : ""
-                  }`}
-                  onClick={addToFavorites}
-                  disabled={isFavorite}
-                >
-                  {isFavorite ? "Added to Favorites" : "Add to Favorites"}
-                </button>
+                {isAuthenticated && (
+                  <button
+                    className={`bg-blue-500 px-3 py-2 rounded-lg cursor-pointer ${
+                      isFavorite ? "bg-teal-500" : ""
+                    }`}
+                    onClick={addToFavorites}
+                    disabled={isFavorite}
+                  >
+                    {isFavorite ? "Added to Favorites" : "Add to Favorites"}
+                  </button>
+                )}                
               </div>
             </div>
           </div>
