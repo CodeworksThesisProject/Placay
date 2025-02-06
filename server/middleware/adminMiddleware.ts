@@ -24,7 +24,7 @@ export const adminMiddleware = async (req: AdminRequest, res: Response, next: Ne
   const token = cookies?.[process.env.COOKIE_NAME || "token"];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "") as { id: string };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "token") as { id: string };
 
     const user = await User.findById(decoded.id);
 

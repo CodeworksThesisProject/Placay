@@ -3,7 +3,7 @@ export async function getTours(user_id: string): Promise<any> {
   try {
     const response = await fetch(`http://localhost:3000/tour/${user_id}`);
     const userTours = await response.json();
-    console.log(userTours)
+
     return userTours;
   } catch (err) {
     console.error('Error fetching the users tours:', err);
@@ -28,7 +28,7 @@ export async function postTours(user_id: string, title: string, city: string, co
       }),
     });
     const data = await response.json();
-    console.log('the response is:', data)
+
     return data;
   } catch (err) {
     console.error('Error:', err);
@@ -63,7 +63,7 @@ export async function editTours(tour_id: string, title?: string, city?: string, 
       }),
     });
     const data = await response.json();
-    console.log('the response is:', data)
+
     return data;
   } catch (err) {
     console.error('Error:', err);
@@ -78,7 +78,7 @@ export async function deleteTours(tour_id: string): Promise<any> {
       method: 'DELETE',
     });
     const data = await response.json();
-    console.log('the response is:', data)
+
     return data;
   } catch (err) {
     console.error('Error:', err);
@@ -86,7 +86,3 @@ export async function deleteTours(tour_id: string): Promise<any> {
   }
 }
 //await deleteTours('679c926ecbb6cd198a40b6cf');
-
-
-
-

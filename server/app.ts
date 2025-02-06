@@ -10,11 +10,7 @@ import adminRoutes from "./routes/adminRoute";
 import cityRouter from "./routes/cityRoute";
 import tourRouter from "./routes/toursRoute";
 import profileRoutes from "./routes/profileRoute";
-
-// Load enviroment variables
-process.env.NODE_ENV == 'develop'
-  ? require('dotenv').config({ path: '.env.development.local' })
-  : require('dotenv').config({ path: '.env.production.local' });
+import GoogleRoute from "./routes/GoogleRoute";
 
 const app: Application = express();
 
@@ -22,8 +18,9 @@ const app: Application = express();
 app.use(cookieParser());
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
 
@@ -31,13 +28,15 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Routes for Data Uploads
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+const UPLOAD_DIR = process.env.UPLOAD_DIR || "uploads";
+app.use("/uploads", express.static(path.join(__dirname, UPLOAD_DIR)));
 
 // Routes used for Requests
 app.use("/api", authRoute);
 app.use("/admin", adminRoutes);
 app.use("/city", cityRouter);
-app.use("/profile", profileRoutes);
+app.use("/user", profileRoutes);
 app.use("/tour", tourRouter);
+app.use("/google", GoogleRoute);
 
 export default app;

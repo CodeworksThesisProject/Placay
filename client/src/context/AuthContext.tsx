@@ -1,23 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { User, AuthContextType, AuthProviderProps } from '../types/allTypes';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-}
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  user: User | null;
-  checkAuth: () => void;
-  setIsAuthenticated: (auth: boolean) => void;
-}
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -29,9 +13,10 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     checkAuth();
@@ -47,12 +32,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (!response.ok) {
         setIsAuthenticated(false);
         setUser(null);
+        setLoading(false);
         return;
       }
 
       const data = await response.json();
       setIsAuthenticated(true);
       setUser(data.user);
+      setLoading(false);
     } catch (error) {
       console.error('Error checking authentication:', error);
       setIsAuthenticated(false);
@@ -61,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, checkAuth, setIsAuthenticated }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, loading, checkAuth, setIsAuthenticated, setUser }}>
       {children}
     </AuthContext.Provider>
   );

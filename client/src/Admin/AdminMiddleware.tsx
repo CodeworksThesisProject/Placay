@@ -1,14 +1,19 @@
 import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { AdminRouteProps } from '../types/allTypes';
 
-// Check if user is Admin. If not, navigate to /login
+// Check if user is Admin. If not, navigate to root
 
-const AdminRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
-  const isAdmin = localStorage.getItem('role') === 'admin';
+const AdminRoute = ({ children }: AdminRouteProps) => {
+  const { isAuthenticated, user, loading } = useAuth();
 
-  // if (!token || !isAdmin) {
-  //   return <Navigate to="/login" replace />;
-  // }
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!isAuthenticated || user?.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
 
   return children;
 };

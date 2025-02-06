@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const Login: React.FC = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -37,12 +37,11 @@ const Login: React.FC = () => {
         return;
       }
 
-      const data = await response.json();
       setIsAuthenticated(true);
       navigate('/');
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Login error:', err);
-      setError(`Error: ${err.message || err}`);
+      setError(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   };
 

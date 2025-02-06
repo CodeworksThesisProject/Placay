@@ -7,13 +7,12 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
   const token = req.cookies.token;
 
   if (!token) {
-    console.log("No token provided");
     res.status(401).json({ error: "No token, authorization denied" });
     return;
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "your_jwt_secret") as { id: string };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "token") as { id: string };
 
 
     const user = await User.findById(decoded.id);
