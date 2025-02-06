@@ -1,19 +1,39 @@
-import React, { useState, useEffect } from "react";
-import PathTour from "../Map/PathTour";
+import React, { useEffect, useState } from "react";
 import { getPOIDetails } from "../../Services/getPOIDetailsService";
+import { useAuth } from '../../context/AuthContext';
+import PathTour from "../Map/PathTour";
+
+// interface Tour {
+//   _id: string;
+//   user_id: string;
+//   title: string;
+//   duration?: string;
+//   location: {
+//     latitude: number;
+//     longitude: number;
+//     label?: string;
+//     googlePOIId?: string;
+//   }[];
+// }
+
+// interface TourDetailProps {
+//   tour: Tour;
+// }
 
 interface Location {
   name: string;
   latitude: number;
   longitude: number;
   googlePOIId: string
-  image:any
+  image:string;
 }
 
 interface Tour {
+  _id: string;
+  user_id: string;
   title: string;
   duration: string;
-  locations: Location[];
+  location: Location[];
 }
 
 interface TourDetailProps {
@@ -21,12 +41,15 @@ interface TourDetailProps {
 }
 
 const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
+  const token = localStorage.getItem("token") || "";
+  const { user } = useAuth();
+
   const [liked, setLiked] = useState<boolean>(false);
   const [loadingImages, setLoadingImages] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchLocationImages = async () => {
-      const updatedLocations = [...tour.locations];
+      const updatedLocations = [...tour.location];
       for (const location of updatedLocations) {
         try {
           const details = await getPOIDetails(location.googlePOIId);
@@ -46,6 +69,74 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
     };
     fetchLocationImages();
   }, [tour]);
+
+  const [numLikedTours, setNumLikedTours] = useState<number>(0);
+
+  useEffect(() => {
+    const updateUserLike = async () => { //likedTours
+      try {
+        //Get /user/like/:userId/:tourId update user like icon state
+        const response = await fetch(`/user/like/${user.id}/${tour._id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const likeState = data.response;
+          setLiked(likeState);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const fetchLike = async () => {
+      try {
+        //Get /tour/like/:tourId just get numbers
+        const response = await fetch(`/tour/liked/${tour._id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setNumLikedTours(data.tourLiked);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchLike();
+    updateUserLike();
+  }, [liked]);
+
+  const likeClickHandler = async () => {
+    try {
+      //POST /tour/like/:userId/:tourId
+      const response = await fetch(`/tour/liked/${user.id}/${tour._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.ok) {
+        setLiked(!liked);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log("tour =>");
+  console.log(tour);
 
   return (
     <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm">
@@ -75,20 +166,20 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
 
       {/* Map Image */}
       <div id="map-container" className="h-96 w-full ">
-        <PathTour points={tour.locations} />
+        <PathTour points={tour.location} />
       </div>
 
       {/* Locations */}
       <div className="tour-locations grid grid-cols-2 gap-4">
-        {tour.locations.map((location, index) => (
+        {tour.location.map((loc, index) => (
           <div key={index} className="px-4 flex flex-row gap-3">
             <div className="flex flex-col">
-              <p className="text-[10px] text-gray-500">{location.name}</p>
+              <p className="text-[10px] text-gray-500">{loc.name}</p>
               {/* If we have a location image, display it */}
-              {location.image && (
+              {loc.image && (
                 <img
-                  src={location.image}
-                  alt={location.name}
+                  src={loc.image}
+                  alt={loc.name}
                   className="w-20 h-20 object-cover rounded-lg"
                 />
               )}
@@ -96,44 +187,25 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
           </div>
         ))}
       </div>
+      
 
-      {/* Like Button */}
       <div className="border-t-1 border-gray-200 flex flex-row gap-3 items-center pt-3 pl-2 text-gray-600">
-        <div className="cursor-pointer" onClick={() => setLiked(!liked)}>
+        {/* TODO if user is login then can click */}
+        <div className="cursor-pointer" onClick={likeClickHandler}>
           {!liked ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
             </svg>
           ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="red"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="red"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" className="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
             </svg>
           )}
         </div>
-        <p>23 likes</p>
+        <p>{ numLikedTours } likes</p>
+
       </div>
+      
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Tour } from "../models/tourModel";
+import { User } from "../models/userModel";
 
 // GET /tour/:user_id -> get all tours of a user
 export const getTours = async (req: Request, res: Response): Promise<void> => {
@@ -7,6 +8,17 @@ export const getTours = async (req: Request, res: Response): Promise<void> => {
   const tours = await Tour.find({ user_id: userId });
   res.json(tours);
 };
+
+// GET /tour/tours -> get all tours 
+export const getAllTours = async (req: Request, res: Response): Promise<void> => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit =  20;
+  const skip = (page - 1) * limit;
+
+  const tours = await Tour.find().skip(skip).limit(limit);
+  res.json(tours);
+};
+
 
 //  POST /tour/:user_id -> Saves a new tour and needs title, destination, startDate, endDate, (optinal: days)
 export const postTours = async (req: Request, res: Response): Promise<void> => {
@@ -92,4 +104,61 @@ export const getTourById = async (req: Request, res: Response): Promise<void> =>
     return;
   }
   res.json(tour);
+};
+
+// POST /tour/like/:userId/:tourId user should be login just login user can like
+export const likedTours = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { tourId, userId } = req.params;
+
+    const user = await User.findById(userId);
+    const tour = await Tour.findById(tourId);
+
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    if (!tour) {
+      res.status(404).json({ error: "Tour not found" });
+      return;
+    }
+
+    if (!user.likedTours) {
+      user.likedTours = [];
+    }
+
+    const tourIndex = user.likedTours.indexOf(tourId as any);
+    if (tourIndex === -1) {
+      user.likedTours.push(tourId as any);
+      tour.like = (Number(tour.like) || 0) + 1;
+    } else {
+      user.likedTours.splice(tourIndex, 1);
+      if (Number(tour.like) > 0) tour.like = Number(tour.like) - 1;
+    }
+
+    await user.save();
+    await tour.save();
+
+    res.json({ message: "Like updated", numLikedTours: user.likedTours.length });
+  } catch (error: any) {
+    console.error("Error updating like:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+// Get /tour/like/:tourId just get numbers
+export const getNumberOfLikes = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { tourId } = req.params;
+
+    const tour = await Tour.findById(tourId);
+    if (!tour) {
+      res.status(404).json({ error: "Tour not found" });
+      return;
+    }
+    
+    res.json({ message: "number of liked sent", tourLiked: tour.like });
+  } catch (error: any) {
+    console.error("Error updating like:", error);
+    res.status(500).json({ error: error.message });
+  }
 };

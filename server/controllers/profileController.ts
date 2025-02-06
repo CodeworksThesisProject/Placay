@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
 import { UploadedFile } from "express-fileupload";
 import fs from "fs";
 import path from "path";
@@ -145,5 +144,52 @@ export const uploadProfileImage = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error. So sorry" });
+  }
+};
+//Get /user/likedTour/:userId => get all tours which user liked
+export const getUsersLikedTour = async (req: Request, res: Response) => {
+  try {
+    const {  userId } = req.params;
+    const user = await User.findById(userId).populate("likedTours");;
+    
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    if (!user.likedTours) {
+      user.likedTours = [];
+    }
+
+    res.json({ message: "liked tour is send", tours: user.likedTours });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+//get /user/like/:userId/:tourId => check if current tour is liked by user
+export const checkLikeTour = async (req: Request, res: Response) => {
+  try {
+    const {  userId, tourId } = req.params;
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+
+    if (!user.likedTours) {
+      user.likedTours = [];
+    }
+
+    const exists = user.likedTours.some((tour) => tour.toString() === tourId);
+
+    res.json({ message: "Liked tour status of user sent", response: exists });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error." });
   }
 };

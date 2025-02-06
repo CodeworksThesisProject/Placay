@@ -1,270 +1,70 @@
+import { useEffect, useState } from "react";
+import ErrorAlert from "../../Components/Alert/ErrorAlert";
+import { useAuth } from "../../context/AuthContext";
+import TourDetail from "./TourDetail";
+interface Tour {
+  _id: string;
+  user_id: string;
+  title: string;
+  duration?: string;
+  location: {
+    latitude: number;
+    longitude: number;
+    label?: string;
+    googlePOIId?: string;
+  }[];
+}
 interface ListOfUserToursProps {
   profileActive: string;
 }
 export default function FavouritTour( {profileActive }: ListOfUserToursProps) {
+  const { user } = useAuth();
+  const [favourits, setFavourits] = useState<Tour[]>([]);
+  
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const token = localStorage.getItem("token") || "";
+
+  useEffect(() => {
+      const fetchTours = async () => {
+        if (!user) return;
+        try {
+          const response = await fetch(`/user/likedTour/${user.id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const favouritTours = data.tours;
+            console.log(favouritTours);
+            setFavourits(favouritTours);
+          }
+        } catch (error) {
+          console.log(error);
+          setErrorMsg(`Error fetching tours`)
+        }
+      };
+      fetchTours();
+    }, [user, favourits]);
 
   return (
     <div className={`tour flex flex-col gap-5 pb-20 ${profileActive === 'favourit' ? '': 'hidden'}`}>
-
-
+        {errorMsg && <ErrorAlert message={errorMsg} onClose={() => setErrorMsg(null)} />}
+          
         <div className="flex flex-row flex-wrap gap-5 justify-start">
 
-          {/* -------------------------------------------------- */}
-          <div className="flex flex-col gap-3 w-sm bg-white p-3 rounded-xs shadow-sm" >
-
-            <div className="header flex flex-row justify-between text-gray-800 mx-5">
-              <div className="flex flex-row gap-2 text-sm items-center">
-                <p>title of route</p>
-              </div>
-
-              <div className="flex flex-row gap-2 text-sm items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                <p>2 days tour</p>
-              </div>
-
-            </div>
-
-            <div className="map">
-
-              <img src="asserts/images/tours/map.png" className="px-5" alt="map" />
-              {/* TODO mapview with router should be shown here */}
-            </div>
-
-            <div className="tour-locations grid grid-cols-2 gap-4">
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/tv-tower.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">TV Tower</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/brandenburg.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Brandenburg Gate</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/catedral.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Berlin Cathedral</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/zoo.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Zoological Garden</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/east-side-gallery.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">East Side Gallery</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* -------------------------------------------------- */}
-          <div className="flex flex-col gap-3  w-sm bg-white p-3 rounded-xs shadow-sm" >
-
-            <div className="header flex flex-row justify-between text-gray-800 mx-5">
-              <div className="flex flex-row gap-2 text-sm items-center">
-                <p>title of route</p>
-              </div>
-
-              <div className="flex flex-row gap-2 text-sm items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                <p>2 days tour</p>
-              </div>
-
-            </div>
-
-            <div className="map">
-              <img src="asserts/images/tours/map.png" className="px-5" alt="map" />
-              {/* TODO mapview with router should be shown here */}
-            </div>
-
-            <div className="tour-locations grid grid-cols-2 gap-4">
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/tv-tower.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">TV Tower</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/brandenburg.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Brandenburg Gate</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/catedral.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Berlin Cathedral</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/zoo.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Zoological Garden</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/east-side-gallery.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">East Side Gallery</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* -------------------------------------------------- */}
-          <div className="flex flex-col gap-3  w-sm bg-white p-3 rounded-xs shadow-sm" >
-
-            <div className="header flex flex-row justify-between text-gray-800 mx-5">
-              <div className="flex flex-row gap-2 text-sm items-center">
-                <p>title of route</p>
-              </div>
-
-              <div className="flex flex-row gap-2 text-sm items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                <p>2 days tour</p>
-              </div>
-
-            </div>
-
-            <div className="map">
-              <img src="asserts/images/tours/map.png" className="px-5" alt="map" />
-              {/* TODO mapview with router should be shown here */}
-            </div>
-
-            <div className="tour-locations grid grid-cols-2 gap-4">
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/tv-tower.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">TV Tower</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="asserts/images/tours/brandenburg.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Brandenburg Gate</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="../../asserts/images/tours/catedral.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Berlin Cathedral</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="../../asserts/images/tours/zoo.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Zoological Garden</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="../../asserts/images/tours/east-side-gallery.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">East Side Gallery</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
+            { favourits.length > 0 ? (
+              favourits.map((favourits: Tour) => (
+                <TourDetail key={favourits._id} tour={favourits} />
+              ))
+            ): (
+              <p className="text-gray-500 text-center">No liked tour exist!</p>
+            )}
+        
         </div>
     </div>
   );

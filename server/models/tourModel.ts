@@ -5,6 +5,7 @@ export interface ITour extends Document {
   user_id: string;       // User ID of the user
   title: string;
   duration?: string;
+  like?: Number,
   location: {
     latitude: number;
     longitude: number;
@@ -31,6 +32,7 @@ const tourSchema = new Schema(
     user_id: { type: String, required: true },
     title: { type: String, required: true },
     duration: { type: String, required: true },
+    like: Number,
     location : [tourPlaceSchema],
   },
   { timestamps: true }

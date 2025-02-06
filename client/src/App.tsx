@@ -5,17 +5,16 @@ import './App.css';
 import AuthTest from './Components/AuthTest/AuthTest';
 import Footer from './Components/footer';
 import Login from './Components/Login/Login';
-import AddTour from './Components/Tour/AddTour';
 import Register from './Components/Login/Register';
 import Navbar from "./Components/Navbar";
 import { AuthProvider } from './context/AuthContext';
+import AuthRoute from './context/AuthMiddleware';
 import About from './Pages/About';
+import FunctionTest from './Pages/FunctionTest';
 import Home from './Pages/Home';
 import Legal from './Pages/Legal';
 import Tour from './Pages/Tour';
 import Profile from './Pages/UserProfile';
-import FunctionTest from './Pages/FunctionTest';
-import AuthRoute from './context/AuthMiddleware';
 
 const App = () => {
 
@@ -24,7 +23,6 @@ const App = () => {
       <Router>
           <Navbar />
             <Routes>
-              <Route path="/add-tour" element={<AddTour profileActive="true" />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<AuthRoute><Profile /></AuthRoute>} />
