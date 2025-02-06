@@ -116,13 +116,7 @@ const Navbar = () => {
               <div ref={dropdownRef} className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-50">
                 <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { closeDropdown(); navigate('/profile'); }}>
                   View Profile
-                </button>
-                <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { closeDropdown(); navigate('/mytours'); }}>
-                  My Tours
-                </button>
-                <button className="block px-4 py-2 text-[#38436C] hover:bg-gray-100 w-full text-center cursor-pointer" onClick={() => { closeDropdown(); navigate('/mylocations'); }}>
-                  My Locations
-                </button>
+                </button>                
                 {isAuthenticated && user?.role === "admin" ? (
                   <div>
                     <button className="block px-4 py-2 text-[#38436C] hover:bg-orange-100 w-full text-center cursor-pointer" onClick={() => { closeDropdown(); navigate('/dashboard'); }}>Dashboard</button>
