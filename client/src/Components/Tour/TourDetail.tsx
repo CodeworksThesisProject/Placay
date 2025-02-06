@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getPOIDetails } from "../../Services/getPOIDetailsService";
 import { useAuth } from '../../context/AuthContext';
-import PathTour from "../Map/PathTour";
 
 // interface Tour {
 //   _id: string;
@@ -25,10 +24,12 @@ interface Location {
   latitude: number;
   longitude: number;
   googlePOIId: string
-  image:any
+  image:string;
 }
 
 interface Tour {
+  _id: string;
+  user_id: string;
   title: string;
   duration: string;
   locations: Location[];
@@ -133,6 +134,9 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
     }
   };
 
+  console.log("tour =>");
+  console.log(tour);
+
   return (
     <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm">
       {/* Header */}
@@ -160,9 +164,9 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
       </div>
 
       {/* Map Image */}
-      <div id="map-container" className="h-96 w-full ">
+      {/* <div id="map-container" className="h-96 w-full ">
         <PathTour points={tour.locations} />
-      </div>
+      </div> */}
 
       {/* Locations */}
       <div className="tour-locations grid grid-cols-2 gap-4">
@@ -182,24 +186,26 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
           </div>
         ))}
       </div>
+      
 
-            <div className="border-t-1 border-gray-200 flex flex-row gap-3 items-center pt-3 pl-2 text-gray-600">
-              {/* TODO if user is login then can click */}
-              <div className="cursor-pointer" onClick={likeClickHandler}>
-                {!liked ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" className="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                  </svg>
-                )}
-              </div>
-              <p>{ numLikedTours } likes</p>
-
-            </div>
+      <div className="border-t-1 border-gray-200 flex flex-row gap-3 items-center pt-3 pl-2 text-gray-600">
+        {/* TODO if user is login then can click */}
+        <div className="cursor-pointer" onClick={likeClickHandler}>
+          {!liked ? (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="red" className="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+            </svg>
+          )}
         </div>
+        <p>{ numLikedTours } likes</p>
+
+      </div>
+      
+    </div>
   );
 };
 

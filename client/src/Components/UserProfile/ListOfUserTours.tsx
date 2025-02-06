@@ -3,17 +3,33 @@ import ErrorAlert from "../../Components/Alert/ErrorAlert";
 import TourDetail from "../../Components/Tour/TourDetail";
 import { useAuth } from "../../context/AuthContext";
 
+// interface Tour {
+//   _id: string;
+//   user_id: string;
+//   title: string;
+//   duration?: string;
+//   locations: {
+//     latitude: number;
+//     longitude: number;
+//     label?: string;
+//     googlePOIId?: string;
+//   }[];
+// }
+
+interface Location {
+  name: string;
+  latitude: number;
+  longitude: number;
+  googlePOIId: string
+  image:string;
+}
+
 interface Tour {
   _id: string;
   user_id: string;
   title: string;
   duration?: string;
-  location: {
-    latitude: number;
-    longitude: number;
-    label?: string;
-    googlePOIId?: string;
-  }[];
+  locations: Location[];
 }
 
 interface ListOfUserToursProps {
