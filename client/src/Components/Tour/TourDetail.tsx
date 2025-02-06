@@ -1,17 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { getPOIDetails } from "../../Services/getPOIDetailsService";
 import { useAuth } from '../../context/AuthContext';
+import PathTour from "../Map/PathTour";
+
+// interface Tour {
+//   _id: string;
+//   user_id: string;
+//   title: string;
+//   duration?: string;
+//   location: {
+//     latitude: number;
+//     longitude: number;
+//     label?: string;
+//     googlePOIId?: string;
+//   }[];
+// }
+
+// interface TourDetailProps {
+//   tour: Tour;
+// }
+
+interface Location {
+  name: string;
+  latitude: number;
+  longitude: number;
+  googlePOIId: string
+  image:any
+}
 
 interface Tour {
-  _id: string;
-  user_id: string;
   title: string;
-  duration?: string;
-  location: {
-    latitude: number;
-    longitude: number;
-    label?: string;
-    googlePOIId?: string;
-  }[];
+  duration: string;
+  locations: Location[];
 }
 
 interface TourDetailProps {
@@ -23,8 +43,32 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
   const { user } = useAuth();
 
   const [liked, setLiked] = useState<boolean>(false);
-  const [numLikedTours, setNumLikedTours] = useState<number>(0);
+  const [loadingImages, setLoadingImages] = useState<boolean>(true);
 
+  useEffect(() => {
+    const fetchLocationImages = async () => {
+      const updatedLocations = [...tour.locations];
+      for (const location of updatedLocations) {
+        try {
+          const details = await getPOIDetails(location.googlePOIId);
+          if (details && details.images && details.images.length > 0) {
+            const imageUrl = details.images[0]?.photo_reference
+              ? `http://localhost:3000/google/photo?photoReference=${details.images[0].photo_reference}`
+              : null;
+            if (imageUrl) {
+              location.image = imageUrl;
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching POI details:", error);
+        }
+      }
+      setLoadingImages(false);
+    };
+    fetchLocationImages();
+  }, [tour]);
+
+  const [numLikedTours, setNumLikedTours] = useState<number>(0);
 
   useEffect(() => {
     const updateUserLike = async () => { //likedTours
@@ -90,90 +134,54 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
   };
 
   return (
-      <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm" >
+    <div className="flex flex-col gap-3 w-xs bg-white p-3 rounded-xs shadow-sm">
+      {/* Header */}
+      <div className="header flex flex-row justify-between text-gray-800 mx-5">
+        <div className="flex flex-row gap-2 text-sm items-center">
+          <p>{tour.title}</p>
+        </div>
+        <div className="flex flex-row gap-2 text-sm items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="size-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+          <p>{tour.duration}</p>
+        </div>
+      </div>
 
-            <div className="header flex flex-row justify-between text-gray-800 mx-5">
-              <div className="flex flex-row gap-2 text-sm items-center">
-                <p>{tour.title}</p>
-              </div>
+      {/* Map Image */}
+      <div id="map-container" className="h-96 w-full ">
+        <PathTour points={tour.locations} />
+      </div>
 
-              <div className="flex flex-row gap-2 text-sm items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                <p>{ tour.duration}</p>
-              </div>
-
-            </div>
-
-            <div className="map">
-
-              <img src="../../../asserts/images/tours/map.png" className="px-5" alt="map" />
-              {/* TODO mapview with router should be shown here */}
-            </div>
-
-            <div className="tour-locations grid grid-cols-2 gap-4">
-              
-              <div className="px-4 flex flex-row gap-3">
+      {/* Locations */}
+      <div className="tour-locations grid grid-cols-2 gap-4">
+        {tour.locations.map((location, index) => (
+          <div key={index} className="px-4 flex flex-row gap-3">
+            <div className="flex flex-col">
+              <p className="text-[10px] text-gray-500">{location.name}</p>
+              {/* If we have a location image, display it */}
+              {location.image && (
                 <img
-                  src="../../../asserts/images/tours/tv-tower.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                  />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">TV Tower</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="../../../asserts/images/tours/brandenburg.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                  />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Brandenburg Gate</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="../../../asserts/images/tours/catedral.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                  />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Berlin Cathedral</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="../../../asserts/images/tours/zoo.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
-                  />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">Zoological Garden</p>
-                </div>
-              </div>
-
-              <div className="px-4 flex flex-row gap-3">
-                <img
-                  src="../../../asserts/images/tours/east-side-gallery.png"
-                  className="w-8 h-8 object-cover rounded-full shadow-sm"
-                  alt="picture of location"
+                  src={location.image}
+                  alt={location.name}
+                  className="w-20 h-20 object-cover rounded-lg"
                 />
-                <div className="flex flex-col">
-                  <p className="text-xs">Berlin, Germany</p>
-                  <p className="text-[10px] text-gray-500">East Side Gallery</p>
-                </div>
-              </div>
+              )}
             </div>
+          </div>
+        ))}
+      </div>
 
             <div className="border-t-1 border-gray-200 flex flex-row gap-3 items-center pt-3 pl-2 text-gray-600">
               {/* TODO if user is login then can click */}
@@ -195,4 +203,4 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
   );
 };
 
-export default TourDetail
+export default TourDetail;

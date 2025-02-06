@@ -1,4 +1,4 @@
-const Legal: React.FC = () => {
+const Legal = () => {
   return (
       <div className="mx-auto p-6 max-w-6xl">
         <h1 className="text-3xl font-bold text-gray-800 mb-4">Legal Information</h1>

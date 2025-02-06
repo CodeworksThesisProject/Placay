@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MapView from '../Components/Map/MapView';
 import SearchField from '../Components/SearchField';
 
-const Home: React.FC = () => {
+const Home = () => {
   const [searchedCity, setSearchedCity] = useState<{ name: string; lat: number; lng: number }>({
     name: "London",
     lat: 51.5072178,

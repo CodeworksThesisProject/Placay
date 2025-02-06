@@ -3,17 +3,17 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface ITour extends Document {
   user_id: string;       // User ID of the user
-  title: string; 
+  title: string;
   duration?: string;
   like?: Number,
   location: {
     latitude: number;
     longitude: number;
-    label?: string;
+    name?: string;
     googlePOIId?: string;
   }[];
 
-  //TODO for feature        
+  //TODO for feature
   destination?: string;   // Where we're going
   startDate?: Date;       // Start of the Tour
   endDate?: Date;         // End of the tour
@@ -23,7 +23,7 @@ export interface ITour extends Document {
 const tourPlaceSchema = new Schema({
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
-  label: { type: String, required: false },
+  name: { type: String, required: false },
   googlePOIId: { type: String, required: false },
 });
 

@@ -16,7 +16,7 @@ import Legal from './Pages/Legal';
 import Tour from './Pages/Tour';
 import Profile from './Pages/UserProfile';
 
-const App: React.FC = () => {
+const App = () => {
 
   return (
     <AuthProvider>

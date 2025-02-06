@@ -2,6 +2,39 @@
 
 Discover *city highlights* and create *personalized itineraries*
 
+## Prerequisites
+Before starting, ensure you have the following installed:
+* `Node.js` (version 16 or higher recommended)
+* `npm` (usually bundled with Node.js)
+
+## Getting Started
+To set up and run Placay, follow these steps:
+
+1. Clone the Repository
+Ensure you have a local copy of the Sellio repository. Just clone it
+
+2. Navigate to the `/server` directory to manage the backend, and the `/client` directory for the frontend
+
+3. Do `npm install` on both directories
+
+4. Make sure MongoDB is installed and running, you can get it with `brew services start mongodb-community@8.0` in Terminal on a Mac
+
+5. Environment Variables:
+  You need to create .env files for variables: `.env.development.local` and `.env.production.local`. For both there are example files `.env.development`and `.env.production`. Rename them and put in the needed information. The files with .local are ignored in .gitignore and should not leave your computer. `.env.development.local` is loaded when `NODE_ENV=develop` is set by a script in `package.json` (e.g. `npm run develop`, see below)
+
+6. Get a Google API Key (for Maps & Places API)
+- Go to [Google Cloud Console](https://console.cloud.google.com/apis/dashboard)
+- Create a new project (or select an existing one)
+- Enable **Maps JavaScript API** & **Places API**
+- Generate an **API Key** under Credentials
+- Restrict the key (Domain/IP restriction recommended).
+- Add it to `.env.production.local` and `.env.development.local` (backend only!): GOOGLE_MAPS_API_KEY= "your_Google_Maps_API_Key"
+
+8. Use the following commands based on your needs (they do work on both directories):
+- `npm run develop`: Starts the server and client in the testing environment
+- `npm run start`: Launches the application for regular use
+- `npm run test`: Executes the test suite to ensure everything is functioning correctly
+
 ## Development Documentation
 
 ### User Routes
@@ -16,8 +49,8 @@ Discover *city highlights* and create *personalized itineraries*
 * `/user/profileimage` -> post -> Fileupload for a picture to folder /uploads with input type="file" name="profileImage", will set the profileImage field of user to file without base url /uploads/NameOFImage (Name is auto generated when uploading an image)
 
 ### User favorites Routes
-* `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, label, Google Point-of-Interest ID and an unique id
-* `/user/favorite` -> post -> lets you add a favorite with latitude, longitude, label, Google Point-of-Interest ID and will create an unique id
+* `/user/favorite` -> get -> gives you a list of favorites saved in the user profile with latitude, longitude, name, Google Point-of-Interest ID and an unique id
+* `/user/favorite` -> post -> lets you add a favorite with latitude, longitude, name, Google Point-of-Interest ID and will create an unique id
 * `/user/favorite` -> delete -> send the id of a favorite to delete it
 
 ### Tours Routes
@@ -45,11 +78,13 @@ Need a role `admin` to work
 * `/admin/user:User ID` -> put -> will update an existing User
 * `/admin/user:User ID` -> delete -> will delete a User
 
+If you need an Admin User, use `npm run seed` to create one. Yo can change the Details in `/server/seed/createAdmin`. If there is already an Admin User in the database, you will get the name of that account. Otherwise the first person to register is automatically an Admin User
+
 ### User Model
 * Fields:
   * name (String, required)
   * email (String, required, unique)
-  * password (String, required, hashed)
+  * password (String, required, hashed when set or changed in userModel.ts by default)
   * role (String, default: "user", values: "user", "admin")
   * profileImage (String, optional, Link to default image or user image in /uploads)
   * favorites (Array of Favorite references, see Favorite Model)
@@ -61,7 +96,7 @@ Need a role `admin` to work
 ### Favorite Model
 * Fields:
   * user (ObjectId, references User, required)
-  * label (String, optional, for Name or user can use an own name)
+  * name (String, optional, for Name or user can use an own name)
   * latitude (Number, required)
   * longitude (Number, required)
   * googlePOIId (String, optional, can be used to get Name, Description and Picture from Google)
@@ -69,39 +104,6 @@ Need a role `admin` to work
   Directly linked to a User Model via the user field
 * Usage:
   Represents favorite locations for each user
-
-## Prerequisites
-Before starting, ensure you have the following installed:
-* `Node.js` (version 16 or higher recommended)
-* `npm` (usually bundled with Node.js)
-
-## Getting Started
-To set up and run Sellio, follow these steps:
-
-1. Clone the Repository
-Ensure you have a local copy of the Sellio repository. Just clone it
-
-2. Navigate to the `/server` directory to manage the backend, and the `/client` directory for the frontend
-
-3. Do `npm install` on both directories
-
-4. Make sure MongoDB is installed and running, you can get it with `brew services start mongodb-community@8.0` in Terminal on a Mac
-
-5. Environment Variables:
-  You need to create .env files for variables: `.env.development.local` and `.env.production.local`. For both there are example files `.env.development`and `.env.production`. Rename them and put in the needed information. The files with .local are ignored in .gitignore and should not leave your computer. `.env.development.local` is loaded when `NODE_ENV=develop` is set by a script in `package.json` (e.g. `npm run develop`, see below)
-
-6. Get a Google API Key (for Maps & Places API)
-- Go to [Google Cloud Console](https://console.cloud.google.com/apis/dashboard)
-- Create a new project (or select an existing one).
-- Enable **Maps JavaScript API** & **Places API**.
-- Generate an **API Key** under **Credentials**.
-- Restrict the key (Domain/IP restriction recommended).
-- Add it to `.env.production.local` and `.env.development.local` (backend only!): GOOGLE_MAPS_API_KEY= "your_Google_Maps_API_Key"
-
-8. Use the following commands based on your needs (they do work on both directories):
-- `npm run develop`: Starts the server and client in the testing environment
-- `npm run start`: Launches the application for regular use
-- `npm run test`: Executes the test suite to ensure everything is functioning correctly
 
 ## Additional Notes
 Linting: Use `npm run lint` to ensure your code matches to project standards

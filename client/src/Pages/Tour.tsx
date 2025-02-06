@@ -1,3 +1,4 @@
+import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import ErrorAlert from "../Components/Alert/ErrorAlert";
 import TourDetail from "../Components/Tour/TourDetail";
